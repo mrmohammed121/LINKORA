@@ -305,7 +305,7 @@ export function PublicLandingPage() {
           <div className="mx-auto max-w-3xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#3F3F46] bg-[#18181B]/70 px-3.5 py-1.5 text-xs font-semibold text-[#E9FFDB]">
               <Sparkles className="h-3.5 w-3.5" />
-              Precision Link Infrastructure Â· Dynamic QR Rescue Â· Neon PostgreSQL
+              Precision Link Infrastructure · Dynamic QR Rescue · Neon PostgreSQL
             </div>
 
             <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-[54px] lg:leading-[1.08]">
@@ -345,7 +345,7 @@ export function PublicLandingPage() {
                 <span className="h-2.5 w-2.5 rounded-full bg-[#3F3F46]" />
                 <span className="h-2.5 w-2.5 rounded-full bg-[#E9FFDB]" />
                 <span className="ml-2 font-mono text-[11px] text-zinc-400">
-                  Live Workspace Preview Â· Try creating a real link right here
+                  Live Workspace Preview · Try creating a real link right here
                 </span>
               </div>
 
@@ -478,7 +478,7 @@ export function PublicLandingPage() {
                       <div className={showGuestQr ? 'sm:col-span-8' : ''}>
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="rounded-full bg-[#16A34A]/15 px-2.5 py-0.5 text-[11px] font-semibold text-[#16A34A]">
-                            Live Â· 24h Guest Preview
+                            Live · 24h Guest Preview
                           </span>
                         </div>
                         <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -656,7 +656,7 @@ export function PublicLandingPage() {
             <p className="mt-3 text-sm leading-relaxed text-[#71717A] sm:text-base">
               LINKORA separates the permanent short slug from the destination URL. Built on Fastify
               5, Prisma 6.6, and Neon Serverless PostgreSQL, redirects run cache-first while click
-              events are persisted asynchronouslyâ€”keeping redirects fast and QR campaigns editable
+              events are persisted asynchronously—keeping redirects fast and QR campaigns editable
               forever.
             </p>
           </div>
@@ -710,7 +710,7 @@ export function PublicLandingPage() {
       </section>
 
       <footer className="border-t border-[#3F3F46] bg-[#27272A] px-4 py-8 text-center text-xs text-zinc-400">
-        LINKORA â€” Smart URL Shortening, Dynamic QR Rescue &amp; Analytics Â· Powered by Fastify &amp;
+        LINKORA — Smart URL Shortening, Dynamic QR Rescue &amp; Analytics · Powered by Fastify &amp;
         Neon PostgreSQL
       </footer>
 

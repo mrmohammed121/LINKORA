@@ -591,7 +591,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                     >
                       <ShieldCheck className="h-3.5 w-3.5" />
                       Contrast {contrastRatio.toFixed(1)}:1{' '}
-                      {contrastRatio >= 4.5 ? '(Scan-Safe)' : '(Low contrast â€” darken QR color)'}
+                      {contrastRatio >= 4.5 ? '(Scan-Safe)' : '(Low contrast — darken QR color)'}
                     </span>
 
                     <div className="flex items-center gap-2">

@@ -245,8 +245,8 @@ export function SettingsPage() {
 
                   <div className="flex flex-wrap items-center gap-3 text-xs text-[#71717A] dark:text-zinc-400">
                     <span>Role: {user?.role}</span>
-                    <span>â€¢</span>
-                    <span>Member since {user ? new Date(user.createdAt).toLocaleDateString() : 'â€”'}</span>
+                    <span>•</span>
+                    <span>Member since {user ? new Date(user.createdAt).toLocaleDateString() : '—'}</span>
                   </div>
 
                   {profileErr && (
@@ -448,7 +448,7 @@ export function SettingsPage() {
                     PostgreSQL
                   </div>
                   <p className="mt-2 font-display text-lg font-bold text-[#18181B] dark:text-white">
-                    {health?.database ?? 'â€”'}
+                    {health?.database ?? '—'}
                   </p>
                 </div>
 
@@ -458,7 +458,7 @@ export function SettingsPage() {
                     Cache Layer
                   </div>
                   <p className="mt-2 font-display text-lg font-bold text-[#18181B] dark:text-white">
-                    {health?.cacheMode ?? 'â€”'}
+                    {health?.cacheMode ?? '—'}
                   </p>
                   {typeof health?.cachedSlugs === 'number' && (
                     <p className="mt-1 text-xs text-[#71717A] dark:text-zinc-400">

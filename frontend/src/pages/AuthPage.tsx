@@ -193,7 +193,7 @@ export function AuthPage({ mode }: AuthPageProps) {
         </div>
 
         <div className="mt-8 hidden border-t border-[#3F3F46] pt-5 text-xs text-zinc-400 lg:block">
-          Fastify 5 Â· Prisma 6.6 Â· Neon PostgreSQL Â· JWT Auth
+          Fastify 5 · Prisma 6.6 · Neon PostgreSQL · JWT Auth
         </div>
       </aside>
 
@@ -249,7 +249,7 @@ export function AuthPage({ mode }: AuthPageProps) {
               to="/dashboard"
               className="text-xs font-semibold text-[#71717A] hover:text-[#18181B] hover:underline"
             >
-              Continue as guest â†’
+              Continue as guest →
             </Link>
           </div>
 
@@ -395,7 +395,7 @@ export function AuthPage({ mode }: AuthPageProps) {
               <div className="rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] p-3 text-xs text-[#71717A]">
                 <strong className="text-[#18181B]">Password recovery:</strong> Email password resets
                 are not enabled in this workspace. Signed-in users can update their password anytime
-                under <strong>Settings â†’ Security</strong>, or sign in with Google / Demo Account.
+                under <strong>Settings → Security</strong>, or sign in with Google / Demo Account.
               </div>
             )}
 

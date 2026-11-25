@@ -268,7 +268,7 @@ export function QrCodesPage() {
         onClose={() => setRescueModalLink(null)}
         onSaved={(updated) =>
           setRescueToast(
-            `/${updated.slug} now redirects live to ${updated.originalUrl} â€” no reprinting needed.`
+            `/${updated.slug} now redirects live to ${updated.originalUrl} — no reprinting needed.`
           )
         }
       />

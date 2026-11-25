@@ -200,7 +200,7 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
             ) : (
               originalUrl.trim() && (
                 <p className="mt-1 text-[11px] font-medium text-[#16A34A]">
-                  Valid target URL â€” ready for zero-downtime swap
+                  Valid target URL — ready for zero-downtime swap
                 </p>
               )
             )}
