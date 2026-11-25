@@ -49,7 +49,7 @@ export function QrThumbnail({
   if (qrStyleConfig && shortUrl && slug) {
     return (
       <div
-        className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-1 dark:border-slate-700 ${sizeClass}`}
+        className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#E4E4E7] bg-white p-1 dark:border-[#3F3F46] ${sizeClass}`}
       >
         <StyledQrPreview
           shortUrl={shortUrl}
@@ -64,17 +64,17 @@ export function QrThumbnail({
 
   return (
     <div
-      className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-1.5 dark:border-slate-700 ${sizeClass}`}
+      className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#E4E4E7] bg-white p-1.5 dark:border-[#3F3F46] ${sizeClass}`}
     >
       {loading ? (
-        <Loader2 className="h-5 w-5 animate-spin text-slate-400" />
+        <Loader2 className="h-5 w-5 animate-spin text-[#71717A]" />
       ) : svg ? (
         <div
           className="h-full w-full [&>svg]:h-full [&>svg]:w-full"
           dangerouslySetInnerHTML={{ __html: svg }}
         />
       ) : (
-        <QrCode className="h-6 w-6 text-slate-400" />
+        <QrCode className="h-6 w-6 text-[#71717A]" />
       )}
     </div>
   );

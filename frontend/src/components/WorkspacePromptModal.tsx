@@ -13,7 +13,7 @@ interface WorkspacePromptCardProps {
 
 export function WorkspacePromptCard({
   featureName = 'your workspace overview',
-  redirectTo = '/',
+  redirectTo = '/dashboard',
   onClose,
   onSuccess,
 }: WorkspacePromptCardProps) {
@@ -40,39 +40,39 @@ export function WorkspacePromptCard({
   };
 
   return (
-    <div className="relative w-full max-w-md rounded-3xl border border-slate-200 bg-white p-7 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+    <div className="relative w-full max-w-md rounded-3xl border border-[#E4E4E7] bg-white p-7 shadow-2xl dark:border-[#3F3F46] dark:bg-[#27272A]">
       {onClose && (
         <button
           type="button"
           onClick={onClose}
           aria-label="Close prompt"
-          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800"
+          className="absolute right-4 top-4 rounded-lg p-1.5 text-[#71717A] hover:bg-[#F4F4F5] hover:text-[#18181B] dark:hover:bg-[#3F3F46] dark:hover:text-white"
         >
           <X className="h-5 w-5" />
         </button>
       )}
 
-      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 dark:bg-blue-500/15 dark:text-blue-400">
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#27272A] text-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]">
         <Lock className="h-6 w-6" />
       </div>
 
-      <h2 className="mt-4 text-center text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+      <h2 className="mt-4 text-center text-xl font-extrabold tracking-tight text-[#18181B] dark:text-white">
         Sign in to access {featureName}
       </h2>
-      <p className="mt-2 text-center text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+      <p className="mt-2 text-center text-xs leading-relaxed text-[#71717A] dark:text-zinc-300">
         Save temporary guest links permanently, hot-swap QR destinations with QR Rescue, and
         explore live click &amp; scan analytics.
       </p>
 
-      <div className="mt-5 rounded-xl border border-teal-200 bg-teal-50/75 p-3 text-xs text-teal-800 dark:border-teal-500/20 dark:bg-teal-500/10 dark:text-teal-200">
+      <div className="mt-5 rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] p-3 text-xs text-[#18181B] dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-zinc-200">
         <div className="flex items-center gap-1.5 font-semibold">
-          <LifeBuoy className="h-3.5 w-3.5 text-teal-600" />
+          <LifeBuoy className="h-3.5 w-3.5 text-[#16A34A]" />
           Guest links are automatically saved on login
         </div>
       </div>
 
       {error && (
-        <div className="mt-3 rounded-xl border border-rose-300 bg-rose-50 px-3 py-2 text-xs font-medium text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
+        <div className="mt-3 rounded-xl border border-[#DC2626]/25 bg-[#DC2626]/10 px-3 py-2 text-xs font-medium text-[#DC2626]">
           {error}
         </div>
       )}
@@ -85,17 +85,17 @@ export function WorkspacePromptCard({
           }}
         />
 
-        <div className="flex items-center gap-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-          <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+        <div className="flex items-center gap-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#71717A]">
+          <span className="h-px flex-1 bg-[#E4E4E7] dark:bg-[#3F3F46]" />
           <span>or</span>
-          <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+          <span className="h-px flex-1 bg-[#E4E4E7] dark:bg-[#3F3F46]" />
         </div>
 
         <button
           type="button"
           onClick={() => void handleDemoLogin()}
           disabled={demoLoading}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white shadow-xs transition hover:bg-blue-700 disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#C4F000] px-4 py-2.5 text-xs font-bold text-[#18181B] shadow-xs transition hover:bg-[#d2f833] disabled:opacity-60"
         >
           {demoLoading ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -112,7 +112,7 @@ export function WorkspacePromptCard({
               onClose?.();
               navigate(`/login?redirect=${encodedRedirect}`);
             }}
-            className="inline-flex items-center justify-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+            className="inline-flex items-center justify-center gap-1 rounded-xl border border-[#E4E4E7] bg-white px-3 py-2.5 text-xs font-semibold text-[#18181B] hover:bg-[#F4F4F5] dark:border-[#3F3F46] dark:bg-[#3F3F46] dark:text-white"
           >
             Log In
             <ArrowRight className="h-3.5 w-3.5" />
@@ -124,7 +124,7 @@ export function WorkspacePromptCard({
               onClose?.();
               navigate(`/register?redirect=${encodedRedirect}`);
             }}
-            className="inline-flex items-center justify-center gap-1 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-500/30 dark:bg-blue-500/15 dark:text-blue-300"
+            className="inline-flex items-center justify-center gap-1 rounded-xl bg-[#27272A] px-3 py-2.5 text-xs font-semibold text-white hover:bg-[#3F3F46]"
           >
             Sign Up Free
           </button>

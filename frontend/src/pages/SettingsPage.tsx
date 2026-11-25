@@ -1,365 +1,476 @@
-import { useEffect, useState, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { FormEvent, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
+  Activity,
   CheckCircle2,
   Database,
-  Loader2,
+  HardDrive,
+  Lock,
+  LogOut,
   Moon,
-  Save,
-  Shield,
+  RefreshCw,
+  Settings2,
   Sun,
-  User as UserIcon,
+  User as UserIcon
 } from 'lucide-react';
-import { AppLayout } from '../components/AppLayout';
-import { api } from '../lib/api';
 import { useAuthStore } from '../store/useAuthStore';
-import type { HealthResponse } from '../types';
+import { useLinkStore } from '../store/useLinkStore';
+import { api } from '../lib/api';
+import { HealthResponse } from '../types';
 
-type SettingsTab = 'profile' | 'security' | 'system' | 'storage';
+type SettingsTab = 'profile' | 'security' | 'system' | 'appearance';
 
 export function SettingsPage() {
-  const { token, user, theme, setTheme, updateProfile } = useAuthStore();
-  const isAuthenticated = Boolean(token);
+  const navigate = useNavigate();
+  const { user, theme, setTheme, updateProfile, logout } = useAuthStore();
+  const { links, reset: resetLinks } = useLinkStore();
+  const isAuthenticated = Boolean(user);
 
-  const [tab, setTab] = useState<SettingsTab>(isAuthenticated ? 'profile' : 'system');
+  const [tab, setTab] = useState<SettingsTab>('profile');
   const [name, setName] = useState(user?.name ?? '');
   const [profileSaving, setProfileSaving] = useState(false);
-  const [profileMessage, setProfileMessage] = useState<string | null>(null);
-  const [profileError, setProfileError] = useState<string | null>(null);
+  const [profileMsg, setProfileMsg] = useState('');
+  const [profileErr, setProfileErr] = useState('');
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [pwdSaving, setPwdSaving] = useState(false);
-  const [pwdMessage, setPwdMessage] = useState<string | null>(null);
-  const [pwdError, setPwdError] = useState<string | null>(null);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordMsg, setPasswordMsg] = useState('');
+  const [passwordErr, setPasswordErr] = useState('');
 
   const [health, setHealth] = useState<HealthResponse | null>(null);
+  const [healthLoading, setHealthLoading] = useState(false);
 
   useEffect(() => {
     setName(user?.name ?? '');
-  }, [user?.name]);
+  }, [user]);
 
-  useEffect(() => {
-    if (!isAuthenticated && (tab === 'profile' || tab === 'security')) {
-      setTab('system');
+  const loadHealth = async () => {
+    setHealthLoading(true);
+    try {
+      const res = await api.health();
+      setHealth(res);
+    } catch {
+      setHealth(null);
+    } finally {
+      setHealthLoading(false);
     }
-  }, [isAuthenticated, tab]);
+  };
 
   useEffect(() => {
-    api
-      .health()
-      .then(setHealth)
-      .catch(() => setHealth(null));
+    void loadHealth();
   }, []);
 
-  const handleSaveName = async (e: FormEvent) => {
+  const handleProfileSave = async (e: FormEvent) => {
     e.preventDefault();
-    setProfileMessage(null);
-    setProfileError(null);
+    setProfileMsg('');
+    setProfileErr('');
+    if (!name.trim()) {
+      setProfileErr('Display name is required.');
+      return;
+    }
     setProfileSaving(true);
     try {
       await updateProfile({ name: name.trim() });
-      setProfileMessage('Display name updated successfully.');
+      setProfileMsg('Profile details saved.');
     } catch (err) {
-      setProfileError(err instanceof Error ? err.message : 'Failed to update display name');
+      setProfileErr(err instanceof Error ? err.message : 'Unable to save profile.');
     } finally {
       setProfileSaving(false);
     }
   };
 
-  const handleSavePassword = async (e: FormEvent) => {
+  const handlePasswordSave = async (e: FormEvent) => {
     e.preventDefault();
-    setPwdMessage(null);
-    setPwdError(null);
-    setPwdSaving(true);
+    setPasswordMsg('');
+    setPasswordErr('');
+    if (!currentPassword || !newPassword) {
+      setPasswordErr('Enter your current password and new password.');
+      return;
+    }
+    if (newPassword.length < 8) {
+      setPasswordErr('New password must be at least 8 characters.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordErr('Passwords do not match.');
+      return;
+    }
+    setPasswordSaving(true);
     try {
       await updateProfile({ currentPassword, newPassword });
+      setPasswordMsg('Password updated successfully.');
       setCurrentPassword('');
       setNewPassword('');
-      setPwdMessage('Password updated successfully.');
+      setConfirmPassword('');
     } catch (err) {
-      setPwdError(err instanceof Error ? err.message : 'Failed to update password');
+      setPasswordErr(err instanceof Error ? err.message : 'Unable to update password.');
     } finally {
-      setPwdSaving(false);
+      setPasswordSaving(false);
     }
   };
 
-  return (
-    <AppLayout>
-      <div className="mx-auto max-w-5xl space-y-6">
-        <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-            Settings
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Manage your profile preferences, security credentials, appearance, and runtime health.
-          </p>
-        </div>
+  const handleSignOut = () => {
+    resetLinks();
+    logout();
+    navigate('/');
+  };
 
-        {/* Split Settings Layout inspired by Reference Screenshot 7 */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-          <aside className="space-y-1 md:col-span-3">
-            <div className="px-3 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              {isAuthenticated ? 'Personal settings' : 'Workspace settings'}
+  return (
+    <div className="space-y-6">
+      <section className="rounded-3xl bg-[#27272A] p-6 text-white shadow-soft sm:p-7">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#3F3F46] px-3 py-1 text-xs font-medium text-[#C4F000]">
+              <Settings2 className="h-3.5 w-3.5" />
+              Workspace & Account Settings
             </div>
-            {(isAuthenticated
-              ? ([
-                  { id: 'profile', label: 'Profile', icon: UserIcon },
-                  { id: 'security', label: 'Security', icon: Shield },
-                  { id: 'system', label: 'Appearance & System', icon: Database },
-                ] as const)
-              : ([
-                  { id: 'system', label: 'Appearance & System', icon: Database },
-                  { id: 'storage', label: 'Save Data (Optional)', icon: Save },
-                ] as const)
-            ).map(({ id, label, icon: Icon }) => (
+            <h1 className="mt-3 font-display text-2xl font-bold sm:text-3xl">
+              Preferences, Security & Diagnostics
+            </h1>
+            <p className="mt-1 text-sm text-zinc-300">
+              Manage your LINKORA account profile, password credentials, display theme, and backend health checks.
+            </p>
+          </div>
+
+          {isAuthenticated ? (
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-[#3F3F46] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#DC2626]"
+            >
+              <LogOut className="h-4 w-4 text-[#C4F000]" />
+              Log Out
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#C4F000] px-4 py-2.5 text-xs font-semibold text-[#18181B] hover:bg-[#b2dc00]"
+            >
+              Log In to Sync Account
+            </Link>
+          )}
+        </div>
+      </section>
+
+      <div className="grid gap-6 lg:grid-cols-4">
+        <aside className="space-y-1.5 rounded-3xl border border-[#E4E4E7] bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900">
+          {(
+            [
+              { id: 'profile', label: 'Profile & Account', icon: UserIcon },
+              { id: 'security', label: 'Password & Security', icon: Lock },
+              { id: 'appearance', label: 'Theme & Workspace', icon: Sun },
+              { id: 'system', label: 'System Diagnostics', icon: Activity }
+            ] as const
+          ).map((item) => {
+            const Icon = item.icon;
+            const active = tab === item.id;
+            return (
               <button
-                key={id}
+                key={item.id}
                 type="button"
-                onClick={() => setTab(id)}
-                className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition ${
-                  tab === id
-                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300'
-                    : 'text-slate-600 hover:bg-white dark:text-slate-400 dark:hover:bg-slate-900'
+                onClick={() => setTab(item.id)}
+                className={`flex w-full items-center gap-3 rounded-2xl px-3.5 py-2.5 text-left text-sm font-semibold transition ${
+                  active
+                    ? 'bg-[#27272A] text-[#C4F000]'
+                    : 'text-[#71717A] hover:bg-[#F4F4F5] hover:text-[#18181B] dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
                 }`}
               >
                 <Icon className="h-4 w-4" />
-                {label}
+                {item.label}
               </button>
-            ))}
-          </aside>
+            );
+          })}
+        </aside>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900 md:col-span-9">
-            {tab === 'storage' && !isAuthenticated && (
-              <div className="space-y-5">
-                <div>
-                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-                    Save Data to an Account (Optional)
-                  </h2>
-                  <p className="text-xs text-slate-500">
-                    No login is required to shorten links, generate dynamic QR codes, use QR
-                    Rescue, or inspect analytics.
+        <div className="lg:col-span-3">
+          {tab === 'profile' && (
+            <div className="rounded-3xl border border-[#E4E4E7] bg-white p-6 shadow-soft dark:border-zinc-800 dark:bg-zinc-900 sm:p-8">
+              <h2 className="font-display text-lg font-bold text-[#18181B] dark:text-white">
+                Profile Information
+              </h2>
+              <p className="mt-1 text-sm text-[#71717A] dark:text-zinc-400">
+                Update how your name appears in the LINKORA workspace.
+              </p>
+
+              {!isAuthenticated ? (
+                <div className="mt-6 rounded-2xl border border-[#E4E4E7] bg-[#F4F4F5] p-5 dark:border-zinc-800 dark:bg-zinc-950">
+                  <p className="text-sm font-semibold text-[#18181B] dark:text-white">
+                    Currently running in Guest Session mode
                   </p>
+                  <p className="mt-1 text-xs text-[#71717A] dark:text-zinc-400">
+                    You have {links.length} link(s) in this browser session. Create an account or sign in to keep your links synced permanently.
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <Link
+                      to="/register"
+                      className="rounded-xl bg-[#C4F000] px-4 py-2 text-xs font-semibold text-[#18181B] hover:bg-[#b2dc00]"
+                    >
+                      Create Account
+                    </Link>
+                    <Link
+                      to="/login"
+                      className="rounded-xl bg-[#27272A] px-4 py-2 text-xs font-semibold text-white hover:bg-[#3F3F46]"
+                    >
+                      Log In
+                    </Link>
+                  </div>
                 </div>
-
-                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs leading-relaxed text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300">
-                  Right now your links are tied to this browser session and expire after 24 hours by
-                  default. If you want to store your links permanently and access them across
-                  devices, sign in or create an account—any links from this session will be saved
-                  automatically.
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  <Link
-                    to="/login?redirect=/settings"
-                    className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white shadow-xs transition hover:bg-blue-700"
-                  >
-                    <Save className="h-3.5 w-3.5" />
-                    Sign in to save data
-                  </Link>
-                  <Link
-                    to="/register?redirect=/settings"
-                    className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-                  >
-                    Create account
-                  </Link>
-                </div>
-              </div>
-            )}
-
-            {tab === 'profile' && isAuthenticated && (
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">Profile</h2>
-                  <p className="text-xs text-slate-500">Preferences and verified account identity</p>
-                </div>
-
-                <form onSubmit={handleSaveName} className="max-w-md space-y-4">
+              ) : (
+                <form onSubmit={handleProfileSave} className="mt-6 max-w-lg space-y-4">
                   <div>
-                    <label className="mb-1.5 block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                      Display name
+                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#71717A] dark:text-zinc-400">
+                      Display Name
                     </label>
                     <input
                       type="text"
-                      required
-                      minLength={2}
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                      className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] px-4 py-2.5 text-sm text-[#18181B] outline-none focus:border-[#27272A] focus:bg-white dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
                     />
                   </div>
 
-                  {profileMessage && (
-                    <p className="text-xs font-medium text-emerald-600">{profileMessage}</p>
-                  )}
-                  {profileError && (
-                    <p className="text-xs font-medium text-rose-600">{profileError}</p>
-                  )}
-
-                  <button
-                    type="submit"
-                    disabled={profileSaving}
-                    className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
-                  >
-                    {profileSaving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-                    Update display name
-                  </button>
-                </form>
-
-                <div className="border-t border-slate-200 pt-5 dark:border-slate-800">
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                    Email address &amp; Role
-                  </h3>
-                  <div className="mt-3 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800">
-                    <table className="w-full text-left text-xs">
-                      <thead className="bg-slate-50 text-slate-500 dark:bg-slate-950">
-                        <tr>
-                          <th className="px-4 py-2.5 font-semibold">Email</th>
-                          <th className="px-4 py-2.5 font-semibold">Status</th>
-                          <th className="px-4 py-2.5 font-semibold">Role</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td className="px-4 py-3 font-medium">{user?.email}</td>
-                          <td className="px-4 py-3">
-                            <span className="inline-flex items-center gap-1 font-semibold text-emerald-600">
-                              <CheckCircle2 className="h-3.5 w-3.5" /> Verified
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 font-mono font-semibold">{user?.role}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {tab === 'security' && isAuthenticated && (
-              <div className="space-y-5">
-                <div>
-                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">Security</h2>
-                  <p className="text-xs text-slate-500">Update your account password</p>
-                </div>
-
-                <form onSubmit={handleSavePassword} className="max-w-md space-y-4">
                   <div>
-                    <label className="mb-1.5 block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                      Current password
+                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#71717A] dark:text-zinc-400">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={user?.email ?? ''}
+                      disabled
+                      className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] px-4 py-2.5 text-sm text-[#71717A] dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-500"
+                    />
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-[#71717A] dark:text-zinc-400">
+                    <span>Role: {user?.role}</span>
+                    <span>•</span>
+                    <span>Member since {user ? new Date(user.createdAt).toLocaleDateString() : '—'}</span>
+                  </div>
+
+                  {profileErr && (
+                    <div className="rounded-xl border border-[#DC2626]/30 bg-[#DC2626]/10 px-3.5 py-2.5 text-xs text-[#DC2626]">
+                      {profileErr}
+                    </div>
+                  )}
+                  {profileMsg && (
+                    <div className="flex items-center gap-2 rounded-xl border border-[#16A34A]/30 bg-[#16A34A]/10 px-3.5 py-2.5 text-xs text-[#16A34A]">
+                      <CheckCircle2 className="h-4 w-4" />
+                      {profileMsg}
+                    </div>
+                  )}
+
+                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                    <button
+                      type="submit"
+                      disabled={profileSaving}
+                      className="rounded-xl bg-[#C4F000] px-5 py-2.5 text-sm font-semibold text-[#18181B] hover:bg-[#b2dc00] disabled:opacity-60"
+                    >
+                      {profileSaving ? 'Saving...' : 'Save Changes'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-[#E4E4E7] px-4 py-2.5 text-sm font-semibold text-[#DC2626] hover:bg-[#DC2626]/10 dark:border-zinc-700"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign Out
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          )}
+
+          {tab === 'security' && (
+            <div className="rounded-3xl border border-[#E4E4E7] bg-white p-6 shadow-soft dark:border-zinc-800 dark:bg-zinc-900 sm:p-8">
+              <h2 className="font-display text-lg font-bold text-[#18181B] dark:text-white">
+                Password & Security
+              </h2>
+              <p className="mt-1 text-sm text-[#71717A] dark:text-zinc-400">
+                Keep your workspace credentials protected with a strong password.
+              </p>
+
+              {!isAuthenticated ? (
+                <p className="mt-5 text-sm text-[#71717A] dark:text-zinc-400">
+                  Sign in with a registered LINKORA account to manage password settings.
+                </p>
+              ) : (
+                <form onSubmit={handlePasswordSave} className="mt-6 max-w-lg space-y-4">
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#71717A] dark:text-zinc-400">
+                      Current Password
                     </label>
                     <input
                       type="password"
-                      required
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950"
+                      className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] px-4 py-2.5 text-sm text-[#18181B] outline-none focus:border-[#27272A] focus:bg-white dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
                     />
                   </div>
                   <div>
-                    <label className="mb-1.5 block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                      New password (min 8 characters)
+                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#71717A] dark:text-zinc-400">
+                      New Password
                     </label>
                     <input
                       type="password"
-                      required
-                      minLength={8}
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950"
+                      placeholder="At least 8 characters"
+                      className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] px-4 py-2.5 text-sm text-[#18181B] outline-none focus:border-[#27272A] focus:bg-white dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#71717A] dark:text-zinc-400">
+                      Confirm New Password
+                    </label>
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] px-4 py-2.5 text-sm text-[#18181B] outline-none focus:border-[#27272A] focus:bg-white dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
                     />
                   </div>
 
-                  {pwdMessage && <p className="text-xs font-medium text-emerald-600">{pwdMessage}</p>}
-                  {pwdError && <p className="text-xs font-medium text-rose-600">{pwdError}</p>}
+                  {passwordErr && (
+                    <div className="rounded-xl border border-[#DC2626]/30 bg-[#DC2626]/10 px-3.5 py-2.5 text-xs text-[#DC2626]">
+                      {passwordErr}
+                    </div>
+                  )}
+                  {passwordMsg && (
+                    <div className="flex items-center gap-2 rounded-xl border border-[#16A34A]/30 bg-[#16A34A]/10 px-3.5 py-2.5 text-xs text-[#16A34A]">
+                      <CheckCircle2 className="h-4 w-4" />
+                      {passwordMsg}
+                    </div>
+                  )}
 
                   <button
                     type="submit"
-                    disabled={pwdSaving}
-                    className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
+                    disabled={passwordSaving}
+                    className="rounded-xl bg-[#27272A] px-5 py-2.5 text-sm font-semibold text-[#C4F000] hover:bg-[#3F3F46] disabled:opacity-60"
                   >
-                    {pwdSaving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-                    Change password
+                    {passwordSaving ? 'Updating...' : 'Update Password'}
                   </button>
                 </form>
-              </div>
-            )}
+              )}
+            </div>
+          )}
 
-            {tab === 'system' && (
-              <div className="space-y-6">
+          {tab === 'appearance' && (
+            <div className="rounded-3xl border border-[#E4E4E7] bg-white p-6 shadow-soft dark:border-zinc-800 dark:bg-zinc-900 sm:p-8">
+              <h2 className="font-display text-lg font-bold text-[#18181B] dark:text-white">
+                Appearance & Session Storage
+              </h2>
+              <p className="mt-1 text-sm text-[#71717A] dark:text-zinc-400">
+                Choose your preferred workspace surface contrast.
+              </p>
+
+              <div className="mt-6 grid max-w-xl gap-4 sm:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={() => setTheme('light')}
+                  className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition ${
+                    theme === 'light'
+                      ? 'border-[#27272A] bg-[#F4F4F5] ring-2 ring-[#C4F000]'
+                      : 'border-[#E4E4E7] hover:bg-[#F4F4F5] dark:border-zinc-800 dark:hover:bg-zinc-800'
+                  }`}
+                >
+                  <div className="rounded-xl bg-white p-2 text-[#18181B] shadow-sm">
+                    <Sun className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-[#18181B] dark:text-white">Light Surface</p>
+                    <p className="mt-0.5 text-xs text-[#71717A] dark:text-zinc-400">
+                      Charcoal sidebar + soft zinc workspace
+                    </p>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setTheme('dark')}
+                  className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition ${
+                    theme === 'dark'
+                      ? 'border-[#C4F000] bg-[#27272A] text-white ring-2 ring-[#C4F000]'
+                      : 'border-[#E4E4E7] hover:bg-[#F4F4F5] dark:border-zinc-800 dark:hover:bg-zinc-800'
+                  }`}
+                >
+                  <div className="rounded-xl bg-[#3F3F46] p-2 text-[#C4F000]">
+                    <Moon className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold">Dark Surface</p>
+                    <p className="mt-0.5 text-xs text-zinc-400">
+                      Deep obsidian cards with Electric Lime highlights
+                    </p>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {tab === 'system' && (
+            <div className="rounded-3xl border border-[#E4E4E7] bg-white p-6 shadow-soft dark:border-zinc-800 dark:bg-zinc-900 sm:p-8">
+              <div className="flex items-center justify-between gap-3">
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-                    Appearance &amp; System Diagnostics
+                  <h2 className="font-display text-lg font-bold text-[#18181B] dark:text-white">
+                    Backend & Redirect Engine Health
                   </h2>
-                  <p className="text-xs text-slate-500">
-                    Customize theme mode and inspect native backend storage &amp; cache health.
+                  <p className="mt-1 text-sm text-[#71717A] dark:text-zinc-400">
+                    Live connectivity report from the LINKORA API.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => void loadHealth()}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#27272A] px-3.5 py-2 text-xs font-semibold text-[#C4F000] hover:bg-[#3F3F46]"
+                >
+                  <RefreshCw className={`h-3.5 w-3.5 ${healthLoading ? 'animate-spin' : ''}`} />
+                  Check Now
+                </button>
+              </div>
+
+              <div className="mt-6 grid gap-4 sm:grid-cols-3">
+                <div className="rounded-2xl border border-[#E4E4E7] bg-[#F4F4F5] p-4 dark:border-zinc-800 dark:bg-zinc-950">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-[#71717A] dark:text-zinc-400">
+                    <Activity className="h-4 w-4 text-[#16A34A]" />
+                    API Service
+                  </div>
+                  <p className="mt-2 font-display text-lg font-bold text-[#18181B] dark:text-white">
+                    {health?.status ?? 'Checking...'}
                   </p>
                 </div>
 
-                <div>
-                  <label className="mb-2 block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                    Interface Theme
-                  </label>
-                  <div className="inline-flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setTheme('light')}
-                      className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-semibold transition ${
-                        theme === 'light'
-                          ? 'border-blue-600 bg-blue-50 text-blue-700'
-                          : 'border-slate-200 bg-white text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300'
-                      }`}
-                    >
-                      <Sun className="h-4 w-4" />
-                      Light SaaS
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setTheme('dark')}
-                      className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-semibold transition ${
-                        theme === 'dark'
-                          ? 'border-blue-500 bg-blue-500/15 text-blue-300'
-                          : 'border-slate-200 bg-white text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300'
-                      }`}
-                    >
-                      <Moon className="h-4 w-4" />
-                      Dark Mode
-                    </button>
+                <div className="rounded-2xl border border-[#E4E4E7] bg-[#F4F4F5] p-4 dark:border-zinc-800 dark:bg-zinc-950">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-[#71717A] dark:text-zinc-400">
+                    <Database className="h-4 w-4 text-[#2563EB]" />
+                    PostgreSQL
                   </div>
+                  <p className="mt-2 font-display text-lg font-bold text-[#18181B] dark:text-white">
+                    {health?.database ?? '—'}
+                  </p>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
-                  <div className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Backend Runtime Health
+                <div className="rounded-2xl border border-[#E4E4E7] bg-[#F4F4F5] p-4 dark:border-zinc-800 dark:bg-zinc-950">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-[#71717A] dark:text-zinc-400">
+                    <HardDrive className="h-4 w-4 text-[#F59E0B]" />
+                    Cache Layer
                   </div>
-                  {health ? (
-                    <div className="mt-3 grid grid-cols-2 gap-3 text-xs sm:grid-cols-4">
-                      <div>
-                        <div className="text-slate-400">API Status</div>
-                        <div className="font-semibold text-emerald-600">{health.status}</div>
-                      </div>
-                      <div>
-                        <div className="text-slate-400">Database</div>
-                        <div className="font-mono font-semibold">{health.database}</div>
-                      </div>
-                      <div>
-                        <div className="text-slate-400">Cache Engine</div>
-                        <div className="font-mono font-semibold">{health.cacheMode}</div>
-                      </div>
-                      <div>
-                        <div className="text-slate-400">Cached Slugs</div>
-                        <div className="font-bold">{health.cachedSlugs}</div>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="mt-2 text-xs text-slate-500">Checking API health...</p>
+                  <p className="mt-2 font-display text-lg font-bold text-[#18181B] dark:text-white">
+                    {health?.cacheMode ?? '—'}
+                  </p>
+                  {typeof health?.cachedSlugs === 'number' && (
+                    <p className="mt-1 text-xs text-[#71717A] dark:text-zinc-400">
+                      {health.cachedSlugs} cached keys
+                    </p>
                   )}
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
-    </AppLayout>
+    </div>
   );
 }

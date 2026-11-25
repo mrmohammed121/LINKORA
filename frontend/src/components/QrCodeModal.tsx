@@ -50,7 +50,7 @@ const FRAME_MODES: Array<{ id: QrFrameMode; label: string; desc: string }> = [
   {
     id: 'color-matched',
     label: 'Color-Matched Dots',
-    desc: 'Styled modules & corners using extracted image palette',
+    desc: 'Styled modules & corners using extracted palette',
   },
   {
     id: 'branded-card',
@@ -89,7 +89,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
     dominant: string;
     accent: string;
   } | null>(null);
-  const [showDesigner, setShowDesigner] = useState(false);
+  const [showDesigner, setShowDesigner] = useState(true);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [savingStyle, setSavingStyle] = useState(false);
@@ -102,8 +102,10 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
 
   useEffect(() => {
     if (!link) return;
-    setStyleConfig(link.qrStyleConfig ? { ...DEFAULT_QR_STYLE, ...link.qrStyleConfig } : DEFAULT_QR_STYLE);
-    setShowDesigner(Boolean(link.qrStyleConfig));
+    setStyleConfig(
+      link.qrStyleConfig ? { ...DEFAULT_QR_STYLE, ...link.qrStyleConfig } : DEFAULT_QR_STYLE
+    );
+    setShowDesigner(true);
     setExtractedPalette(null);
     setSaveSuccess(null);
     setError(null);
@@ -208,23 +210,23 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#18181B]/75 p-4 backdrop-blur-xs">
       <div
-        className={`my-auto w-full rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900 ${
+        className={`my-auto w-full rounded-2xl border border-[#E4E4E7] bg-white p-6 shadow-2xl dark:border-[#3F3F46] dark:bg-[#27272A] ${
           showDesigner ? 'max-w-4xl' : 'max-w-md'
         }`}
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#27272A] text-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]">
               <QrCode className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                Dynamic QR Code Studio
+              <h3 className="text-base font-bold text-[#18181B] dark:text-white">
+                QR Code Studio
               </h3>
               <div className="mt-0.5 flex items-center gap-2">
-                <span className="font-mono text-xs text-slate-500 dark:text-slate-400">
+                <span className="font-mono text-xs text-[#71717A] dark:text-zinc-400">
                   /{link.slug}
                 </span>
                 <StatusBadge status={link.status} />
@@ -236,19 +238,20 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
             <button
               type="button"
               onClick={() => setShowDesigner((prev) => !prev)}
-              className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
+              className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition ${
                 showDesigner
-                  ? 'border-indigo-500 bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300'
-                  : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200'
+                  ? 'border-[#27272A] bg-[#27272A] text-[#C4F000] dark:border-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]'
+                  : 'border-[#E4E4E7] bg-white text-[#18181B] hover:bg-[#F4F4F5] dark:border-[#3F3F46] dark:bg-[#3F3F46] dark:text-white'
               }`}
             >
               <Palette className="h-3.5 w-3.5" />
-              {showDesigner ? 'Hide Designer' : 'Upload Image / Custom Style'}
+              {showDesigner ? 'Compact View' : 'Customise QR'}
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+              aria-label="Close QR studio"
+              className="rounded-lg p-1.5 text-[#71717A] transition hover:bg-[#F4F4F5] hover:text-[#18181B] dark:hover:bg-[#3F3F46] dark:hover:text-white"
             >
               <X className="h-5 w-5" />
             </button>
@@ -258,7 +261,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
         <div className={`mt-5 grid grid-cols-1 gap-6 ${showDesigner ? 'lg:grid-cols-12' : ''}`}>
           {/* Left Preview + Export Column */}
           <div className={showDesigner ? 'lg:col-span-5' : ''}>
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950">
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-[#E4E4E7] bg-[#F4F4F5] p-5 dark:border-[#3F3F46] dark:bg-[#18181B]">
               <StyledQrPreview
                 shortUrl={link.shortUrl}
                 slug={link.slug}
@@ -266,17 +269,17 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                 size={216}
               />
 
-              <div className="mt-4 flex w-full items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 dark:border-slate-800 dark:bg-slate-900">
-                <span className="truncate font-mono text-xs text-slate-700 dark:text-slate-300">
+              <div className="mt-4 flex w-full items-center justify-between gap-2 rounded-xl border border-[#E4E4E7] bg-white px-3 py-2 dark:border-[#3F3F46] dark:bg-[#27272A]">
+                <span className="truncate font-mono text-xs text-[#18181B] dark:text-zinc-200">
                   {link.shortUrl}
                 </span>
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                  className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-[#F4F4F5] px-2.5 py-1 text-xs font-semibold text-[#18181B] transition hover:bg-[#E4E4E7] dark:bg-[#3F3F46] dark:text-white"
                 >
                   {copied ? (
-                    <Check className="h-3.5 w-3.5 text-emerald-500" />
+                    <Check className="h-3.5 w-3.5 text-[#16A34A]" />
                   ) : (
                     <Copy className="h-3.5 w-3.5" />
                   )}
@@ -290,21 +293,21 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                 type="button"
                 onClick={() => void handleDownload('png')}
                 disabled={downloading !== null}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-800 transition hover:bg-slate-50 disabled:opacity-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E4E4E7] bg-white px-3 py-2.5 text-xs font-bold text-[#18181B] transition hover:bg-[#F4F4F5] disabled:opacity-60 dark:border-[#3F3F46] dark:bg-[#3F3F46] dark:text-white"
               >
                 {downloading === 'png' ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <Download className="h-4 w-4" />
                 )}
-                PNG (1024px)
+                Download PNG
               </button>
 
               <button
                 type="button"
                 onClick={() => void handleDownload('svg')}
                 disabled={downloading !== null}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-800 transition hover:bg-slate-50 disabled:opacity-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E4E4E7] bg-white px-3 py-2.5 text-xs font-bold text-[#18181B] transition hover:bg-[#F4F4F5] disabled:opacity-60 dark:border-[#3F3F46] dark:bg-[#3F3F46] dark:text-white"
               >
                 {downloading === 'svg' ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -318,7 +321,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
             <button
               type="button"
               onClick={handleSimulateScan}
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition hover:from-indigo-500 hover:to-cyan-500"
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[#27272A] px-4 py-2.5 text-xs font-bold text-[#C4F000] transition hover:bg-[#3F3F46] dark:bg-[#C4F000] dark:text-[#18181B]"
             >
               {simulating ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -330,25 +333,25 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
             </button>
           </div>
 
-          {/* Right Custom Image-to-QR Designer Panel */}
+          {/* Right Custom Designer Panel */}
           {showDesigner && (
-            <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-950/60 lg:col-span-7">
+            <div className="space-y-4 rounded-2xl border border-[#E4E4E7] bg-[#F4F4F5] p-4 dark:border-[#3F3F46] dark:bg-[#18181B] lg:col-span-7">
               {!isAuthenticated ? (
                 <div className="flex h-full min-h-[280px] flex-col items-center justify-center p-4 text-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#27272A] text-[#C4F000]">
                     <Lock className="h-6 w-6" />
                   </div>
-                  <h4 className="mt-3 text-sm font-bold text-slate-900 dark:text-white">
-                    Image-to-QR Custom Designer
+                  <h4 className="mt-3 text-sm font-bold text-[#18181B] dark:text-white">
+                    Custom QR Designer
                   </h4>
-                  <p className="mt-1.5 max-w-sm text-xs leading-relaxed text-slate-500 dark:text-slate-400">
-                    Sign in to upload a brand logo or image, automatically extract scan-safe colors,
-                    embed center badges or branded cards, and save custom styles to your QR links.
+                  <p className="mt-1.5 max-w-sm text-xs leading-relaxed text-[#71717A] dark:text-zinc-400">
+                    Sign in to upload a brand logo, extract scan-safe colors, customize dots &amp;
+                    frames, and save custom styles to your QR links.
                   </p>
                   <button
                     type="button"
                     onClick={() => setShowAuthPrompt(true)}
-                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white shadow-xs transition hover:bg-blue-700"
+                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#C4F000] px-4 py-2.5 text-xs font-bold text-[#18181B] transition hover:bg-[#d2f833]"
                   >
                     Sign in to Unlock Custom Designer
                   </button>
@@ -358,8 +361,8 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                   {/* 1. Image Upload & Palette Extraction */}
                   <div>
                     <div className="mb-2 flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                        1. Upload Brand Image / Logo
+                      <span className="text-xs font-bold uppercase tracking-wider text-[#71717A]">
+                        1. Brand Image / Logo
                       </span>
                       {styleConfig.logoDataUrl && (
                         <button
@@ -371,7 +374,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                               frameMode: prev.frameMode === 'center-logo' ? 'none' : prev.frameMode,
                             }))
                           }
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 hover:underline"
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#DC2626] hover:underline"
                         >
                           <Trash2 className="h-3 w-3" /> Remove image
                         </button>
@@ -391,7 +394,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploadingImage}
-                        className="inline-flex items-center gap-2 rounded-xl border border-dashed border-indigo-400 bg-white px-4 py-2.5 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-50 dark:border-indigo-500/40 dark:bg-slate-900 dark:text-indigo-300"
+                        className="inline-flex items-center gap-2 rounded-xl border border-dashed border-[#27272A] bg-white px-4 py-2.5 text-xs font-semibold text-[#18181B] transition hover:bg-[#E4E4E7]/40 dark:border-[#C4F000]/50 dark:bg-[#27272A] dark:text-white"
                       >
                         {uploadingImage ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -405,20 +408,20 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                         <img
                           src={styleConfig.logoDataUrl}
                           alt="Uploaded brand preview"
-                          className="h-10 w-10 rounded-lg border border-slate-200 bg-white object-contain p-0.5 dark:border-slate-700"
+                          className="h-10 w-10 rounded-lg border border-[#E4E4E7] bg-white object-contain p-0.5 dark:border-[#3F3F46]"
                         />
                       )}
 
                       {extractedPalette && (
-                        <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] dark:border-slate-700 dark:bg-slate-900">
-                          <span className="text-slate-500">Extracted:</span>
+                        <div className="flex items-center gap-1.5 rounded-lg border border-[#E4E4E7] bg-white px-2.5 py-1.5 text-[11px] dark:border-[#3F3F46] dark:bg-[#27272A]">
+                          <span className="text-[#71717A]">Extracted:</span>
                           <span
-                            className="h-4 w-4 rounded-full border border-slate-300"
+                            className="h-4 w-4 rounded-full border border-[#E4E4E7]"
                             style={{ backgroundColor: extractedPalette.dominant }}
                             title={`Primary ${extractedPalette.dominant}`}
                           />
                           <span
-                            className="h-4 w-4 rounded-full border border-slate-300"
+                            className="h-4 w-4 rounded-full border border-[#E4E4E7]"
                             style={{ backgroundColor: extractedPalette.accent }}
                             title={`Accent ${extractedPalette.accent}`}
                           />
@@ -429,8 +432,8 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
 
                   {/* 2. Format Presets */}
                   <div>
-                    <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                      2. Visual Format Mode
+                    <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#71717A]">
+                      2. Design Mode
                     </span>
                     <div className="grid grid-cols-2 gap-2">
                       {FRAME_MODES.map((mode) => (
@@ -442,14 +445,24 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                           }
                           className={`rounded-xl border p-2.5 text-left transition ${
                             styleConfig.frameMode === mode.id
-                              ? 'border-indigo-500 bg-indigo-50/80 dark:bg-indigo-500/15'
-                              : 'border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900'
+                              ? 'border-[#27272A] bg-[#27272A] text-white dark:border-[#C4F000] dark:bg-[#3F3F46]'
+                              : 'border-[#E4E4E7] bg-white text-[#18181B] hover:border-[#71717A] dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-white'
                           }`}
                         >
-                          <div className="text-xs font-bold text-slate-900 dark:text-white">
+                          <div
+                            className={`text-xs font-bold ${
+                              styleConfig.frameMode === mode.id ? 'text-[#C4F000]' : ''
+                            }`}
+                          >
                             {mode.label}
                           </div>
-                          <div className="mt-0.5 text-[10px] leading-snug text-slate-500 dark:text-slate-400">
+                          <div
+                            className={`mt-0.5 text-[10px] leading-snug ${
+                              styleConfig.frameMode === mode.id
+                                ? 'text-zinc-300'
+                                : 'text-[#71717A] dark:text-zinc-400'
+                            }`}
+                          >
                             {mode.desc}
                           </div>
                         </button>
@@ -460,7 +473,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                   {/* 3. Dot & Corner Shapes */}
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <div>
-                      <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                      <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-[#71717A]">
                         Module Dots
                       </span>
                       <div className="grid grid-cols-2 gap-1.5">
@@ -473,8 +486,8 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                             }
                             className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition ${
                               styleConfig.dotStyle === dot.id
-                                ? 'border-blue-600 bg-blue-600 text-white'
-                                : 'border-slate-200 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300'
+                                ? 'border-[#27272A] bg-[#27272A] text-[#C4F000] dark:border-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]'
+                                : 'border-[#E4E4E7] bg-white text-[#18181B] dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-zinc-300'
                             }`}
                           >
                             {dot.label}
@@ -484,7 +497,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                     </div>
 
                     <div>
-                      <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                      <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-[#71717A]">
                         Corner Squares
                       </span>
                       <div className="grid grid-cols-3 gap-1.5">
@@ -497,8 +510,8 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                             }
                             className={`rounded-lg border px-2 py-1.5 text-xs font-semibold transition ${
                               styleConfig.cornerStyle === corner.id
-                                ? 'border-blue-600 bg-blue-600 text-white'
-                                : 'border-slate-200 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300'
+                                ? 'border-[#27272A] bg-[#27272A] text-[#C4F000] dark:border-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]'
+                                : 'border-[#E4E4E7] bg-white text-[#18181B] dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-zinc-300'
                             }`}
                           >
                             {corner.label}
@@ -510,8 +523,8 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
 
                   {/* 4. Colors & CTA Label */}
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                    <label className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold dark:border-slate-800 dark:bg-slate-900">
-                      <span>Foreground</span>
+                    <label className="flex items-center justify-between rounded-xl border border-[#E4E4E7] bg-white px-3 py-2 text-xs font-semibold dark:border-[#3F3F46] dark:bg-[#27272A]">
+                      <span>QR Color</span>
                       <input
                         type="color"
                         value={styleConfig.foregroundColor}
@@ -527,7 +540,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                       />
                     </label>
 
-                    <label className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold dark:border-slate-800 dark:bg-slate-900">
+                    <label className="flex items-center justify-between rounded-xl border border-[#E4E4E7] bg-white px-3 py-2 text-xs font-semibold dark:border-[#3F3F46] dark:bg-[#27272A]">
                       <span>Accent</span>
                       <input
                         type="color"
@@ -539,7 +552,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                       />
                     </label>
 
-                    <label className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold dark:border-slate-800 dark:bg-slate-900">
+                    <label className="flex items-center justify-between rounded-xl border border-[#E4E4E7] bg-white px-3 py-2 text-xs font-semibold dark:border-[#3F3F46] dark:bg-[#27272A]">
                       <span>Background</span>
                       <input
                         type="color"
@@ -554,7 +567,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
 
                   {styleConfig.frameMode === 'branded-card' && (
                     <div>
-                      <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                      <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-[#71717A]">
                         Card Call-to-Action Label
                       </label>
                       <input
@@ -565,22 +578,20 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                           setStyleConfig((prev) => ({ ...prev, ctaText: e.target.value }))
                         }
                         placeholder="SCAN ME"
-                        className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                        className="w-full rounded-xl border border-[#E4E4E7] bg-white px-3 py-2 text-xs font-semibold text-[#18181B] focus:border-[#27272A] focus:outline-none dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-white"
                       />
                     </div>
                   )}
 
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 pt-3 dark:border-slate-800">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#E4E4E7] pt-3 dark:border-[#3F3F46]">
                     <span
                       className={`inline-flex items-center gap-1.5 text-[11px] font-semibold ${
-                        contrastRatio >= 4.5
-                          ? 'text-emerald-600 dark:text-emerald-400'
-                          : 'text-amber-600 dark:text-amber-400'
+                        contrastRatio >= 4.5 ? 'text-[#16A34A]' : 'text-[#F59E0B]'
                       }`}
                     >
                       <ShieldCheck className="h-3.5 w-3.5" />
                       Contrast {contrastRatio.toFixed(1)}:1{' '}
-                      {contrastRatio >= 4.5 ? '(Scan-Safe)' : '(Low contrast — darken modules)'}
+                      {contrastRatio >= 4.5 ? '(Scan-Safe)' : '(Low contrast — darken QR color)'}
                     </span>
 
                     <div className="flex items-center gap-2">
@@ -588,7 +599,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                         type="button"
                         onClick={() => void handleResetStyle()}
                         disabled={savingStyle}
-                        className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                        className="inline-flex items-center gap-1 rounded-xl border border-[#E4E4E7] bg-white px-3 py-2 text-xs font-semibold text-[#71717A] hover:text-[#18181B] dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-zinc-300"
                       >
                         <RotateCcw className="h-3.5 w-3.5" />
                         Reset
@@ -597,7 +608,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                         type="button"
                         onClick={() => void handleSaveStyle()}
                         disabled={savingStyle}
-                        className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-xs transition hover:bg-blue-700 disabled:opacity-60"
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-[#C4F000] px-4 py-2 text-xs font-bold text-[#18181B] transition hover:bg-[#d2f833] disabled:opacity-60"
                       >
                         {savingStyle ? (
                           <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -610,7 +621,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                   </div>
 
                   {saveSuccess && (
-                    <div className="rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200">
+                    <div className="rounded-xl border border-[#16A34A]/30 bg-[#16A34A]/10 px-3 py-2 text-xs font-medium text-[#16A34A]">
                       {saveSuccess}
                     </div>
                   )}
@@ -620,13 +631,13 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
           )}
         </div>
 
-        {error && <p className="mt-3 text-center text-xs font-medium text-rose-500">{error}</p>}
+        {error && <p className="mt-3 text-center text-xs font-medium text-[#DC2626]">{error}</p>}
       </div>
 
       {showAuthPrompt && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-xs">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#18181B]/70 p-4 backdrop-blur-xs">
           <WorkspacePromptCard
-            featureName="Custom Image-to-QR Designer"
+            featureName="Custom QR Designer"
             redirectTo="/qr-codes"
             onClose={() => setShowAuthPrompt(false)}
             onSuccess={() => {

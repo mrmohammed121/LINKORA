@@ -7,6 +7,7 @@ import { CreateLinkPage } from './pages/CreateLinkPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { LinkManagementPage } from './pages/LinkManagementPage';
 import { MyLinksPage } from './pages/MyLinksPage';
+import { PublicLandingPage } from './pages/PublicLandingPage';
 import { QrCodesPage } from './pages/QrCodesPage';
 import { RescueFallbackPage } from './pages/RescueFallbackPage';
 import { SettingsPage } from './pages/SettingsPage';
@@ -22,7 +23,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<DashboardPage />} />
+        <Route path="/" element={<PublicLandingPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/login" element={<AuthPage mode="login" />} />
         <Route path="/register" element={<AuthPage mode="register" />} />
         <Route path="/rescue/:slug" element={<RescueFallbackPage />} />

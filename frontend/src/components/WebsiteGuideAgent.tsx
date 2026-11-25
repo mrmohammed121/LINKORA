@@ -1,14 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import {
-  ArrowUpRight,
-  BookOpen,
-  Bot,
-  Loader2,
-  Send,
-  Sparkles,
-  X,
-} from 'lucide-react';
+import { ArrowUpRight, BookOpen, Bot, Loader2, Send, Sparkles, X } from 'lucide-react';
 import { api } from '../lib/api';
 import type { AssistantReferenceItem } from '../types';
 
@@ -47,10 +39,11 @@ const INITIAL_REFERENCES: AssistantReferenceItem[] = [
 ];
 
 function formatPageLabel(pathname: string): string {
-  if (pathname === '/') return 'Home';
-  if (pathname.startsWith('/create')) return 'Create Link';
+  if (pathname === '/') return 'Landing';
+  if (pathname.startsWith('/dashboard')) return 'Overview';
+  if (pathname.startsWith('/create')) return 'Create Short Link';
   if (pathname.startsWith('/links')) return 'My Links';
-  if (pathname.startsWith('/qr-codes')) return 'QR Codes';
+  if (pathname.startsWith('/qr-codes')) return 'QR Code Studio';
   if (pathname.startsWith('/analytics')) return 'Analytics';
   if (pathname.startsWith('/manage')) return 'Link Management';
   if (pathname.startsWith('/settings')) return 'Settings';
@@ -72,7 +65,7 @@ export function WebsiteGuideAgent() {
     {
       id: 'welcome',
       role: 'assistant',
-      text: "Hi! I'm the **LINKORA Guide Agent**, trained on LINKORA's website features and technical docs. Ask me how to shorten links, generate or style QR codes, rescue expired links, view analytics, or manage your account.",
+      text: "Hi! I'm the **LINKORA Guide Agent**, trained on LINKORA's features and docs. Ask me how to shorten URLs, customize QR codes, rescue expired links, read analytics, or manage your account.",
       references: INITIAL_REFERENCES,
       suggestions: INITIAL_SUGGESTIONS,
     },
@@ -120,7 +113,7 @@ export function WebsiteGuideAgent() {
         {
           id: `a_${Date.now()}`,
           role: 'assistant',
-          text: 'The backend is waking up or temporarily unreachable. Meanwhile, you can jump straight to these LINKORA sections below and try again in a few seconds.',
+          text: 'The backend is waking up or temporarily unreachable. You can jump straight to these LINKORA pages below and try again in a few seconds.',
           references: INITIAL_REFERENCES,
           suggestions: INITIAL_SUGGESTIONS,
         },
@@ -147,23 +140,23 @@ export function WebsiteGuideAgent() {
       {open && (
         <section
           aria-label="LINKORA Guide Agent"
-          className="mb-3 flex h-[500px] max-h-[75vh] w-[370px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900"
+          className="mb-3 flex h-[500px] max-h-[75vh] w-[370px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-[#E4E4E7] bg-white shadow-2xl dark:border-[#3F3F46] dark:bg-[#27272A]"
         >
-          {/* Header */}
-          <div className="flex items-center justify-between border-b border-slate-200 bg-gradient-to-r from-blue-600 to-teal-500 px-4 py-3 text-white dark:border-slate-800">
+          {/* Charcoal Header */}
+          <div className="flex items-center justify-between border-b border-[#3F3F46] bg-[#27272A] px-4 py-3 text-white">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/20 backdrop-blur-xs">
-                <Bot className="h-4 w-4 text-white" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#C4F000] text-[#18181B]">
+                <Bot className="h-4 w-4" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5 text-sm font-bold leading-tight">
                   LINKORA Guide
-                  <span className="inline-flex items-center gap-0.5 rounded-full bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold">
+                  <span className="inline-flex items-center gap-0.5 rounded-full bg-[#C4F000]/15 px-1.5 py-0.5 text-[10px] font-semibold text-[#C4F000]">
                     <Sparkles className="h-2.5 w-2.5" />
                     Docs
                   </span>
                 </div>
-                <p className="text-[11px] text-white/85">
+                <p className="text-[11px] text-zinc-400">
                   Viewing: {formatPageLabel(location.pathname)}
                 </p>
               </div>
@@ -173,14 +166,17 @@ export function WebsiteGuideAgent() {
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close LINKORA Guide"
-              className="rounded-lg p-1.5 text-white/85 transition hover:bg-white/20 hover:text-white"
+              className="rounded-lg p-1.5 text-zinc-400 transition hover:bg-[#3F3F46] hover:text-white"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
 
           {/* Messages */}
-          <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-slate-50/70 p-3.5 dark:bg-slate-950/60">
+          <div
+            ref={scrollRef}
+            className="flex-1 space-y-3 overflow-y-auto bg-[#F4F4F5] p-3.5 dark:bg-[#18181B]"
+          >
             {messages.map((msg) => (
               <div
                 key={msg.id}
@@ -189,8 +185,8 @@ export function WebsiteGuideAgent() {
                 <div
                   className={`max-w-[90%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line ${
                     msg.role === 'user'
-                      ? 'rounded-br-sm bg-blue-600 text-white shadow-xs'
-                      : 'rounded-bl-sm border border-slate-200 bg-white text-slate-700 shadow-xs dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200'
+                      ? 'rounded-br-sm bg-[#27272A] font-medium text-[#C4F000] shadow-xs dark:bg-[#C4F000] dark:text-[#18181B]'
+                      : 'rounded-bl-sm border border-[#E4E4E7] bg-white text-[#18181B] shadow-xs dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-zinc-100'
                   }`}
                 >
                   {msg.text.split('**').map((part, i) =>
@@ -207,7 +203,7 @@ export function WebsiteGuideAgent() {
                 {/* Cited Website References */}
                 {msg.role === 'assistant' && msg.references && msg.references.length > 0 && (
                   <div className="mt-2 w-[92%] space-y-1.5">
-                    <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[#71717A]">
                       <BookOpen className="h-3 w-3" />
                       Website References
                     </div>
@@ -216,17 +212,17 @@ export function WebsiteGuideAgent() {
                         key={ref.id}
                         type="button"
                         onClick={() => handleNavigateRef(ref.route)}
-                        className="flex w-full items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-left transition hover:border-blue-400 hover:bg-blue-50/60 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-500/50 dark:hover:bg-blue-500/10"
+                        className="flex w-full items-center justify-between gap-2 rounded-xl border border-[#E4E4E7] bg-white px-3 py-2 text-left transition hover:border-[#27272A] dark:border-[#3F3F46] dark:bg-[#27272A] dark:hover:border-[#C4F000]"
                       >
                         <div className="min-w-0">
-                          <div className="truncate text-[11px] font-bold text-slate-800 dark:text-slate-100">
+                          <div className="truncate text-[11px] font-bold text-[#18181B] dark:text-white">
                             {ref.title}
                           </div>
-                          <div className="truncate text-[10px] text-slate-500 dark:text-slate-400">
+                          <div className="truncate text-[10px] text-[#71717A] dark:text-zinc-400">
                             {ref.summary}
                           </div>
                         </div>
-                        <span className="inline-flex shrink-0 items-center gap-0.5 rounded-lg bg-blue-50 px-2 py-1 text-[10px] font-semibold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
+                        <span className="inline-flex shrink-0 items-center gap-0.5 rounded-lg bg-[#27272A] px-2 py-1 text-[10px] font-bold text-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]">
                           {ref.routeLabel}
                           <ArrowUpRight className="h-3 w-3" />
                         </span>
@@ -235,7 +231,6 @@ export function WebsiteGuideAgent() {
                   </div>
                 )}
 
-                {/* Quick Suggestion Chips on latest assistant message */}
                 {msg.role === 'assistant' &&
                   msg.id === messages[messages.length - 1]?.id &&
                   msg.suggestions &&
@@ -246,7 +241,7 @@ export function WebsiteGuideAgent() {
                           key={q}
                           type="button"
                           onClick={() => void askAgent(q)}
-                          className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-600 transition hover:border-blue-400 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-blue-500 dark:hover:text-blue-300"
+                          className="rounded-full border border-[#E4E4E7] bg-white px-2.5 py-1 text-[11px] font-medium text-[#18181B] transition hover:border-[#27272A] dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-zinc-200 dark:hover:border-[#C4F000]"
                         >
                           {q}
                         </button>
@@ -257,8 +252,8 @@ export function WebsiteGuideAgent() {
             ))}
 
             {isLoading && (
-              <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                <Loader2 className="h-3.5 w-3.5 animate-spin text-blue-600" />
+              <div className="flex items-center gap-2 text-xs text-[#71717A]">
+                <Loader2 className="h-3.5 w-3.5 animate-spin text-[#27272A] dark:text-[#C4F000]" />
                 Searching LINKORA references...
               </div>
             )}
@@ -267,7 +262,7 @@ export function WebsiteGuideAgent() {
           {/* Input */}
           <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-2 border-t border-slate-200 bg-white p-2.5 dark:border-slate-800 dark:bg-slate-900"
+            className="flex items-center gap-2 border-t border-[#E4E4E7] bg-white p-2.5 dark:border-[#3F3F46] dark:bg-[#27272A]"
           >
             <input
               type="text"
@@ -275,13 +270,13 @@ export function WebsiteGuideAgent() {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask about links, QR Rescue, analytics..."
               maxLength={500}
-              className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+              className="flex-1 rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] px-3 py-2 text-xs text-[#18181B] placeholder:text-[#71717A] focus:border-[#27272A] focus:bg-white focus:outline-none dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-white"
             />
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
               aria-label="Send question"
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white transition hover:bg-blue-700 disabled:opacity-50"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#C4F000] text-[#18181B] transition hover:bg-[#d2f833] disabled:opacity-50"
             >
               <Send className="h-3.5 w-3.5" />
             </button>
@@ -289,13 +284,13 @@ export function WebsiteGuideAgent() {
         </section>
       )}
 
-      {/* Floating Launcher Button */}
+      {/* Compact Circular Launcher Button */}
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         title={open ? 'Close LINKORA Guide' : 'Ask LINKORA Guide'}
         aria-label={open ? 'Close LINKORA Guide Agent' : 'Ask LINKORA Guide'}
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-teal-500 text-white shadow-lg shadow-blue-600/30 transition hover:scale-105 hover:from-blue-500 hover:to-teal-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-slate-950"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3F3F46] bg-[#27272A] text-[#C4F000] shadow-xl transition hover:scale-105 hover:bg-[#3F3F46] focus:outline-none focus:ring-2 focus:ring-[#C4F000]"
       >
         {open ? <X className="h-5 w-5" /> : <Bot className="h-5 w-5" />}
       </button>

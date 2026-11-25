@@ -5,13 +5,17 @@ import {
   CalendarClock,
   Check,
   Copy,
+  Download,
   ExternalLink,
   Link2,
   Loader2,
+  QrCode,
+  Share2,
   Sparkles,
 } from 'lucide-react';
 import { AppLayout } from '../components/AppLayout';
-import { getDisplayBaseHost } from '../lib/api';
+import { QrThumbnail } from '../components/QrThumbnail';
+import { api, getDisplayBaseHost } from '../lib/api';
 import { sanitizeSlugInput, validateSlugForSubmit } from '../lib/slug';
 import { useLinkStore } from '../store/useLinkStore';
 import type { LinkItem } from '../types';
@@ -26,7 +30,10 @@ export function CreateLinkPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [createdLink, setCreatedLink] = useState<LinkItem | null>(null);
+  const [showQrPreview, setShowQrPreview] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [sharedNotice, setSharedNotice] = useState<string | null>(null);
+  const [downloading, setDownloading] = useState<'png' | 'svg' | null>(null);
 
   const handleSlugChange = (raw: string) => {
     const { slug, notice } = sanitizeSlugInput(raw);
@@ -54,6 +61,8 @@ export function CreateLinkPage() {
         expiresAt: expiresAt ? new Date(expiresAt).toISOString() : null,
       });
       setCreatedLink(created);
+      setShowQrPreview(false);
+      setSharedNotice(null);
       setOriginalUrl('');
       setCustomSlug('');
       setSlugNotice(null);
@@ -72,49 +81,80 @@ export function CreateLinkPage() {
     setTimeout(() => setCopied(false), 1600);
   };
 
+  const handleShare = async () => {
+    if (!createdLink) return;
+    if (typeof navigator.share === 'function') {
+      try {
+        await navigator.share({
+          title: `LINKORA /${createdLink.slug}`,
+          text: `Short link created with LINKORA`,
+          url: createdLink.shortUrl,
+        });
+        setSharedNotice('Shared successfully.');
+        setTimeout(() => setSharedNotice(null), 2000);
+        return;
+      } catch {
+        // Fallback to clipboard copy if user dismissed or share unavailable
+      }
+    }
+    await navigator.clipboard.writeText(createdLink.shortUrl);
+    setSharedNotice('Share link copied to clipboard.');
+    setTimeout(() => setSharedNotice(null), 2000);
+  };
+
+  const handleDownload = async (format: 'png' | 'svg') => {
+    if (!createdLink) return;
+    setDownloading(format);
+    try {
+      await api.qr.downloadFile(createdLink.id, createdLink.slug, format);
+    } finally {
+      setDownloading(null);
+    }
+  };
+
   return (
     <AppLayout>
-      <div className="mx-auto max-w-4xl space-y-6">
+      <div className="mx-auto max-w-5xl space-y-6">
         <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl font-extrabold tracking-tight text-[#18181B] dark:text-white">
             Create Short Link
           </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Generate a fast, reliable short URL with an optional custom slug and expiration.
+          <p className="mt-1 text-sm text-[#71717A] dark:text-zinc-400">
+            Generate a fast short URL with an optional custom slug and expiration timer.
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
           <form
             onSubmit={handleSubmit}
-            className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900 lg:col-span-7"
+            className="space-y-5 rounded-2xl border border-[#E4E4E7] bg-white p-6 shadow-xs dark:border-[#3F3F46] dark:bg-[#27272A] lg:col-span-7"
           >
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                Destination URL *
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-[#71717A] dark:text-zinc-400">
+                Original URL *
               </label>
               <div className="relative">
-                <Link2 className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Link2 className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#71717A]" />
                 <input
                   type="url"
                   required
                   value={originalUrl}
                   onChange={(e) => setOriginalUrl(e.target.value)}
                   placeholder="https://your-website.com/landing-page"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] py-3 pl-10 pr-4 text-sm text-[#18181B] focus:border-[#27272A] focus:bg-white focus:outline-none dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-white"
                 />
               </div>
-              <p className="mt-1 text-[11px] text-slate-400">
+              <p className="mt-1 text-[11px] text-[#71717A]">
                 Only http:// and https:// URLs are accepted for security.
               </p>
             </div>
 
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                Custom Back-Half / Slug (optional)
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-[#71717A] dark:text-zinc-400">
+                Custom Slug (optional)
               </label>
-              <div className="flex items-center rounded-xl border border-slate-200 bg-slate-50 focus-within:border-blue-500 focus-within:bg-white dark:border-slate-700 dark:bg-slate-950">
-                <span className="border-r border-slate-200 px-3.5 py-3 font-mono text-xs text-slate-500 dark:border-slate-700">
+              <div className="flex items-center rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] focus-within:border-[#27272A] focus-within:bg-white dark:border-[#3F3F46] dark:bg-[#18181B]">
+                <span className="border-r border-[#E4E4E7] px-3.5 py-3 font-mono text-xs text-[#71717A] dark:border-[#3F3F46]">
                   {getDisplayBaseHost(createdLink?.shortUrl ?? links[0]?.shortUrl)}/
                 </span>
                 <input
@@ -122,44 +162,42 @@ export function CreateLinkPage() {
                   value={customSlug}
                   onChange={(e) => handleSlugChange(e.target.value)}
                   placeholder="spring-promo (auto 6 chars if empty)"
-                  className="w-full bg-transparent px-3.5 py-3 font-mono text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-white"
+                  className="w-full bg-transparent px-3.5 py-3 font-mono text-sm text-[#18181B] placeholder:text-[#71717A] focus:outline-none dark:text-white"
                 />
               </div>
               {slugNotice && (
-                <p className="mt-1 text-[11px] font-medium text-amber-600 dark:text-amber-400">
-                  {slugNotice}
-                </p>
+                <p className="mt-1 text-[11px] font-medium text-[#F59E0B]">{slugNotice}</p>
               )}
             </div>
 
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-[#71717A] dark:text-zinc-400">
                 Expiration Date &amp; Time (optional)
               </label>
               <div className="relative">
-                <CalendarClock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <CalendarClock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#71717A]" />
                 <input
                   type="datetime-local"
                   value={expiresAt}
                   onChange={(e) => setExpiresAt(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] py-3 pl-10 pr-4 text-sm text-[#18181B] focus:border-[#27272A] focus:bg-white focus:outline-none dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-white"
                 />
               </div>
             </div>
 
-            <div className="rounded-xl border border-teal-200 bg-teal-50/70 p-3.5 text-xs text-teal-800 dark:border-teal-500/20 dark:bg-teal-500/10 dark:text-teal-200">
-              <div className="flex items-center gap-1.5 font-semibold">
-                <Sparkles className="h-4 w-4 text-teal-600" />
+            <div className="rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] p-3.5 text-xs text-[#18181B] dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-zinc-200">
+              <div className="flex items-center gap-1.5 font-bold">
+                <Sparkles className="h-4 w-4 text-[#16A34A]" />
                 Instant Short URL Routing
               </div>
-              <p className="mt-1 leading-relaxed">
-                Your short link routes immediately with cached HTTP 302 redirects. If you ever need
-                a QR code later, you can open it anytime from My Links or QR Codes.
+              <p className="mt-1 leading-relaxed text-[#71717A] dark:text-zinc-400">
+                Your short link routes immediately with HTTP 302 redirects. Generate a QR code on
+                demand from the result card or anytime in QR Code Studio.
               </p>
             </div>
 
             {error && (
-              <div className="rounded-xl border border-rose-300 bg-rose-50 px-4 py-3 text-xs font-medium text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
+              <div className="rounded-xl border border-[#DC2626]/30 bg-[#DC2626]/10 px-4 py-3 text-xs font-medium text-[#DC2626]">
                 {error}
               </div>
             )}
@@ -167,95 +205,146 @@ export function CreateLinkPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#C4F000] px-5 py-3 text-sm font-bold text-[#18181B] shadow-xs transition hover:bg-[#d2f833] disabled:opacity-60"
             >
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Creating Short Link...
+                  Generating Short Link...
                 </>
               ) : (
                 <>
-                  Create Short Link
+                  Generate Short Link
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
             </button>
           </form>
 
-          {/* Right Preview Panel — Short Link Only */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900 lg:col-span-5">
-            <h2 className="text-sm font-bold text-slate-900 dark:text-white">
+          {/* Right Result Panel */}
+          <div className="rounded-2xl border border-[#E4E4E7] bg-white p-6 shadow-xs dark:border-[#3F3F46] dark:bg-[#27272A] lg:col-span-5">
+            <h2 className="text-sm font-bold text-[#18181B] dark:text-white">
               Short Link Result
             </h2>
 
             {createdLink ? (
               <div className="mt-4 space-y-4">
-                <div className="rounded-xl border border-emerald-200 bg-emerald-50/80 px-3.5 py-2.5 text-xs font-semibold text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200">
-                  Short link created and ready to share!
+                <div className="rounded-xl border border-[#16A34A]/30 bg-[#16A34A]/10 px-3.5 py-2.5 text-xs font-semibold text-[#16A34A]">
+                  Short link ready to share
                 </div>
 
-                <div className="flex w-full items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 dark:border-slate-700 dark:bg-slate-950">
+                <div className="rounded-xl border border-[#3F3F46] bg-[#27272A] p-4 text-white">
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+                    Generated Short URL
+                  </div>
                   <a
                     href={createdLink.shortUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 truncate font-mono text-sm font-bold text-blue-600 hover:underline dark:text-blue-400"
+                    className="mt-1.5 inline-flex items-center gap-1.5 break-all font-mono text-sm font-bold text-[#C4F000] hover:underline"
                   >
                     {createdLink.shortUrl}
                     <ExternalLink className="h-3.5 w-3.5 shrink-0" />
                   </a>
-                  <button
-                    type="button"
-                    onClick={() => void handleCopy()}
-                    className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-xs hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-200"
-                  >
-                    {copied ? (
-                      <Check className="h-3.5 w-3.5 text-emerald-500" />
-                    ) : (
-                      <Copy className="h-3.5 w-3.5" />
-                    )}
-                    {copied ? 'Copied' : 'Copy'}
-                  </button>
+
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => void handleCopy()}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#C4F000] px-3 py-2 text-xs font-bold text-[#18181B] transition hover:bg-[#d2f833]"
+                    >
+                      {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                      {copied ? 'Copied' : 'Copy'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void handleShare()}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#3F3F46] bg-[#3F3F46]/60 px-3 py-2 text-xs font-semibold text-white transition hover:bg-[#3F3F46]"
+                    >
+                      <Share2 className="h-3.5 w-3.5" />
+                      Share
+                    </button>
+                  </div>
+
+                  {sharedNotice && (
+                    <p className="mt-2 text-[11px] font-medium text-[#C4F000]">{sharedNotice}</p>
+                  )}
                 </div>
 
-                <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-3 text-xs dark:border-slate-800 dark:bg-slate-950/60">
-                  <div className="font-semibold text-slate-500 dark:text-slate-400">
-                    Redirects to
-                  </div>
-                  <p className="mt-1 break-all font-medium text-slate-700 dark:text-slate-200">
+                <div className="rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] p-3 text-xs dark:border-[#3F3F46] dark:bg-[#18181B]">
+                  <div className="font-semibold text-[#71717A]">Destination</div>
+                  <p className="mt-1 break-all font-medium text-[#18181B] dark:text-zinc-200">
                     {createdLink.originalUrl}
                   </p>
                   {createdLink.expiresAt && (
-                    <p className="mt-2 text-[11px] text-slate-500">
+                    <p className="mt-2 text-[11px] text-[#71717A]">
                       Expires: {new Date(createdLink.expiresAt).toLocaleString()}
                     </p>
                   )}
                 </div>
 
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                {/* On-demand QR Preview */}
+                {showQrPreview ? (
+                  <div className="flex flex-col items-center rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] p-4 dark:border-[#3F3F46] dark:bg-[#18181B]">
+                    <QrThumbnail
+                      linkId={createdLink.id}
+                      shortUrl={createdLink.shortUrl}
+                      slug={createdLink.slug}
+                      sizeClass="h-40 w-40"
+                    />
+                    <div className="mt-3 grid w-full grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => void handleDownload('png')}
+                        disabled={downloading !== null}
+                        className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#E4E4E7] bg-white px-3 py-2 text-xs font-semibold text-[#18181B] hover:bg-[#E4E4E7]/50 dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-white"
+                      >
+                        <Download className="h-3.5 w-3.5" /> PNG
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => void handleDownload('svg')}
+                        disabled={downloading !== null}
+                        className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#E4E4E7] bg-white px-3 py-2 text-xs font-semibold text-[#18181B] hover:bg-[#E4E4E7]/50 dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-white"
+                      >
+                        <Download className="h-3.5 w-3.5" /> SVG
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setShowQrPreview(true)}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] px-4 py-2.5 text-xs font-bold text-[#18181B] transition hover:border-[#27272A] dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-white"
+                  >
+                    <QrCode className="h-4 w-4" />
+                    Generate QR Code Preview
+                  </button>
+                )}
+
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
                   <Link
                     to="/links"
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 hover:underline dark:text-slate-300"
+                    className="font-semibold text-[#71717A] hover:text-[#18181B] hover:underline dark:text-zinc-300"
                   >
                     View My Links
                   </Link>
                   <Link
                     to={`/analytics/${createdLink.id}`}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:underline dark:text-blue-400"
+                    className="inline-flex items-center gap-1 font-bold text-[#18181B] underline decoration-[#C4F000] decoration-2 dark:text-white"
                   >
-                    Open Link Analytics <ArrowRight className="h-3.5 w-3.5" />
+                    Open Analytics <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
                 </div>
               </div>
             ) : (
-              <div className="mt-8 flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 py-14 text-center dark:border-slate-700">
-                <Link2 className="h-11 w-11 text-slate-300 dark:text-slate-700" />
-                <p className="mt-3 text-xs font-semibold text-slate-600 dark:text-slate-300">
+              <div className="mt-8 flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#E4E4E7] py-14 text-center dark:border-[#3F3F46]">
+                <Link2 className="h-11 w-11 text-[#71717A]/50" />
+                <p className="mt-3 text-xs font-semibold text-[#18181B] dark:text-zinc-200">
                   Your short link will appear here
                 </p>
-                <p className="mt-1 max-w-[220px] text-[11px] text-slate-400">
-                  Enter a destination URL and submit to generate a shareable short link.
+                <p className="mt-1 max-w-[220px] text-[11px] text-[#71717A]">
+                  Enter a destination URL and click Generate Short Link.
                 </p>
               </div>
             )}

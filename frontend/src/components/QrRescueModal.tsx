@@ -65,7 +65,7 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
 
   if (!isAuthenticated) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#18181B]/75 p-4 backdrop-blur-xs">
         <WorkspacePromptCard
           featureName={`Dynamic QR Rescue (/${link.slug})`}
           redirectTo="/qr-codes"
@@ -107,25 +107,25 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#18181B]/75 p-4 backdrop-blur-xs">
+      <div className="w-full max-w-lg rounded-2xl border border-[#E4E4E7] bg-white p-6 shadow-2xl dark:border-[#3F3F46] dark:bg-[#27272A]">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F59E0B]/15 text-[#F59E0B]">
               <LifeBuoy className="h-5 w-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                  QR Rescue — Fix Broken QR Target
+                <h3 className="text-base font-bold text-[#18181B] dark:text-white">
+                  Edit Link &amp; QR Rescue
                 </h3>
                 {(link.rescueCount ?? 0) > 0 && (
-                  <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold text-amber-700 dark:text-amber-300">
+                  <span className="rounded-full bg-[#F59E0B]/15 px-2 py-0.5 text-[10px] font-bold text-[#B45309] dark:text-[#FBBF24]">
                     {link.rescueCount} rescues
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-[#71717A] dark:text-zinc-400">
                 Hot-swap destination &amp; lifecycle with instant cache invalidation
               </p>
             </div>
@@ -134,14 +134,15 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+            aria-label="Close modal"
+            className="rounded-lg p-1.5 text-[#71717A] transition hover:bg-[#F4F4F5] hover:text-[#18181B] dark:hover:bg-[#3F3F46] dark:hover:text-white"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-indigo-500/25 bg-indigo-500/10 p-3.5 text-xs text-indigo-800 dark:text-indigo-200">
-          <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
+        <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] p-3.5 text-xs text-[#18181B] dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-zinc-200">
+          <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-[#F59E0B]" />
           <p className="font-medium leading-relaxed">
             <strong>Permanent QR Matrix:</strong> Your printed QR code stays identical while the
             target URL updates immediately.
@@ -149,14 +150,14 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
         </div>
 
         {savedToast && (
-          <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-emerald-400/40 bg-emerald-500/10 p-3.5 text-xs font-medium text-emerald-800 dark:text-emerald-200">
-            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+          <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-[#16A34A]/30 bg-[#16A34A]/10 p-3.5 text-xs font-medium text-[#16A34A]">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
             <div className="flex-1">
               <p>{savedToast}</p>
               <button
                 type="button"
                 onClick={onClose}
-                className="mt-2 font-bold text-emerald-700 underline dark:text-emerald-300"
+                className="mt-2 font-bold underline"
               >
                 Done &amp; close
               </button>
@@ -166,24 +167,17 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-600 dark:text-slate-300">
+            <label className="mb-1.5 block text-xs font-semibold text-[#71717A] dark:text-zinc-300">
               Locked Short Slug (Immutable)
             </label>
-            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-100 px-3.5 py-2.5 font-mono text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400">
+            <div className="flex items-center justify-between rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] px-3.5 py-2.5 font-mono text-sm text-[#71717A] dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-zinc-300">
               <span className="truncate">{link.shortUrl}</span>
-              <Lock className="h-3.5 w-3.5 shrink-0 text-slate-400" />
+              <Lock className="h-3.5 w-3.5 shrink-0" />
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400">
-            <span className="font-semibold text-slate-700 dark:text-slate-300">
-              Current Target URL:
-            </span>{' '}
-            <span className="break-all">{link.originalUrl}</span>
-          </div>
-
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-600 dark:text-slate-300">
+            <label className="mb-1.5 block text-xs font-semibold text-[#71717A] dark:text-zinc-300">
               New Destination URL (http:// or https://)
             </label>
             <input
@@ -195,19 +189,17 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
                 setError(null);
               }}
               placeholder="https://example.com/updated-destination"
-              className={`w-full rounded-xl border bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 dark:bg-slate-950 dark:text-white ${
+              className={`w-full rounded-xl border bg-[#F4F4F5] px-3.5 py-2.5 text-sm text-[#18181B] focus:bg-white focus:outline-none dark:bg-[#18181B] dark:text-white ${
                 liveUrlError
-                  ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-500/20'
-                  : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-slate-700 dark:focus:border-indigo-400'
+                  ? 'border-[#DC2626]'
+                  : 'border-[#E4E4E7] focus:border-[#27272A] dark:border-[#3F3F46]'
               }`}
             />
             {liveUrlError ? (
-              <p className="mt-1 text-[11px] font-medium text-rose-600 dark:text-rose-400">
-                {liveUrlError}
-              </p>
+              <p className="mt-1 text-[11px] font-medium text-[#DC2626]">{liveUrlError}</p>
             ) : (
               originalUrl.trim() && (
-                <p className="mt-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                <p className="mt-1 text-[11px] font-medium text-[#16A34A]">
                   Valid target URL — ready for zero-downtime swap
                 </p>
               )
@@ -216,13 +208,13 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-xs font-medium text-slate-600 dark:text-slate-300">
+              <label className="mb-1.5 block text-xs font-semibold text-[#71717A] dark:text-zinc-300">
                 Link Status
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as LinkStatus)}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] px-3.5 py-2.5 text-sm font-medium text-[#18181B] focus:border-[#27272A] focus:bg-white focus:outline-none dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-white"
               >
                 <option value="ACTIVE">ACTIVE (Routing live)</option>
                 <option value="EXPIRED">EXPIRED (Show rescue page)</option>
@@ -232,14 +224,14 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
 
             <div>
               <div className="mb-1.5 flex items-center justify-between">
-                <label className="text-xs font-medium text-slate-600 dark:text-slate-300">
+                <label className="text-xs font-semibold text-[#71717A] dark:text-zinc-300">
                   Expiration Date
                 </label>
                 {expiresAt && (
                   <button
                     type="button"
                     onClick={() => setExpiresAt('')}
-                    className="text-[11px] font-semibold text-indigo-600 hover:underline dark:text-indigo-400"
+                    className="text-[11px] font-semibold text-[#18181B] underline decoration-[#C4F000] dark:text-[#C4F000]"
                   >
                     Clear expiry
                   </button>
@@ -249,13 +241,13 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
                 type="datetime-local"
                 value={expiresAt}
                 onChange={(e) => setExpiresAt(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] px-3 py-2.5 text-xs text-[#18181B] focus:border-[#27272A] focus:bg-white focus:outline-none dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-white"
               />
             </div>
           </div>
 
           {error && (
-            <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 px-3.5 py-2.5 text-xs font-medium text-rose-700 dark:text-rose-300">
+            <div className="rounded-xl border border-[#DC2626]/30 bg-[#DC2626]/10 px-3.5 py-2.5 text-xs font-medium text-[#DC2626]">
               {error}
             </div>
           )}
@@ -264,14 +256,14 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+              className="rounded-xl border border-[#E4E4E7] px-4 py-2.5 text-xs font-semibold text-[#18181B] transition hover:bg-[#F4F4F5] dark:border-[#3F3F46] dark:text-zinc-300 dark:hover:bg-[#3F3F46]"
             >
               Close
             </button>
             <button
               type="submit"
               disabled={isSaving || Boolean(liveUrlError)}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition hover:from-indigo-500 hover:to-cyan-500 disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#C4F000] px-5 py-2.5 text-xs font-bold text-[#18181B] shadow-xs transition hover:bg-[#d2f833] disabled:opacity-60"
             >
               {isSaving && <Loader2 className="h-4 w-4 animate-spin" />}
               Save &amp; Rescue QR
