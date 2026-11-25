@@ -25,6 +25,7 @@ import {
   YAxis,
 } from 'recharts';
 import { AppLayout } from '../components/AppLayout';
+import Crosshair from '../components/Crosshair';
 import { QrCodeModal } from '../components/QrCodeModal';
 import { QrRescueModal } from '../components/QrRescueModal';
 import { StatusBadge } from '../components/StatusBadge';
@@ -49,8 +50,10 @@ export function DashboardPage() {
 
   const token = useAuthStore((s) => s.token);
   const user = useAuthStore((s) => s.user);
+  const theme = useAuthStore((s) => s.theme);
   const claimNotice = useAuthStore((s) => s.claimNotice);
   const clearClaimNotice = useAuthStore((s) => s.clearClaimNotice);
+  const heroRef = useRef<HTMLElement | null>(null);
   const { links, isLoading: linksLoading, fetchLinks, createLink } = useLinkStore();
   const [dismissGuestNotice, setDismissGuestNotice] = useState(false);
 
@@ -241,8 +244,20 @@ export function DashboardPage() {
         )}
 
         {/* Hero Quick-Create Card inspired by Reference Screenshot 1 */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900 sm:p-8">
-          <div className="mx-auto max-w-3xl text-center">
+        <section
+          ref={heroRef}
+          className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900 sm:p-8"
+        >
+          <Crosshair
+            containerRef={heroRef}
+            color={theme === 'dark' ? '#38bdf8' : '#2563eb'}
+            opacity={0.45}
+            fade={0.35}
+            targetEffect="lock"
+            showCoordinates
+            clickPulse
+          />
+          <div className="relative z-10 mx-auto max-w-3xl text-center">
             <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
               What do you want to create{user?.name ? `, ${user.name.split(' ')[0]}` : ''}?
             </h1>

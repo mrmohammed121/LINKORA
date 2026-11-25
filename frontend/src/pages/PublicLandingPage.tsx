@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Activity,
@@ -17,12 +17,16 @@ import {
   Zap,
 } from 'lucide-react';
 import { AppLayout } from '../components/AppLayout';
+import Crosshair from '../components/Crosshair';
 import { api, getDisplayBaseHost } from '../lib/api';
 import { getGuestLinks, saveGuestLink } from '../lib/guestStorage';
 import { sanitizeSlugInput, validateSlugForSubmit } from '../lib/slug';
+import { useAuthStore } from '../store/useAuthStore';
 import type { LinkItem } from '../types';
 
 export function PublicLandingPage() {
+  const theme = useAuthStore((s) => s.theme);
+  const heroRef = useRef<HTMLElement | null>(null);
   const [createMode, setCreateMode] = useState<'link' | 'qr'>('link');
   const [originalUrl, setOriginalUrl] = useState('');
   const [customSlug, setCustomSlug] = useState('');
@@ -122,8 +126,20 @@ export function PublicLandingPage() {
     <AppLayout>
       <div className="space-y-6">
         {/* Public Try-It-Now Hero Card */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900 sm:p-8">
-          <div className="mx-auto max-w-3xl text-center">
+        <section
+          ref={heroRef}
+          className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900 sm:p-8"
+        >
+          <Crosshair
+            containerRef={heroRef}
+            color={theme === 'dark' ? '#38bdf8' : '#2563eb'}
+            opacity={0.45}
+            fade={0.35}
+            targetEffect="lock"
+            showCoordinates
+            clickPulse
+          />
+          <div className="relative z-10 mx-auto max-w-3xl text-center">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-800 dark:border-teal-500/30 dark:bg-teal-500/10 dark:text-teal-300">
               <Sparkles className="h-3.5 w-3.5" />
               Try LINKORA Free — No Account Required
