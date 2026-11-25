@@ -122,8 +122,8 @@ export function AnalyticsPage() {
   const isDark = theme === 'dark';
   const gridStroke = isDark ? '#3F3F46' : '#E4E4E7';
   const axisTickColor = isDark ? '#A1A1AA' : '#71717A';
-  const areaStroke = isDark ? '#C4F000' : '#27272A';
-  const barFill = isDark ? '#C4F000' : '#27272A';
+  const areaStroke = isDark ? '#E9FFDB' : '#27272A';
+  const barFill = isDark ? '#E9FFDB' : '#27272A';
 
   return (
     <div className="space-y-6">
@@ -145,7 +145,7 @@ export function AnalyticsPage() {
                 onClick={() => setPreset(item)}
                 className={`rounded-lg px-3 py-1.5 text-xs font-semibold uppercase transition ${
                   preset === item
-                    ? 'bg-[#27272A] text-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]'
+                    ? 'bg-[#27272A] text-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]'
                     : 'text-[#71717A] hover:text-[#18181B] dark:text-zinc-400 dark:hover:text-white'
                 }`}
               >
@@ -174,7 +174,7 @@ export function AnalyticsPage() {
           <button
             type="button"
             onClick={() => void load()}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-[#27272A] px-3.5 py-2 text-xs font-semibold text-[#C4F000] hover:bg-[#3F3F46]"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-[#27272A] px-3.5 py-2 text-xs font-semibold text-[#E9FFDB] hover:bg-[#3F3F46]"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
             Refresh
@@ -193,7 +193,7 @@ export function AnalyticsPage() {
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2.5">
-                <h1 className="font-mono text-2xl font-bold text-[#C4F000]">/{linkItem.slug}</h1>
+                <h1 className="font-mono text-2xl font-bold text-[#E9FFDB]">/{linkItem.slug}</h1>
                 <StatusBadge status={linkItem.status} />
                 {linkItem.isCached && (
                   <span className="rounded-full border border-white/15 bg-[#3F3F46] px-2.5 py-0.5 text-[11px] font-medium text-zinc-200">
@@ -211,7 +211,7 @@ export function AnalyticsPage() {
               <button
                 type="button"
                 onClick={() => void handleCopy()}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-[#C4F000] px-3.5 py-2 text-xs font-semibold text-[#18181B] hover:bg-[#b2dc00]"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#E9FFDB] px-3.5 py-2 text-xs font-semibold text-[#18181B] hover:bg-[#D7F9C2]"
               >
                 {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                 {copied ? 'Copied' : 'Copy Link'}
@@ -221,7 +221,7 @@ export function AnalyticsPage() {
                 onClick={() => setQrLink(linkItem)}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-[#3F3F46] px-3.5 py-2 text-xs font-semibold text-white hover:bg-zinc-600"
               >
-                <QrCode className="h-3.5 w-3.5 text-[#C4F000]" />
+                <QrCode className="h-3.5 w-3.5 text-[#E9FFDB]" />
                 QR Studio
               </button>
               <button
@@ -261,11 +261,11 @@ export function AnalyticsPage() {
             <div className="rounded-2xl border border-[#27272A] bg-[#27272A] p-5 text-white">
               <div className="flex items-center justify-between text-xs font-medium text-zinc-300">
                 <span>Total Clicks</span>
-                <span className="rounded-lg bg-[#C4F000] p-1.5 text-[#18181B]">
+                <span className="rounded-lg bg-[#E9FFDB] p-1.5 text-[#18181B]">
                   <MousePointerClick className="h-4 w-4" />
                 </span>
               </div>
-              <p className="mt-3 font-display text-3xl font-bold text-[#C4F000]">
+              <p className="mt-3 font-display text-3xl font-bold text-[#E9FFDB]">
                 {data.totalClicks.toLocaleString()}
               </p>
               <p className="mt-1 text-xs text-zinc-400">Recorded hits</p>
@@ -274,7 +274,7 @@ export function AnalyticsPage() {
             <div className="rounded-2xl border border-[#E4E4E7] bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
               <div className="flex items-center justify-between text-xs font-medium text-[#71717A] dark:text-zinc-400">
                 <span>Unique Visitors</span>
-                <span className="rounded-lg bg-[#F4F4F5] p-1.5 text-[#18181B] dark:bg-zinc-800 dark:text-[#C4F000]">
+                <span className="rounded-lg bg-[#F4F4F5] p-1.5 text-[#18181B] dark:bg-zinc-800 dark:text-[#E9FFDB]">
                   <Users className="h-4 w-4" />
                 </span>
               </div>
@@ -287,7 +287,7 @@ export function AnalyticsPage() {
             <div className="rounded-2xl border border-[#E4E4E7] bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
               <div className="flex items-center justify-between text-xs font-medium text-[#71717A] dark:text-zinc-400">
                 <span>Primary Referrer</span>
-                <span className="rounded-lg bg-[#F4F4F5] p-1.5 text-[#18181B] dark:bg-zinc-800 dark:text-[#C4F000]">
+                <span className="rounded-lg bg-[#F4F4F5] p-1.5 text-[#18181B] dark:bg-zinc-800 dark:text-[#E9FFDB]">
                   <Globe2 className="h-4 w-4" />
                 </span>
               </div>
@@ -302,7 +302,7 @@ export function AnalyticsPage() {
             <div className="rounded-2xl border border-[#E4E4E7] bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
               <div className="flex items-center justify-between text-xs font-medium text-[#71717A] dark:text-zinc-400">
                 <span>Top Region</span>
-                <span className="rounded-lg bg-[#F4F4F5] p-1.5 text-[#18181B] dark:bg-zinc-800 dark:text-[#C4F000]">
+                <span className="rounded-lg bg-[#F4F4F5] p-1.5 text-[#18181B] dark:bg-zinc-800 dark:text-[#E9FFDB]">
                   <MapPin className="h-4 w-4" />
                 </span>
               </div>
@@ -326,8 +326,8 @@ export function AnalyticsPage() {
                     <AreaChart data={chartSeries} margin={{ top: 10, right: 10, left: -18, bottom: 0 }}>
                       <defs>
                         <linearGradient id="linkDetailFill" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#C4F000" stopOpacity={0.55} />
-                          <stop offset="95%" stopColor="#C4F000" stopOpacity={0.04} />
+                          <stop offset="5%" stopColor="#E9FFDB" stopOpacity={0.9} />
+                          <stop offset="95%" stopColor="#E9FFDB" stopOpacity={0.12} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />
@@ -348,7 +348,7 @@ export function AnalyticsPage() {
                         stroke={areaStroke}
                         strokeWidth={2.5}
                         fill="url(#linkDetailFill)"
-                        activeDot={{ r: 5, fill: '#C4F000', stroke: '#27272A', strokeWidth: 2 }}
+                        activeDot={{ r: 5, fill: '#E9FFDB', stroke: '#27272A', strokeWidth: 2 }}
                       />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -406,13 +406,13 @@ export function AnalyticsPage() {
                     <div key={item.referrer} className="space-y-1.5">
                       <div className="flex items-center justify-between text-xs">
                         <span className="font-medium text-[#18181B] dark:text-zinc-200">{item.referrer}</span>
-                        <span className="font-mono font-semibold text-[#18181B] dark:text-[#C4F000]">
+                        <span className="font-mono font-semibold text-[#18181B] dark:text-[#E9FFDB]">
                           {item.count}
                         </span>
                       </div>
                       <div className="h-2 overflow-hidden rounded-full bg-[#F4F4F5] dark:bg-zinc-800">
                         <div
-                          className="h-full rounded-full bg-[#27272A] dark:bg-[#C4F000]"
+                          className="h-full rounded-full bg-[#27272A] dark:bg-[#E9FFDB]"
                           style={{ width: `${Math.max(6, Math.round((item.count / maxReferrerCount) * 100))}%` }}
                         />
                       </div>
@@ -434,13 +434,13 @@ export function AnalyticsPage() {
                     <div key={item.region} className="space-y-1.5">
                       <div className="flex items-center justify-between text-xs">
                         <span className="font-medium text-[#18181B] dark:text-zinc-200">{item.region}</span>
-                        <span className="font-mono font-semibold text-[#18181B] dark:text-[#C4F000]">
+                        <span className="font-mono font-semibold text-[#18181B] dark:text-[#E9FFDB]">
                           {item.count}
                         </span>
                       </div>
                       <div className="h-2 overflow-hidden rounded-full bg-[#F4F4F5] dark:bg-zinc-800">
                         <div
-                          className="h-full rounded-full bg-[#C4F000]"
+                          className="h-full rounded-full bg-[#27272A] dark:bg-[#E9FFDB]"
                           style={{ width: `${Math.max(6, Math.round((item.count / maxRegionCount) * 100))}%` }}
                         />
                       </div>

@@ -77,7 +77,7 @@ export function AppLayout({ children }: AppLayoutProps) {
           onClick={() => setMobileOpen(false)}
           className="flex items-center gap-2.5 overflow-hidden"
         >
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#C4F000] text-[#18181B] shadow-xs">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#E9FFDB] text-[#18181B] shadow-xs">
             <Link2 className="h-5 w-5 stroke-[2.4]" />
           </div>
           {(!collapsed || mobile) && (
@@ -86,7 +86,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                 <span className="text-base font-extrabold tracking-tight text-white">
                   LINKORA
                 </span>
-                <span className="rounded bg-[#C4F000]/15 px-1.5 py-0.5 text-[10px] font-bold text-[#C4F000]">
+                <span className="rounded bg-[#E9FFDB]/15 px-1.5 py-0.5 text-[10px] font-bold text-[#E9FFDB]">
                   PRO
                 </span>
               </div>
@@ -111,7 +111,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             type="button"
             onClick={() => setCollapsed((c) => !c)}
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            className="hidden h-7 w-7 items-center justify-center rounded-full border border-[#3F3F46] bg-[#18181B] text-zinc-300 transition hover:border-[#C4F000]/50 hover:text-[#C4F000] lg:flex"
+            className="hidden h-7 w-7 items-center justify-center rounded-full border border-[#3F3F46] bg-[#18181B] text-zinc-300 transition hover:border-[#E9FFDB]/50 hover:text-[#E9FFDB] lg:flex"
           >
             {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
           </button>
@@ -126,7 +126,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             setMobileOpen(false);
             navigate('/create');
           }}
-          className={`flex w-full items-center justify-center gap-2 rounded-xl bg-[#C4F000] px-3 py-2.5 text-xs font-bold text-[#18181B] shadow-xs transition hover:bg-[#d2f833] ${
+          className={`flex w-full items-center justify-center gap-2 rounded-xl bg-[#E9FFDB] px-3 py-2.5 text-xs font-bold text-[#18181B] shadow-xs transition hover:bg-[#D7F9C2] ${
             collapsed && !mobile ? 'px-0' : ''
           }`}
         >
@@ -147,7 +147,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             className={({ isActive }) =>
               `group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
                 isActive
-                  ? 'bg-[#3F3F46] text-[#C4F000]'
+                  ? 'bg-[#3F3F46] text-[#E9FFDB]'
                   : 'text-zinc-300 hover:bg-[#3F3F46]/60 hover:text-white'
               } ${collapsed && !mobile ? 'justify-center px-2' : ''}`
             }
@@ -155,7 +155,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#C4F000]" />
+                  <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#E9FFDB]" />
                 )}
                 <Icon className="h-4 w-4 shrink-0" />
                 {(!collapsed || mobile) && <span className="truncate">{label}</span>}
@@ -169,7 +169,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       <div className="border-t border-[#3F3F46] p-3">
         {(!collapsed || mobile) && (
           <div className="mb-2.5 rounded-xl border border-[#3F3F46] bg-[#18181B]/70 p-3 text-xs">
-            <div className="flex items-center gap-1.5 font-semibold text-[#C4F000]">
+            <div className="flex items-center gap-1.5 font-semibold text-[#E9FFDB]">
               <LifeBuoy className="h-3.5 w-3.5" />
               QR Rescue Active
             </div>
@@ -195,7 +195,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             to="/login"
             onClick={() => setMobileOpen(false)}
             title={collapsed && !mobile ? 'Sign in to save data' : undefined}
-            className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-[#3F3F46] hover:text-[#C4F000] ${
+            className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-[#3F3F46] hover:text-[#E9FFDB] ${
               collapsed && !mobile ? 'justify-center px-2' : ''
             }`}
           >
@@ -254,7 +254,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                 value={globalSearch}
                 onChange={(e) => setGlobalSearch(e.target.value)}
                 placeholder="Search links, slugs, or destinations..."
-                className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] py-2 pl-9 pr-3 text-sm text-[#18181B] placeholder:text-[#71717A] focus:border-[#27272A] focus:bg-white focus:outline-none dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-white dark:focus:border-[#C4F000]"
+                className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] py-2 pl-9 pr-3 text-sm text-[#18181B] placeholder:text-[#71717A] focus:border-[#27272A] focus:bg-white focus:outline-none dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-white dark:focus:border-[#E9FFDB]"
               />
             </form>
           </div>
@@ -274,7 +274,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                 to="/settings"
                 className="flex items-center gap-2 rounded-full border border-[#E4E4E7] bg-[#F4F4F5] py-1 pl-1 pr-3 transition hover:border-[#27272A] dark:border-[#3F3F46] dark:bg-[#18181B]"
               >
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#27272A] text-xs font-bold text-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#27272A] text-xs font-bold text-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]">
                   {initials}
                 </span>
                 <span className="hidden text-xs font-semibold text-[#18181B] dark:text-white sm:inline">
@@ -292,7 +292,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                 </Link>
                 <Link
                   to="/register"
-                  className="hidden items-center gap-1.5 rounded-xl bg-[#27272A] px-3 py-1.5 text-xs font-semibold text-[#C4F000] transition hover:bg-[#3F3F46] dark:bg-[#C4F000] dark:text-[#18181B] sm:inline-flex"
+                  className="hidden items-center gap-1.5 rounded-xl bg-[#27272A] px-3 py-1.5 text-xs font-semibold text-[#E9FFDB] transition hover:bg-[#3F3F46] dark:bg-[#E9FFDB] dark:text-[#18181B] sm:inline-flex"
                 >
                   Create Account
                 </Link>

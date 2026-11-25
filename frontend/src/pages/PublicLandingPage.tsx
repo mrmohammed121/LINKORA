@@ -183,23 +183,23 @@ export function PublicLandingPage() {
       <header className="sticky top-0 z-40 border-b border-[#3F3F46] bg-[#27272A]/95 text-white backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#C4F000] text-[#18181B]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#E9FFDB] text-[#18181B]">
               <Link2 className="h-5 w-5 stroke-[2.4]" />
             </div>
             <span className="text-lg font-extrabold tracking-tight text-white">LINKORA</span>
           </Link>
 
           <nav className="hidden items-center gap-7 text-sm font-medium text-zinc-300 md:flex">
-            <a href="#top" className="transition hover:text-[#C4F000]">
+            <a href="#top" className="transition hover:text-[#E9FFDB]">
               Home
             </a>
-            <a href="#features" className="transition hover:text-[#C4F000]">
+            <a href="#features" className="transition hover:text-[#E9FFDB]">
               Features
             </a>
-            <a href="#about" className="transition hover:text-[#C4F000]">
+            <a href="#about" className="transition hover:text-[#E9FFDB]">
               About
             </a>
-            <a href="#contact" className="transition hover:text-[#C4F000]">
+            <a href="#contact" className="transition hover:text-[#E9FFDB]">
               Contact
             </a>
           </nav>
@@ -208,7 +208,7 @@ export function PublicLandingPage() {
             {token ? (
               <Link
                 to="/dashboard"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#C4F000] px-4 py-2 text-xs font-bold text-[#18181B] transition hover:bg-[#d2f833]"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#E9FFDB] px-4 py-2 text-xs font-bold text-[#18181B] transition hover:bg-[#D7F9C2]"
               >
                 Open Dashboard{user?.name ? ` (${user.name.split(' ')[0]})` : ''}
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -223,7 +223,7 @@ export function PublicLandingPage() {
                 </Link>
                 <Link
                   to="/register"
-                  className="rounded-xl bg-[#C4F000] px-4 py-2 text-xs font-bold text-[#18181B] transition hover:bg-[#d2f833]"
+                  className="rounded-xl bg-[#E9FFDB] px-4 py-2 text-xs font-bold text-[#18181B] transition hover:bg-[#D7F9C2]"
                 >
                   Create Account
                 </Link>
@@ -260,7 +260,7 @@ export function PublicLandingPage() {
                 {token ? (
                   <Link
                     to="/dashboard"
-                    className="col-span-2 rounded-xl bg-[#C4F000] py-2.5 text-center text-xs font-bold text-[#18181B]"
+                    className="col-span-2 rounded-xl bg-[#E9FFDB] py-2.5 text-center text-xs font-bold text-[#18181B]"
                   >
                     Open Dashboard
                   </Link>
@@ -274,7 +274,7 @@ export function PublicLandingPage() {
                     </Link>
                     <Link
                       to="/register"
-                      className="rounded-xl bg-[#C4F000] py-2.5 text-center text-xs font-bold text-[#18181B]"
+                      className="rounded-xl bg-[#E9FFDB] py-2.5 text-center text-xs font-bold text-[#18181B]"
                     >
                       Create Account
                     </Link>
@@ -293,7 +293,7 @@ export function PublicLandingPage() {
       >
         <Crosshair
           containerRef={heroRef}
-          color="#C4F000"
+          color="#E9FFDB"
           opacity={0.28}
           fade={0.4}
           targetEffect="lock"
@@ -303,14 +303,14 @@ export function PublicLandingPage() {
 
         <div className="relative z-10 mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#3F3F46] bg-[#18181B]/70 px-3.5 py-1.5 text-xs font-semibold text-[#C4F000]">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#3F3F46] bg-[#18181B]/70 px-3.5 py-1.5 text-xs font-semibold text-[#E9FFDB]">
               <Sparkles className="h-3.5 w-3.5" />
-              Precision Link Infrastructure · Dynamic QR Rescue · Neon PostgreSQL
+              Precision Link Infrastructure Â· Dynamic QR Rescue Â· Neon PostgreSQL
             </div>
 
             <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-[54px] lg:leading-[1.08]">
               Shorten Links, Rescue QR Codes &amp; Track Every Click in{' '}
-              <span className="text-[#C4F000]">Real Time</span>.
+              <span className="text-[#E9FFDB]">Real Time</span>.
             </h1>
 
             <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-zinc-300 sm:text-base">
@@ -322,7 +322,7 @@ export function PublicLandingPage() {
             <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
               <Link
                 to={token ? '/dashboard' : '/dashboard'}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#C4F000] px-6 py-3 text-sm font-bold text-[#18181B] shadow-sm transition hover:bg-[#d2f833]"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#E9FFDB] px-6 py-3 text-sm font-bold text-[#18181B] shadow-sm transition hover:bg-[#D7F9C2]"
               >
                 Get Started
                 <ArrowRight className="h-4 w-4" />
@@ -343,9 +343,9 @@ export function PublicLandingPage() {
               <div className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-[#3F3F46]" />
                 <span className="h-2.5 w-2.5 rounded-full bg-[#3F3F46]" />
-                <span className="h-2.5 w-2.5 rounded-full bg-[#C4F000]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#E9FFDB]" />
                 <span className="ml-2 font-mono text-[11px] text-zinc-400">
-                  Live Workspace Preview · Try creating a real link right here
+                  Live Workspace Preview Â· Try creating a real link right here
                 </span>
               </div>
 
@@ -355,7 +355,7 @@ export function PublicLandingPage() {
                   onClick={() => setCreateMode('link')}
                   className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-semibold transition ${
                     createMode === 'link'
-                      ? 'bg-[#C4F000] text-[#18181B]'
+                      ? 'bg-[#E9FFDB] text-[#18181B]'
                       : 'text-zinc-300 hover:text-white'
                   }`}
                 >
@@ -367,7 +367,7 @@ export function PublicLandingPage() {
                   onClick={() => setCreateMode('qr')}
                   className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-semibold transition ${
                     createMode === 'qr'
-                      ? 'bg-[#C4F000] text-[#18181B]'
+                      ? 'bg-[#E9FFDB] text-[#18181B]'
                       : 'text-zinc-300 hover:text-white'
                   }`}
                 >
@@ -415,7 +415,7 @@ export function PublicLandingPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#27272A] px-5 py-2.5 text-xs font-bold text-[#C4F000] transition hover:bg-[#3F3F46] disabled:opacity-60"
+                      className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#27272A] px-5 py-2.5 text-xs font-bold text-[#E9FFDB] transition hover:bg-[#3F3F46] disabled:opacity-60"
                     >
                       {isSubmitting && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                       {createMode === 'qr' ? 'Generate QR Code' : 'Generate Short Link'}
@@ -478,7 +478,7 @@ export function PublicLandingPage() {
                       <div className={showGuestQr ? 'sm:col-span-8' : ''}>
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="rounded-full bg-[#16A34A]/15 px-2.5 py-0.5 text-[11px] font-semibold text-[#16A34A]">
-                            Live · 24h Guest Preview
+                            Live Â· 24h Guest Preview
                           </span>
                         </div>
                         <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -486,7 +486,7 @@ export function PublicLandingPage() {
                             href={activeGuest.shortUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 truncate font-mono text-sm font-bold text-[#18181B] underline decoration-[#C4F000] decoration-2 underline-offset-4"
+                            className="inline-flex items-center gap-1 truncate font-mono text-sm font-bold text-[#18181B] underline decoration-[#E9FFDB] decoration-2 underline-offset-4"
                           >
                             {activeGuest.shortUrl}
                             <ExternalLink className="h-3.5 w-3.5 shrink-0" />
@@ -510,7 +510,7 @@ export function PublicLandingPage() {
                             <button
                               type="button"
                               onClick={() => setShowGuestQr(true)}
-                              className="inline-flex items-center gap-1 rounded-lg bg-[#27272A] px-2.5 py-1 text-xs font-semibold text-[#C4F000] hover:bg-[#3F3F46]"
+                              className="inline-flex items-center gap-1 rounded-lg bg-[#27272A] px-2.5 py-1 text-xs font-semibold text-[#E9FFDB] hover:bg-[#3F3F46]"
                             >
                               <QrCode className="h-3 w-3" /> Generate QR
                             </button>
@@ -532,7 +532,7 @@ export function PublicLandingPage() {
                                 }}
                                 className={`rounded-md border px-2 py-0.5 font-mono text-[11px] font-semibold ${
                                   activeGuest.slug === item.slug
-                                    ? 'border-[#27272A] bg-[#27272A] text-[#C4F000]'
+                                    ? 'border-[#27272A] bg-[#27272A] text-[#E9FFDB]'
                                     : 'border-[#E4E4E7] bg-white text-[#71717A]'
                                 }`}
                               >
@@ -562,16 +562,16 @@ export function PublicLandingPage() {
                     <div className="rounded-xl border border-[#3F3F46] bg-[#18181B]/70 p-3">
                       <div className="flex items-center justify-between text-xs text-zinc-400">
                         <span>Redirect Protocol</span>
-                        <Zap className="h-3.5 w-3.5 text-[#C4F000]" />
+                        <Zap className="h-3.5 w-3.5 text-[#E9FFDB]" />
                       </div>
-                      <div className="mt-1 font-mono text-base font-extrabold text-[#C4F000]">
+                      <div className="mt-1 font-mono text-base font-extrabold text-[#E9FFDB]">
                         HTTP 302 + Cache
                       </div>
                     </div>
                     <div className="rounded-xl border border-[#3F3F46] bg-[#18181B]/70 p-3">
                       <div className="flex items-center justify-between text-xs text-zinc-400">
                         <span>Dynamic QR Rescue</span>
-                        <LifeBuoy className="h-3.5 w-3.5 text-[#C4F000]" />
+                        <LifeBuoy className="h-3.5 w-3.5 text-[#E9FFDB]" />
                       </div>
                       <div className="mt-1 text-sm font-bold text-white">
                         Swap URLs Without Reprinting
@@ -580,7 +580,7 @@ export function PublicLandingPage() {
                     <div className="rounded-xl border border-[#3F3F46] bg-[#18181B]/70 p-3">
                       <div className="flex items-center justify-between text-xs text-zinc-400">
                         <span>Visitor Privacy</span>
-                        <ShieldCheck className="h-3.5 w-3.5 text-[#C4F000]" />
+                        <ShieldCheck className="h-3.5 w-3.5 text-[#E9FFDB]" />
                       </div>
                       <div className="mt-1 text-sm font-bold text-white">
                         SHA-256 Daily IP Hashing
@@ -591,7 +591,7 @@ export function PublicLandingPage() {
 
                 <Link
                   to="/dashboard"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#C4F000] px-4 py-2.5 text-xs font-bold text-[#18181B] transition hover:bg-[#d2f833]"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#E9FFDB] px-4 py-2.5 text-xs font-bold text-[#18181B] transition hover:bg-[#D7F9C2]"
                 >
                   Open Full Dashboard
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -605,7 +605,7 @@ export function PublicLandingPage() {
       {/* 6 Core Features Section */}
       <section id="features" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#27272A] px-3 py-1 text-xs font-bold text-[#C4F000]">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#27272A] px-3 py-1 text-xs font-bold text-[#E9FFDB]">
             <Layers className="h-3.5 w-3.5" />
             Complete Toolkit
           </span>
@@ -627,7 +627,7 @@ export function PublicLandingPage() {
                 to={feature.route}
                 className="group rounded-2xl border border-[#E4E4E7] bg-white p-6 shadow-xs transition hover:-translate-y-0.5 hover:border-[#27272A]"
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#27272A] text-[#C4F000] transition group-hover:bg-[#C4F000] group-hover:text-[#18181B]">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#27272A] text-[#E9FFDB] transition group-hover:bg-[#E9FFDB] group-hover:text-[#18181B]">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 text-base font-bold text-[#18181B]">{feature.title}</h3>
@@ -656,7 +656,7 @@ export function PublicLandingPage() {
             <p className="mt-3 text-sm leading-relaxed text-[#71717A] sm:text-base">
               LINKORA separates the permanent short slug from the destination URL. Built on Fastify
               5, Prisma 6.6, and Neon Serverless PostgreSQL, redirects run cache-first while click
-              events are persisted asynchronously—keeping redirects fast and QR campaigns editable
+              events are persisted asynchronouslyâ€”keeping redirects fast and QR campaigns editable
               forever.
             </p>
           </div>
@@ -668,8 +668,8 @@ export function PublicLandingPage() {
               <div className="mt-0.5 text-xs text-[#71717A]">Non-blocking click telemetry</div>
             </div>
             <div className="rounded-2xl bg-[#27272A] p-5 text-white">
-              <LifeBuoy className="h-5 w-5 text-[#C4F000]" />
-              <div className="mt-3 text-xl font-extrabold text-[#C4F000]">Zero Reprint</div>
+              <LifeBuoy className="h-5 w-5 text-[#E9FFDB]" />
+              <div className="mt-3 text-xl font-extrabold text-[#E9FFDB]">Zero Reprint</div>
               <div className="mt-0.5 text-xs text-zinc-300">Live QR Rescue updates</div>
             </div>
           </div>
@@ -680,7 +680,7 @@ export function PublicLandingPage() {
       <section id="contact" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-[#27272A] p-8 text-white sm:flex-row sm:items-center sm:p-10">
           <div>
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#C4F000]">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#E9FFDB]">
               <Mail className="h-4 w-4" />
               Get in Touch &amp; Start Building
             </div>
@@ -695,7 +695,7 @@ export function PublicLandingPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               to="/register"
-              className="rounded-xl bg-[#C4F000] px-5 py-3 text-xs font-bold text-[#18181B] transition hover:bg-[#d2f833]"
+              className="rounded-xl bg-[#E9FFDB] px-5 py-3 text-xs font-bold text-[#18181B] transition hover:bg-[#D7F9C2]"
             >
               Create Free Account
             </Link>
@@ -710,7 +710,7 @@ export function PublicLandingPage() {
       </section>
 
       <footer className="border-t border-[#3F3F46] bg-[#27272A] px-4 py-8 text-center text-xs text-zinc-400">
-        LINKORA — Smart URL Shortening, Dynamic QR Rescue &amp; Analytics · Powered by Fastify &amp;
+        LINKORA â€” Smart URL Shortening, Dynamic QR Rescue &amp; Analytics Â· Powered by Fastify &amp;
         Neon PostgreSQL
       </footer>
 

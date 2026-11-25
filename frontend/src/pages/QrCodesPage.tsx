@@ -80,7 +80,7 @@ export function QrCodesPage() {
 
           <Link
             to="/create"
-            className="inline-flex items-center gap-1.5 rounded-xl bg-[#C4F000] px-4 py-2.5 text-xs font-bold text-[#18181B] shadow-xs transition hover:bg-[#d2f833]"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-[#E9FFDB] px-4 py-2.5 text-xs font-bold text-[#18181B] shadow-xs transition hover:bg-[#D7F9C2]"
           >
             <Plus className="h-4 w-4" />
             Create Short Link
@@ -130,7 +130,7 @@ export function QrCodesPage() {
 
         {isLoading && links.length === 0 ? (
           <div className="flex items-center justify-center rounded-2xl border border-[#E4E4E7] bg-white py-16 dark:border-[#3F3F46] dark:bg-[#27272A]">
-            <Loader2 className="mr-2 h-5 w-5 animate-spin text-[#27272A] dark:text-[#C4F000]" />
+            <Loader2 className="mr-2 h-5 w-5 animate-spin text-[#27272A] dark:text-[#E9FFDB]" />
             <span className="text-sm text-[#71717A]">Loading dynamic QR codes...</span>
           </div>
         ) : filteredLinks.length === 0 ? (
@@ -165,12 +165,12 @@ export function QrCodesPage() {
 
                   <div className="min-w-0 flex-1 space-y-1.5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-md bg-[#27272A] px-2 py-0.5 text-[11px] font-bold text-[#C4F000]">
+                      <span className="rounded-md bg-[#27272A] px-2 py-0.5 text-[11px] font-bold text-[#E9FFDB]">
                         Dynamic QR
                       </span>
                       <StatusBadge status={link.status} />
                       {link.qrStyleConfig && (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-[#F4F4F5] px-2 py-0.5 text-[11px] font-semibold text-[#18181B] dark:bg-[#18181B] dark:text-[#C4F000]">
+                        <span className="inline-flex items-center gap-1 rounded-md bg-[#F4F4F5] px-2 py-0.5 text-[11px] font-semibold text-[#18181B] dark:bg-[#18181B] dark:text-[#E9FFDB]">
                           <Palette className="h-3 w-3" />
                           Custom Styled
                         </span>
@@ -198,7 +198,7 @@ export function QrCodesPage() {
                         href={link.shortUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 font-mono text-[#18181B] underline decoration-[#C4F000] decoration-2 dark:text-white"
+                        className="inline-flex items-center gap-1 font-mono text-[#18181B] underline decoration-[#E9FFDB] decoration-2 dark:text-white"
                       >
                         <Link2 className="h-3 w-3" />
                         {link.shortUrl}
@@ -213,7 +213,7 @@ export function QrCodesPage() {
                   <button
                     type="button"
                     onClick={() => setQrModalLink(link)}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-[#27272A] px-3 py-2 text-xs font-bold text-[#C4F000] transition hover:bg-[#3F3F46] dark:bg-[#C4F000] dark:text-[#18181B]"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-[#27272A] px-3 py-2 text-xs font-bold text-[#E9FFDB] transition hover:bg-[#3F3F46] dark:bg-[#E9FFDB] dark:text-[#18181B]"
                   >
                     <Palette className="h-3.5 w-3.5" />
                     Customize QR
@@ -268,7 +268,7 @@ export function QrCodesPage() {
         onClose={() => setRescueModalLink(null)}
         onSaved={(updated) =>
           setRescueToast(
-            `/${updated.slug} now redirects live to ${updated.originalUrl} — no reprinting needed.`
+            `/${updated.slug} now redirects live to ${updated.originalUrl} â€” no reprinting needed.`
           )
         }
       />

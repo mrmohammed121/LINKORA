@@ -106,7 +106,7 @@ export function LinkManagementPage() {
       <section className="rounded-3xl bg-[#27272A] p-6 text-white shadow-soft sm:p-7">
         <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#3F3F46] px-3 py-1 text-xs font-medium text-[#C4F000]">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#3F3F46] px-3 py-1 text-xs font-medium text-[#E9FFDB]">
               <SlidersHorizontal className="h-3.5 w-3.5" />
               Link Management & QR Rescue
             </div>
@@ -121,7 +121,7 @@ export function LinkManagementPage() {
           <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
             <div className="rounded-2xl border border-white/10 bg-[#3F3F46]/70 px-4 py-3">
               <p className="text-[11px] uppercase tracking-wider text-zinc-300">Active</p>
-              <p className="mt-1 font-display text-xl font-bold text-[#C4F000]">{counts.active}</p>
+              <p className="mt-1 font-display text-xl font-bold text-[#E9FFDB]">{counts.active}</p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-[#3F3F46]/70 px-4 py-3">
               <p className="text-[11px] uppercase tracking-wider text-zinc-300">Expired</p>
@@ -154,7 +154,7 @@ export function LinkManagementPage() {
               onClick={() => setStatusFilter(status)}
               className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition ${
                 statusFilter === status
-                  ? 'bg-[#27272A] text-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]'
+                  ? 'bg-[#27272A] text-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]'
                   : 'border border-[#E4E4E7] text-[#71717A] hover:text-[#18181B] dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-white'
               }`}
             >
@@ -203,7 +203,7 @@ export function LinkManagementPage() {
                     <tr key={link.id} className="hover:bg-[#F4F4F5]/60 dark:hover:bg-zinc-800/40">
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs font-bold text-[#18181B] dark:text-[#C4F000]">
+                          <span className="font-mono text-xs font-bold text-[#18181B] dark:text-[#E9FFDB]">
                             /{link.slug}
                           </span>
                           <button
@@ -258,7 +258,7 @@ export function LinkManagementPage() {
                             <button
                               type="button"
                               onClick={() => void handleQuickStatus(link, 'ACTIVE')}
-                              className="inline-flex items-center gap-1 rounded-lg bg-[#C4F000] px-2.5 py-1.5 text-xs font-semibold text-[#18181B] hover:bg-[#b2dc00]"
+                              className="inline-flex items-center gap-1 rounded-lg bg-[#E9FFDB] px-2.5 py-1.5 text-xs font-semibold text-[#18181B] hover:bg-[#D7F9C2]"
                               title="Reactivate link"
                             >
                               <PlayCircle className="h-3.5 w-3.5" />

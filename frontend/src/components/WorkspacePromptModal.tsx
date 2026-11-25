@@ -52,7 +52,7 @@ export function WorkspacePromptCard({
         </button>
       )}
 
-      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#27272A] text-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]">
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#27272A] text-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]">
         <Lock className="h-6 w-6" />
       </div>
 
@@ -95,7 +95,7 @@ export function WorkspacePromptCard({
           type="button"
           onClick={() => void handleDemoLogin()}
           disabled={demoLoading}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#C4F000] px-4 py-2.5 text-xs font-bold text-[#18181B] shadow-xs transition hover:bg-[#d2f833] disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#E9FFDB] px-4 py-2.5 text-xs font-bold text-[#18181B] shadow-xs transition hover:bg-[#D7F9C2] disabled:opacity-60"
         >
           {demoLoading ? (
             <Loader2 className="h-4 w-4 animate-spin" />

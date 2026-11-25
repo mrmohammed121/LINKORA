@@ -205,7 +205,7 @@ export function CreateLinkPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#C4F000] px-5 py-3 text-sm font-bold text-[#18181B] shadow-xs transition hover:bg-[#d2f833] disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#E9FFDB] px-5 py-3 text-sm font-bold text-[#18181B] shadow-xs transition hover:bg-[#D7F9C2] disabled:opacity-60"
             >
               {isSubmitting ? (
                 <>
@@ -241,7 +241,7 @@ export function CreateLinkPage() {
                     href={createdLink.shortUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-1.5 inline-flex items-center gap-1.5 break-all font-mono text-sm font-bold text-[#C4F000] hover:underline"
+                    className="mt-1.5 inline-flex items-center gap-1.5 break-all font-mono text-sm font-bold text-[#E9FFDB] hover:underline"
                   >
                     {createdLink.shortUrl}
                     <ExternalLink className="h-3.5 w-3.5 shrink-0" />
@@ -251,7 +251,7 @@ export function CreateLinkPage() {
                     <button
                       type="button"
                       onClick={() => void handleCopy()}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#C4F000] px-3 py-2 text-xs font-bold text-[#18181B] transition hover:bg-[#d2f833]"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#E9FFDB] px-3 py-2 text-xs font-bold text-[#18181B] transition hover:bg-[#D7F9C2]"
                     >
                       {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                       {copied ? 'Copied' : 'Copy'}
@@ -267,7 +267,7 @@ export function CreateLinkPage() {
                   </div>
 
                   {sharedNotice && (
-                    <p className="mt-2 text-[11px] font-medium text-[#C4F000]">{sharedNotice}</p>
+                    <p className="mt-2 text-[11px] font-medium text-[#E9FFDB]">{sharedNotice}</p>
                   )}
                 </div>
 
@@ -331,7 +331,7 @@ export function CreateLinkPage() {
                   </Link>
                   <Link
                     to={`/analytics/${createdLink.id}`}
-                    className="inline-flex items-center gap-1 font-bold text-[#18181B] underline decoration-[#C4F000] decoration-2 dark:text-white"
+                    className="inline-flex items-center gap-1 font-bold text-[#18181B] underline decoration-[#E9FFDB] decoration-2 dark:text-white"
                   >
                     Open Analytics <ArrowRight className="h-3.5 w-3.5" />
                   </Link>

@@ -122,7 +122,7 @@ export function SettingsPage() {
       <section className="rounded-3xl bg-[#27272A] p-6 text-white shadow-soft sm:p-7">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#3F3F46] px-3 py-1 text-xs font-medium text-[#C4F000]">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#3F3F46] px-3 py-1 text-xs font-medium text-[#E9FFDB]">
               <Settings2 className="h-3.5 w-3.5" />
               Workspace & Account Settings
             </div>
@@ -140,13 +140,13 @@ export function SettingsPage() {
               onClick={handleSignOut}
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-[#3F3F46] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#DC2626]"
             >
-              <LogOut className="h-4 w-4 text-[#C4F000]" />
+              <LogOut className="h-4 w-4 text-[#E9FFDB]" />
               Log Out
             </button>
           ) : (
             <Link
               to="/login"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#C4F000] px-4 py-2.5 text-xs font-semibold text-[#18181B] hover:bg-[#b2dc00]"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#E9FFDB] px-4 py-2.5 text-xs font-semibold text-[#18181B] hover:bg-[#D7F9C2]"
             >
               Log In to Sync Account
             </Link>
@@ -173,7 +173,7 @@ export function SettingsPage() {
                 onClick={() => setTab(item.id)}
                 className={`flex w-full items-center gap-3 rounded-2xl px-3.5 py-2.5 text-left text-sm font-semibold transition ${
                   active
-                    ? 'bg-[#27272A] text-[#C4F000]'
+                    ? 'bg-[#27272A] text-[#E9FFDB]'
                     : 'text-[#71717A] hover:bg-[#F4F4F5] hover:text-[#18181B] dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
                 }`}
               >
@@ -205,7 +205,7 @@ export function SettingsPage() {
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Link
                       to="/register"
-                      className="rounded-xl bg-[#C4F000] px-4 py-2 text-xs font-semibold text-[#18181B] hover:bg-[#b2dc00]"
+                      className="rounded-xl bg-[#E9FFDB] px-4 py-2 text-xs font-semibold text-[#18181B] hover:bg-[#D7F9C2]"
                     >
                       Create Account
                     </Link>
@@ -245,8 +245,8 @@ export function SettingsPage() {
 
                   <div className="flex flex-wrap items-center gap-3 text-xs text-[#71717A] dark:text-zinc-400">
                     <span>Role: {user?.role}</span>
-                    <span>•</span>
-                    <span>Member since {user ? new Date(user.createdAt).toLocaleDateString() : '—'}</span>
+                    <span>â€¢</span>
+                    <span>Member since {user ? new Date(user.createdAt).toLocaleDateString() : 'â€”'}</span>
                   </div>
 
                   {profileErr && (
@@ -265,7 +265,7 @@ export function SettingsPage() {
                     <button
                       type="submit"
                       disabled={profileSaving}
-                      className="rounded-xl bg-[#C4F000] px-5 py-2.5 text-sm font-semibold text-[#18181B] hover:bg-[#b2dc00] disabled:opacity-60"
+                      className="rounded-xl bg-[#E9FFDB] px-5 py-2.5 text-sm font-semibold text-[#18181B] hover:bg-[#D7F9C2] disabled:opacity-60"
                     >
                       {profileSaving ? 'Saving...' : 'Save Changes'}
                     </button>
@@ -348,7 +348,7 @@ export function SettingsPage() {
                   <button
                     type="submit"
                     disabled={passwordSaving}
-                    className="rounded-xl bg-[#27272A] px-5 py-2.5 text-sm font-semibold text-[#C4F000] hover:bg-[#3F3F46] disabled:opacity-60"
+                    className="rounded-xl bg-[#27272A] px-5 py-2.5 text-sm font-semibold text-[#E9FFDB] hover:bg-[#3F3F46] disabled:opacity-60"
                   >
                     {passwordSaving ? 'Updating...' : 'Update Password'}
                   </button>
@@ -372,7 +372,7 @@ export function SettingsPage() {
                   onClick={() => setTheme('light')}
                   className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition ${
                     theme === 'light'
-                      ? 'border-[#27272A] bg-[#F4F4F5] ring-2 ring-[#C4F000]'
+                      ? 'border-[#27272A] bg-[#F4F4F5] ring-2 ring-[#E9FFDB]'
                       : 'border-[#E4E4E7] hover:bg-[#F4F4F5] dark:border-zinc-800 dark:hover:bg-zinc-800'
                   }`}
                 >
@@ -392,11 +392,11 @@ export function SettingsPage() {
                   onClick={() => setTheme('dark')}
                   className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition ${
                     theme === 'dark'
-                      ? 'border-[#C4F000] bg-[#27272A] text-white ring-2 ring-[#C4F000]'
+                      ? 'border-[#E9FFDB] bg-[#27272A] text-white ring-2 ring-[#E9FFDB]'
                       : 'border-[#E4E4E7] hover:bg-[#F4F4F5] dark:border-zinc-800 dark:hover:bg-zinc-800'
                   }`}
                 >
-                  <div className="rounded-xl bg-[#3F3F46] p-2 text-[#C4F000]">
+                  <div className="rounded-xl bg-[#3F3F46] p-2 text-[#E9FFDB]">
                     <Moon className="h-4 w-4" />
                   </div>
                   <div>
@@ -424,7 +424,7 @@ export function SettingsPage() {
                 <button
                   type="button"
                   onClick={() => void loadHealth()}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#27272A] px-3.5 py-2 text-xs font-semibold text-[#C4F000] hover:bg-[#3F3F46]"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#27272A] px-3.5 py-2 text-xs font-semibold text-[#E9FFDB] hover:bg-[#3F3F46]"
                 >
                   <RefreshCw className={`h-3.5 w-3.5 ${healthLoading ? 'animate-spin' : ''}`} />
                   Check Now
@@ -448,7 +448,7 @@ export function SettingsPage() {
                     PostgreSQL
                   </div>
                   <p className="mt-2 font-display text-lg font-bold text-[#18181B] dark:text-white">
-                    {health?.database ?? '—'}
+                    {health?.database ?? 'â€”'}
                   </p>
                 </div>
 
@@ -458,7 +458,7 @@ export function SettingsPage() {
                     Cache Layer
                   </div>
                   <p className="mt-2 font-display text-lg font-bold text-[#18181B] dark:text-white">
-                    {health?.cacheMode ?? '—'}
+                    {health?.cacheMode ?? 'â€”'}
                   </p>
                   {typeof health?.cachedSlugs === 'number' && (
                     <p className="mt-1 text-xs text-[#71717A] dark:text-zinc-400">

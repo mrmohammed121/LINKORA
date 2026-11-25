@@ -100,7 +100,7 @@ export function MyLinksPage() {
 
         <RouterLink
           to="/create"
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#C4F000] px-4 py-2.5 text-sm font-semibold text-[#18181B] shadow-soft transition hover:bg-[#b2dc00]"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#E9FFDB] px-4 py-2.5 text-sm font-semibold text-[#18181B] shadow-soft transition hover:bg-[#D7F9C2]"
         >
           <PlusCircle className="h-4 w-4" />
           Create Short Link
@@ -124,7 +124,7 @@ export function MyLinksPage() {
                 }
               }}
               placeholder="Search by slug, destination URL, or short link..."
-              className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] py-2.5 pl-10 pr-4 text-sm text-[#18181B] outline-none transition focus:border-[#27272A] focus:bg-white dark:border-zinc-700 dark:bg-zinc-950 dark:text-white dark:focus:border-[#C4F000]"
+              className="w-full rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] py-2.5 pl-10 pr-4 text-sm text-[#18181B] outline-none transition focus:border-[#27272A] focus:bg-white dark:border-zinc-700 dark:bg-zinc-950 dark:text-white dark:focus:border-[#E9FFDB]"
             />
           </div>
 
@@ -136,7 +136,7 @@ export function MyLinksPage() {
                 onClick={() => setStatusFilter(status)}
                 className={`rounded-xl px-3 py-2 text-xs font-semibold transition ${
                   statusFilter === status
-                    ? 'bg-[#27272A] text-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]'
+                    ? 'bg-[#27272A] text-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]'
                     : 'border border-[#E4E4E7] bg-white text-[#71717A] hover:text-[#18181B] dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-400 dark:hover:text-white'
                 }`}
               >
@@ -174,7 +174,7 @@ export function MyLinksPage() {
                 setDateTo('');
                 setSearchParams({});
               }}
-              className="text-xs font-semibold text-[#18181B] underline dark:text-[#C4F000]"
+              className="text-xs font-semibold text-[#18181B] underline dark:text-[#E9FFDB]"
             >
               Reset filters
             </button>
@@ -199,7 +199,7 @@ export function MyLinksPage() {
         </div>
       ) : filteredLinks.length === 0 ? (
         <div className="rounded-3xl border border-dashed border-[#E4E4E7] bg-white p-10 text-center dark:border-zinc-800 dark:bg-zinc-900">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#27272A] text-[#C4F000]">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#27272A] text-[#E9FFDB]">
             <Link2 className="h-6 w-6" />
           </div>
           <h2 className="mt-4 font-display text-lg font-bold text-[#18181B] dark:text-white">
@@ -210,7 +210,7 @@ export function MyLinksPage() {
           </p>
           <RouterLink
             to="/create"
-            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#C4F000] px-4 py-2 text-sm font-semibold text-[#18181B] hover:bg-[#b2dc00]"
+            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#E9FFDB] px-4 py-2 text-sm font-semibold text-[#18181B] hover:bg-[#D7F9C2]"
           >
             <PlusCircle className="h-4 w-4" />
             Create Short Link
@@ -225,7 +225,7 @@ export function MyLinksPage() {
             >
               <div className="min-w-0 flex-1 space-y-1.5">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-sm font-bold text-[#18181B] dark:text-[#C4F000]">
+                  <span className="font-mono text-sm font-bold text-[#18181B] dark:text-[#E9FFDB]">
                     /{link.slug}
                   </span>
                   <StatusBadge status={link.status} />
@@ -234,7 +234,7 @@ export function MyLinksPage() {
                       Cached
                     </span>
                   )}
-                  <span className="rounded-full bg-[#27272A] px-2.5 py-0.5 text-[11px] font-semibold text-[#C4F000]">
+                  <span className="rounded-full bg-[#27272A] px-2.5 py-0.5 text-[11px] font-semibold text-[#E9FFDB]">
                     {link.clickCount} clicks
                   </span>
                 </div>
@@ -267,7 +267,7 @@ export function MyLinksPage() {
                 <button
                   type="button"
                   onClick={() => void handleCopy(link)}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#27272A] px-3 py-2 text-xs font-semibold text-[#C4F000] transition hover:bg-[#3F3F46]"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#27272A] px-3 py-2 text-xs font-semibold text-[#E9FFDB] transition hover:bg-[#3F3F46]"
                 >
                   {copiedId === link.id ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                   {copiedId === link.id ? 'Copied' : 'Copy'}

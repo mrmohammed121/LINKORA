@@ -214,7 +214,7 @@ export function DashboardPage() {
             <div className="flex items-center gap-3">
               <Link
                 to="/login"
-                className="rounded-lg bg-[#C4F000] px-3 py-1.5 font-bold text-[#18181B] transition hover:bg-[#d2f833]"
+                className="rounded-lg bg-[#E9FFDB] px-3 py-1.5 font-bold text-[#18181B] transition hover:bg-[#D7F9C2]"
               >
                 Save to Account
               </Link>
@@ -245,7 +245,7 @@ export function DashboardPage() {
         >
           <Crosshair
             containerRef={heroRef}
-            color="#C4F000"
+            color="#E9FFDB"
             opacity={0.28}
             fade={0.35}
             targetEffect="lock"
@@ -256,7 +256,7 @@ export function DashboardPage() {
           <div className="relative z-10 space-y-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-[#3F3F46] bg-[#18181B]/70 px-3 py-1 text-[11px] font-semibold text-[#C4F000]">
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-[#3F3F46] bg-[#18181B]/70 px-3 py-1 text-[11px] font-semibold text-[#E9FFDB]">
                   <Zap className="h-3.5 w-3.5" />
                   LINKORA Workspace Overview
                 </div>
@@ -275,7 +275,7 @@ export function DashboardPage() {
                     onClick={() => setCreateMode('link')}
                     className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
                       createMode === 'link'
-                        ? 'bg-[#C4F000] text-[#18181B]'
+                        ? 'bg-[#E9FFDB] text-[#18181B]'
                         : 'text-zinc-300 hover:text-white'
                     }`}
                   >
@@ -287,7 +287,7 @@ export function DashboardPage() {
                     onClick={() => setCreateMode('qr')}
                     className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
                       createMode === 'qr'
-                        ? 'bg-[#C4F000] text-[#18181B]'
+                        ? 'bg-[#E9FFDB] text-[#18181B]'
                         : 'text-zinc-300 hover:text-white'
                     }`}
                   >
@@ -300,7 +300,7 @@ export function DashboardPage() {
                   to="/create"
                   className="inline-flex items-center gap-1.5 rounded-xl border border-[#3F3F46] bg-[#3F3F46]/60 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-[#3F3F46]"
                 >
-                  <Plus className="h-3.5 w-3.5 text-[#C4F000]" />
+                  <Plus className="h-3.5 w-3.5 text-[#E9FFDB]" />
                   Full Builder
                 </Link>
               </div>
@@ -351,7 +351,7 @@ export function DashboardPage() {
                 <button
                   type="submit"
                   disabled={isCreating}
-                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#C4F000] px-5 py-2.5 text-xs font-bold text-[#18181B] shadow-xs transition hover:bg-[#d2f833] disabled:opacity-60"
+                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#E9FFDB] px-5 py-2.5 text-xs font-bold text-[#18181B] shadow-xs transition hover:bg-[#D7F9C2] disabled:opacity-60"
                 >
                   {isCreating && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                   {createMode === 'qr' ? 'Create QR Code' : 'Quick Create Link'}
@@ -372,9 +372,9 @@ export function DashboardPage() {
             )}
 
             {recentCreatedLink && (
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#C4F000]/40 bg-[#18181B]/90 px-4 py-3 text-xs">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#E9FFDB]/40 bg-[#18181B]/90 px-4 py-3 text-xs">
                 <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-[#C4F000]">Short link created</div>
+                  <div className="font-semibold text-[#E9FFDB]">Short link created</div>
                   <a
                     href={recentCreatedLink.shortUrl}
                     target="_blank"
@@ -382,7 +382,7 @@ export function DashboardPage() {
                     className="mt-0.5 inline-flex items-center gap-1 truncate font-mono font-bold text-white hover:underline"
                   >
                     {recentCreatedLink.shortUrl}
-                    <ExternalLink className="h-3 w-3 shrink-0 text-[#C4F000]" />
+                    <ExternalLink className="h-3 w-3 shrink-0 text-[#E9FFDB]" />
                   </a>
                 </div>
                 <button
@@ -390,7 +390,7 @@ export function DashboardPage() {
                   onClick={() =>
                     void handleCopy(recentCreatedLink.id, recentCreatedLink.shortUrl)
                   }
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#C4F000] px-3 py-1.5 font-bold text-[#18181B] transition hover:bg-[#d2f833]"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#E9FFDB] px-3 py-1.5 font-bold text-[#18181B] transition hover:bg-[#D7F9C2]"
                 >
                   {copiedId === recentCreatedLink.id ? (
                     <>
@@ -412,7 +412,7 @@ export function DashboardPage() {
           <div className="rounded-2xl border border-[#E4E4E7] bg-white p-5 shadow-xs dark:border-[#3F3F46] dark:bg-[#27272A]">
             <div className="flex items-center justify-between text-xs font-semibold text-[#71717A] dark:text-zinc-400">
               <span>Total Links Created</span>
-              <Link2 className="h-4 w-4 text-[#18181B] dark:text-[#C4F000]" />
+              <Link2 className="h-4 w-4 text-[#18181B] dark:text-[#E9FFDB]" />
             </div>
             <div className="mt-2.5 text-2xl font-extrabold text-[#18181B] dark:text-white">
               {summary.totalLinks}
@@ -425,9 +425,9 @@ export function DashboardPage() {
           <div className="rounded-2xl border border-[#3F3F46] bg-[#27272A] p-5 text-white shadow-xs">
             <div className="flex items-center justify-between text-xs font-semibold text-zinc-300">
               <span>Total Clicks</span>
-              <MousePointerClick className="h-4 w-4 text-[#C4F000]" />
+              <MousePointerClick className="h-4 w-4 text-[#E9FFDB]" />
             </div>
-            <div className="mt-2.5 text-2xl font-extrabold text-[#C4F000]">
+            <div className="mt-2.5 text-2xl font-extrabold text-[#E9FFDB]">
               {summary.totalClicks.toLocaleString()}
             </div>
             <div className="mt-1 text-xs text-zinc-400">
@@ -480,7 +480,7 @@ export function DashboardPage() {
                     onClick={() => setPreset(p)}
                     className={`rounded-lg px-2.5 py-1 text-xs font-bold uppercase transition ${
                       preset === p
-                        ? 'bg-[#27272A] text-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]'
+                        ? 'bg-[#27272A] text-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]'
                         : 'text-[#71717A] hover:text-[#18181B] dark:text-zinc-400'
                     }`}
                   >
@@ -492,7 +492,7 @@ export function DashboardPage() {
 
             {overviewLoading ? (
               <div className="flex h-64 items-center justify-center">
-                <Loader2 className="h-6 w-6 animate-spin text-[#27272A] dark:text-[#C4F000]" />
+                <Loader2 className="h-6 w-6 animate-spin text-[#27272A] dark:text-[#E9FFDB]" />
               </div>
             ) : !overview || overview.clicksOverTime.length === 0 ? (
               <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-[#E4E4E7] text-center dark:border-[#3F3F46]">
@@ -507,8 +507,8 @@ export function DashboardPage() {
                   <AreaChart data={overview.clicksOverTime}>
                     <defs>
                       <linearGradient id="dashLimeGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#C4F000" stopOpacity={0.55} />
-                        <stop offset="95%" stopColor="#C4F000" stopOpacity={0.03} />
+                        <stop offset="5%" stopColor="#E9FFDB" stopOpacity={0.9} />
+                        <stop offset="95%" stopColor="#E9FFDB" stopOpacity={0.12} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid
@@ -529,7 +529,7 @@ export function DashboardPage() {
                     <Area
                       type="monotone"
                       dataKey="clicks"
-                      stroke={theme === 'dark' ? '#C4F000' : '#27272A'}
+                      stroke={theme === 'dark' ? '#E9FFDB' : '#27272A'}
                       strokeWidth={2.5}
                       fill="url(#dashLimeGradient)"
                     />
@@ -549,7 +549,7 @@ export function DashboardPage() {
                 </h2>
                 <Link
                   to="/analytics"
-                  className="text-xs font-semibold text-[#18181B] underline decoration-[#C4F000] decoration-2 dark:text-white"
+                  className="text-xs font-semibold text-[#18181B] underline decoration-[#E9FFDB] decoration-2 dark:text-white"
                 >
                   Details
                 </Link>
@@ -573,7 +573,7 @@ export function DashboardPage() {
                         </div>
                         <div className="h-2 w-full overflow-hidden rounded-full bg-[#F4F4F5] dark:bg-[#18181B]">
                           <div
-                            className="h-full rounded-full bg-[#27272A] dark:bg-[#C4F000]"
+                            className="h-full rounded-full bg-[#27272A] dark:bg-[#E9FFDB]"
                             style={{ width: `${pct}%` }}
                           />
                         </div>
@@ -608,7 +608,7 @@ export function DashboardPage() {
                       <span className="truncate font-semibold text-[#18181B] dark:text-white">
                         {r.referrer}
                       </span>
-                      <span className="rounded-md bg-[#27272A] px-2 py-0.5 font-mono text-[11px] font-bold text-[#C4F000]">
+                      <span className="rounded-md bg-[#27272A] px-2 py-0.5 font-mono text-[11px] font-bold text-[#E9FFDB]">
                         {r.count}
                       </span>
                     </div>
@@ -625,7 +625,7 @@ export function DashboardPage() {
             <h2 className="text-base font-bold text-[#18181B] dark:text-white">Recent Links</h2>
             <Link
               to="/links"
-              className="inline-flex items-center gap-1 text-xs font-bold text-[#18181B] underline decoration-[#C4F000] decoration-2 dark:text-white"
+              className="inline-flex items-center gap-1 text-xs font-bold text-[#18181B] underline decoration-[#E9FFDB] decoration-2 dark:text-white"
             >
               Manage all <ArrowRight className="h-3.5 w-3.5" />
             </Link>
@@ -648,7 +648,7 @@ export function DashboardPage() {
                         href={link.shortUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[#18181B] underline decoration-[#C4F000] decoration-2 dark:text-white"
+                        className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[#18181B] underline decoration-[#E9FFDB] decoration-2 dark:text-white"
                       >
                         /{link.slug}
                         <ExternalLink className="h-3 w-3" />

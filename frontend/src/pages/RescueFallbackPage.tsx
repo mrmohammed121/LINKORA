@@ -27,7 +27,7 @@ export function RescueFallbackPage() {
         </div>
 
         <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-[#E4E4E7] bg-[#F4F4F5] px-3 py-1 font-mono text-xs font-semibold text-[#18181B] dark:border-[#3F3F46] dark:bg-[#18181B] dark:text-zinc-200">
-          <QrCode className="h-3.5 w-3.5 text-[#18181B] dark:text-[#C4F000]" />/{slug}
+          <QrCode className="h-3.5 w-3.5 text-[#18181B] dark:text-[#E9FFDB]" />/{slug}
         </div>
 
         <h1 className="mt-4 text-2xl font-extrabold tracking-tight text-[#18181B] dark:text-white">
@@ -58,7 +58,7 @@ export function RescueFallbackPage() {
         <button
           type="button"
           onClick={handleRescueClick}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#C4F000] px-5 py-3 text-sm font-bold text-[#18181B] shadow-xs transition hover:bg-[#d2f833]"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#E9FFDB] px-5 py-3 text-sm font-bold text-[#18181B] shadow-xs transition hover:bg-[#D7F9C2]"
         >
           <LifeBuoy className="h-4 w-4" />
           {token ? 'Rescue This QR Code (Open Dashboard)' : 'Rescue This QR Code (Open Editor)'}
@@ -69,7 +69,7 @@ export function RescueFallbackPage() {
           Powered by{' '}
           <Link
             to="/"
-            className="font-bold text-[#18181B] underline decoration-[#C4F000] decoration-2 dark:text-white"
+            className="font-bold text-[#18181B] underline decoration-[#E9FFDB] decoration-2 dark:text-white"
           >
             LINKORA
           </Link>

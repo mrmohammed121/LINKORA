@@ -119,15 +119,15 @@ export function AnalyticsOverviewPage() {
   const isDark = theme === 'dark';
   const gridStroke = isDark ? '#3F3F46' : '#E4E4E7';
   const axisTickColor = isDark ? '#A1A1AA' : '#71717A';
-  const areaStroke = isDark ? '#C4F000' : '#27272A';
-  const barFill = isDark ? '#C4F000' : '#27272A';
+  const areaStroke = isDark ? '#E9FFDB' : '#27272A';
+  const barFill = isDark ? '#E9FFDB' : '#27272A';
 
   return (
     <div className="space-y-6">
       <section className="rounded-3xl bg-[#27272A] p-6 text-white shadow-soft sm:p-8">
         <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#3F3F46] px-3 py-1 text-xs font-medium text-[#C4F000]">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#3F3F46] px-3 py-1 text-xs font-medium text-[#E9FFDB]">
               <BarChart3 className="h-3.5 w-3.5" />
               Analytics Overview
             </div>
@@ -156,7 +156,7 @@ export function AnalyticsOverviewPage() {
                   onClick={() => setPreset(item.id)}
                   className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
                     preset === item.id
-                      ? 'bg-[#C4F000] text-[#18181B]'
+                      ? 'bg-[#E9FFDB] text-[#18181B]'
                       : 'text-zinc-200 hover:bg-white/10'
                   }`}
                 >
@@ -191,7 +191,7 @@ export function AnalyticsOverviewPage() {
             <button
               type="button"
               onClick={() => void load()}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#C4F000] px-3.5 py-2 text-xs font-semibold text-[#18181B] transition hover:bg-[#b2dc00]"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#E9FFDB] px-3.5 py-2 text-xs font-semibold text-[#18181B] transition hover:bg-[#D7F9C2]"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
               Refresh
@@ -209,7 +209,7 @@ export function AnalyticsOverviewPage() {
                 type="date"
                 value={customFrom}
                 onChange={(e) => setCustomFrom(e.target.value)}
-                className="rounded-xl border border-white/15 bg-[#27272A] px-3 py-1.5 text-xs text-white outline-none focus:border-[#C4F000]"
+                className="rounded-xl border border-white/15 bg-[#27272A] px-3 py-1.5 text-xs text-white outline-none focus:border-[#E9FFDB]"
               />
             </div>
             <div>
@@ -220,13 +220,13 @@ export function AnalyticsOverviewPage() {
                 type="date"
                 value={customTo}
                 onChange={(e) => setCustomTo(e.target.value)}
-                className="rounded-xl border border-white/15 bg-[#27272A] px-3 py-1.5 text-xs text-white outline-none focus:border-[#C4F000]"
+                className="rounded-xl border border-white/15 bg-[#27272A] px-3 py-1.5 text-xs text-white outline-none focus:border-[#E9FFDB]"
               />
             </div>
             <button
               type="button"
               onClick={() => void load()}
-              className="rounded-xl bg-[#C4F000] px-3.5 py-1.5 text-xs font-semibold text-[#18181B] hover:bg-[#b2dc00]"
+              className="rounded-xl bg-[#E9FFDB] px-3.5 py-1.5 text-xs font-semibold text-[#18181B] hover:bg-[#D7F9C2]"
             >
               Apply Range
             </button>
@@ -253,7 +253,7 @@ export function AnalyticsOverviewPage() {
         <>
           <div className="grid gap-4 md:grid-cols-3">
             <div className="rounded-2xl border border-[#27272A] bg-[#27272A] p-4 text-white">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#C4F000]">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#E9FFDB]">
                 <Sparkles className="h-3.5 w-3.5" />
                 Peak Engagement Window
               </div>
@@ -265,7 +265,7 @@ export function AnalyticsOverviewPage() {
             </div>
             <div className="rounded-2xl border border-[#E4E4E7] bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
               <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#71717A] dark:text-zinc-400">
-                <Globe2 className="h-3.5 w-3.5 text-[#18181B] dark:text-[#C4F000]" />
+                <Globe2 className="h-3.5 w-3.5 text-[#18181B] dark:text-[#E9FFDB]" />
                 Leading Traffic Channel
               </div>
               <p className="mt-2 font-display text-base font-bold text-[#18181B] dark:text-white">
@@ -282,7 +282,7 @@ export function AnalyticsOverviewPage() {
               {data.insights.topLink ? (
                 <Link
                   to={`/analytics/${data.insights.topLink.id}`}
-                  className="mt-2 inline-flex items-center gap-1.5 font-display text-base font-bold text-[#18181B] hover:underline dark:text-[#C4F000]"
+                  className="mt-2 inline-flex items-center gap-1.5 font-display text-base font-bold text-[#18181B] hover:underline dark:text-[#E9FFDB]"
                 >
                   /{data.insights.topLink.slug}
                   <span className="text-xs font-medium text-[#71717A] dark:text-zinc-400">
@@ -299,11 +299,11 @@ export function AnalyticsOverviewPage() {
             <div className="rounded-2xl border border-[#27272A] bg-[#27272A] p-5 text-white shadow-soft">
               <div className="flex items-center justify-between text-xs font-medium text-zinc-300">
                 <span>Total Clicks</span>
-                <span className="rounded-lg bg-[#C4F000] p-1.5 text-[#18181B]">
+                <span className="rounded-lg bg-[#E9FFDB] p-1.5 text-[#18181B]">
                   <MousePointerClick className="h-4 w-4" />
                 </span>
               </div>
-              <p className="mt-3 font-display text-3xl font-bold text-[#C4F000]">
+              <p className="mt-3 font-display text-3xl font-bold text-[#E9FFDB]">
                 {data.summary.totalClicks.toLocaleString()}
               </p>
               <p className="mt-1 text-xs text-zinc-400">Across selected window</p>
@@ -312,7 +312,7 @@ export function AnalyticsOverviewPage() {
             <div className="rounded-2xl border border-[#E4E4E7] bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
               <div className="flex items-center justify-between text-xs font-medium text-[#71717A] dark:text-zinc-400">
                 <span>Unique Visitors</span>
-                <span className="rounded-lg bg-[#F4F4F5] p-1.5 text-[#18181B] dark:bg-zinc-800 dark:text-[#C4F000]">
+                <span className="rounded-lg bg-[#F4F4F5] p-1.5 text-[#18181B] dark:bg-zinc-800 dark:text-[#E9FFDB]">
                   <Users className="h-4 w-4" />
                 </span>
               </div>
@@ -325,7 +325,7 @@ export function AnalyticsOverviewPage() {
             <div className="rounded-2xl border border-[#E4E4E7] bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
               <div className="flex items-center justify-between text-xs font-medium text-[#71717A] dark:text-zinc-400">
                 <span>Tracked Links</span>
-                <span className="rounded-lg bg-[#F4F4F5] p-1.5 text-[#18181B] dark:bg-zinc-800 dark:text-[#C4F000]">
+                <span className="rounded-lg bg-[#F4F4F5] p-1.5 text-[#18181B] dark:bg-zinc-800 dark:text-[#E9FFDB]">
                   <Activity className="h-4 w-4" />
                 </span>
               </div>
@@ -338,7 +338,7 @@ export function AnalyticsOverviewPage() {
             <div className="rounded-2xl border border-[#E4E4E7] bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
               <div className="flex items-center justify-between text-xs font-medium text-[#71717A] dark:text-zinc-400">
                 <span>Avg Clicks / Link</span>
-                <span className="rounded-lg bg-[#F4F4F5] p-1.5 text-[#18181B] dark:bg-zinc-800 dark:text-[#C4F000]">
+                <span className="rounded-lg bg-[#F4F4F5] p-1.5 text-[#18181B] dark:bg-zinc-800 dark:text-[#E9FFDB]">
                   <Calendar className="h-4 w-4" />
                 </span>
               </div>
@@ -362,7 +362,7 @@ export function AnalyticsOverviewPage() {
                     Grouped by {trendMode === 'hour' ? 'hour' : trendMode === 'month' ? 'month' : 'day'}
                   </p>
                 </div>
-                <span className="rounded-full bg-[#C4F000]/25 px-3 py-1 text-xs font-semibold text-[#18181B] dark:text-[#C4F000]">
+                <span className="rounded-full bg-[#E9FFDB]/25 px-3 py-1 text-xs font-semibold text-[#18181B] dark:text-[#E9FFDB]">
                   Real Traffic
                 </span>
               </div>
@@ -373,8 +373,8 @@ export function AnalyticsOverviewPage() {
                     <AreaChart data={chartSeries} margin={{ top: 10, right: 10, left: -18, bottom: 0 }}>
                       <defs>
                         <linearGradient id="linkoraClicksFill" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#C4F000" stopOpacity={0.55} />
-                          <stop offset="95%" stopColor="#C4F000" stopOpacity={0.04} />
+                          <stop offset="5%" stopColor="#E9FFDB" stopOpacity={0.9} />
+                          <stop offset="95%" stopColor="#E9FFDB" stopOpacity={0.12} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />
@@ -395,7 +395,7 @@ export function AnalyticsOverviewPage() {
                         stroke={areaStroke}
                         strokeWidth={2.5}
                         fill="url(#linkoraClicksFill)"
-                        activeDot={{ r: 5, fill: '#C4F000', stroke: '#27272A', strokeWidth: 2 }}
+                        activeDot={{ r: 5, fill: '#E9FFDB', stroke: '#27272A', strokeWidth: 2 }}
                       />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -462,13 +462,13 @@ export function AnalyticsOverviewPage() {
                     <div key={item.referrer} className="space-y-1.5">
                       <div className="flex items-center justify-between text-xs">
                         <span className="font-medium text-[#18181B] dark:text-zinc-200">{item.referrer}</span>
-                        <span className="font-mono font-semibold text-[#18181B] dark:text-[#C4F000]">
+                        <span className="font-mono font-semibold text-[#18181B] dark:text-[#E9FFDB]">
                           {item.count}
                         </span>
                       </div>
                       <div className="h-2 overflow-hidden rounded-full bg-[#F4F4F5] dark:bg-zinc-800">
                         <div
-                          className="h-full rounded-full bg-[#27272A] dark:bg-[#C4F000]"
+                          className="h-full rounded-full bg-[#27272A] dark:bg-[#E9FFDB]"
                           style={{ width: `${Math.max(6, Math.round((item.count / maxReferrerCount) * 100))}%` }}
                         />
                       </div>
@@ -493,13 +493,13 @@ export function AnalyticsOverviewPage() {
                     <div key={item.region} className="space-y-1.5">
                       <div className="flex items-center justify-between text-xs">
                         <span className="font-medium text-[#18181B] dark:text-zinc-200">{item.region}</span>
-                        <span className="font-mono font-semibold text-[#18181B] dark:text-[#C4F000]">
+                        <span className="font-mono font-semibold text-[#18181B] dark:text-[#E9FFDB]">
                           {item.count}
                         </span>
                       </div>
                       <div className="h-2 overflow-hidden rounded-full bg-[#F4F4F5] dark:bg-zinc-800">
                         <div
-                          className="h-full rounded-full bg-[#C4F000]"
+                          className="h-full rounded-full bg-[#27272A] dark:bg-[#E9FFDB]"
                           style={{ width: `${Math.max(6, Math.round((item.count / maxRegionCount) * 100))}%` }}
                         />
                       </div>
@@ -518,7 +518,7 @@ export function AnalyticsOverviewPage() {
                 </h2>
                 <Link
                   to="/links"
-                  className="text-xs font-semibold text-[#18181B] hover:underline dark:text-[#C4F000]"
+                  className="text-xs font-semibold text-[#18181B] hover:underline dark:text-[#E9FFDB]"
                 >
                   View All Links
                 </Link>
@@ -545,7 +545,7 @@ export function AnalyticsOverviewPage() {
                       data.topLinks.map((item) => (
                         <tr key={item.id} className="hover:bg-[#F4F4F5]/60 dark:hover:bg-zinc-800/40">
                           <td className="px-5 py-3">
-                            <p className="font-mono text-xs font-semibold text-[#18181B] dark:text-[#C4F000]">
+                            <p className="font-mono text-xs font-semibold text-[#18181B] dark:text-[#E9FFDB]">
                               /{item.slug}
                             </p>
                             <p className="max-w-[200px] truncate text-xs text-[#71717A] dark:text-zinc-400">
@@ -605,7 +605,7 @@ export function AnalyticsOverviewPage() {
                     ) : (
                       data.recentActivity.map((event) => (
                         <tr key={event.id} className="hover:bg-[#F4F4F5]/60 dark:hover:bg-zinc-800/40">
-                          <td className="px-5 py-3 font-mono text-xs font-semibold text-[#18181B] dark:text-[#C4F000]">
+                          <td className="px-5 py-3 font-mono text-xs font-semibold text-[#18181B] dark:text-[#E9FFDB]">
                             <Link to={`/analytics/${event.linkId}`} className="hover:underline">
                               /{event.slug}
                             </Link>

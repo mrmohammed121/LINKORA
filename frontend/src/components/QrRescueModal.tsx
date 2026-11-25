@@ -200,7 +200,7 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
             ) : (
               originalUrl.trim() && (
                 <p className="mt-1 text-[11px] font-medium text-[#16A34A]">
-                  Valid target URL — ready for zero-downtime swap
+                  Valid target URL â€” ready for zero-downtime swap
                 </p>
               )
             )}
@@ -231,7 +231,7 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
                   <button
                     type="button"
                     onClick={() => setExpiresAt('')}
-                    className="text-[11px] font-semibold text-[#18181B] underline decoration-[#C4F000] dark:text-[#C4F000]"
+                    className="text-[11px] font-semibold text-[#18181B] underline decoration-[#E9FFDB] dark:text-[#E9FFDB]"
                   >
                     Clear expiry
                   </button>
@@ -263,7 +263,7 @@ export function QrRescueModal({ link, onClose, onSaved }: QrRescueModalProps) {
             <button
               type="submit"
               disabled={isSaving || Boolean(liveUrlError)}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#C4F000] px-5 py-2.5 text-xs font-bold text-[#18181B] shadow-xs transition hover:bg-[#d2f833] disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#E9FFDB] px-5 py-2.5 text-xs font-bold text-[#18181B] shadow-xs transition hover:bg-[#D7F9C2] disabled:opacity-60"
             >
               {isSaving && <Loader2 className="h-4 w-4 animate-spin" />}
               Save &amp; Rescue QR

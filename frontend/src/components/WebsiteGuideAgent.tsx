@@ -145,13 +145,13 @@ export function WebsiteGuideAgent() {
           {/* Charcoal Header */}
           <div className="flex items-center justify-between border-b border-[#3F3F46] bg-[#27272A] px-4 py-3 text-white">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#C4F000] text-[#18181B]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#E9FFDB] text-[#18181B]">
                 <Bot className="h-4 w-4" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5 text-sm font-bold leading-tight">
                   LINKORA Guide
-                  <span className="inline-flex items-center gap-0.5 rounded-full bg-[#C4F000]/15 px-1.5 py-0.5 text-[10px] font-semibold text-[#C4F000]">
+                  <span className="inline-flex items-center gap-0.5 rounded-full bg-[#E9FFDB]/15 px-1.5 py-0.5 text-[10px] font-semibold text-[#E9FFDB]">
                     <Sparkles className="h-2.5 w-2.5" />
                     Docs
                   </span>
@@ -185,7 +185,7 @@ export function WebsiteGuideAgent() {
                 <div
                   className={`max-w-[90%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line ${
                     msg.role === 'user'
-                      ? 'rounded-br-sm bg-[#27272A] font-medium text-[#C4F000] shadow-xs dark:bg-[#C4F000] dark:text-[#18181B]'
+                      ? 'rounded-br-sm bg-[#27272A] font-medium text-[#E9FFDB] shadow-xs dark:bg-[#E9FFDB] dark:text-[#18181B]'
                       : 'rounded-bl-sm border border-[#E4E4E7] bg-white text-[#18181B] shadow-xs dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-zinc-100'
                   }`}
                 >
@@ -212,7 +212,7 @@ export function WebsiteGuideAgent() {
                         key={ref.id}
                         type="button"
                         onClick={() => handleNavigateRef(ref.route)}
-                        className="flex w-full items-center justify-between gap-2 rounded-xl border border-[#E4E4E7] bg-white px-3 py-2 text-left transition hover:border-[#27272A] dark:border-[#3F3F46] dark:bg-[#27272A] dark:hover:border-[#C4F000]"
+                        className="flex w-full items-center justify-between gap-2 rounded-xl border border-[#E4E4E7] bg-white px-3 py-2 text-left transition hover:border-[#27272A] dark:border-[#3F3F46] dark:bg-[#27272A] dark:hover:border-[#E9FFDB]"
                       >
                         <div className="min-w-0">
                           <div className="truncate text-[11px] font-bold text-[#18181B] dark:text-white">
@@ -222,7 +222,7 @@ export function WebsiteGuideAgent() {
                             {ref.summary}
                           </div>
                         </div>
-                        <span className="inline-flex shrink-0 items-center gap-0.5 rounded-lg bg-[#27272A] px-2 py-1 text-[10px] font-bold text-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]">
+                        <span className="inline-flex shrink-0 items-center gap-0.5 rounded-lg bg-[#27272A] px-2 py-1 text-[10px] font-bold text-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]">
                           {ref.routeLabel}
                           <ArrowUpRight className="h-3 w-3" />
                         </span>
@@ -241,7 +241,7 @@ export function WebsiteGuideAgent() {
                           key={q}
                           type="button"
                           onClick={() => void askAgent(q)}
-                          className="rounded-full border border-[#E4E4E7] bg-white px-2.5 py-1 text-[11px] font-medium text-[#18181B] transition hover:border-[#27272A] dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-zinc-200 dark:hover:border-[#C4F000]"
+                          className="rounded-full border border-[#E4E4E7] bg-white px-2.5 py-1 text-[11px] font-medium text-[#18181B] transition hover:border-[#27272A] dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-zinc-200 dark:hover:border-[#E9FFDB]"
                         >
                           {q}
                         </button>
@@ -253,7 +253,7 @@ export function WebsiteGuideAgent() {
 
             {isLoading && (
               <div className="flex items-center gap-2 text-xs text-[#71717A]">
-                <Loader2 className="h-3.5 w-3.5 animate-spin text-[#27272A] dark:text-[#C4F000]" />
+                <Loader2 className="h-3.5 w-3.5 animate-spin text-[#27272A] dark:text-[#E9FFDB]" />
                 Searching LINKORA references...
               </div>
             )}
@@ -276,7 +276,7 @@ export function WebsiteGuideAgent() {
               type="submit"
               disabled={!input.trim() || isLoading}
               aria-label="Send question"
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#C4F000] text-[#18181B] transition hover:bg-[#d2f833] disabled:opacity-50"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#E9FFDB] text-[#18181B] transition hover:bg-[#D7F9C2] disabled:opacity-50"
             >
               <Send className="h-3.5 w-3.5" />
             </button>
@@ -290,7 +290,7 @@ export function WebsiteGuideAgent() {
         onClick={() => setOpen((v) => !v)}
         title={open ? 'Close LINKORA Guide' : 'Ask LINKORA Guide'}
         aria-label={open ? 'Close LINKORA Guide Agent' : 'Ask LINKORA Guide'}
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3F3F46] bg-[#27272A] text-[#C4F000] shadow-xl transition hover:scale-105 hover:bg-[#3F3F46] focus:outline-none focus:ring-2 focus:ring-[#C4F000]"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3F3F46] bg-[#27272A] text-[#E9FFDB] shadow-xl transition hover:scale-105 hover:bg-[#3F3F46] focus:outline-none focus:ring-2 focus:ring-[#E9FFDB]"
       >
         {open ? <X className="h-5 w-5" /> : <Bot className="h-5 w-5" />}
       </button>

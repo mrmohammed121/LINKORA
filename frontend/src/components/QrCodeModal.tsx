@@ -218,7 +218,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#27272A] text-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#27272A] text-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]">
               <QrCode className="h-5 w-5" />
             </div>
             <div>
@@ -240,7 +240,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
               onClick={() => setShowDesigner((prev) => !prev)}
               className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition ${
                 showDesigner
-                  ? 'border-[#27272A] bg-[#27272A] text-[#C4F000] dark:border-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]'
+                  ? 'border-[#27272A] bg-[#27272A] text-[#E9FFDB] dark:border-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]'
                   : 'border-[#E4E4E7] bg-white text-[#18181B] hover:bg-[#F4F4F5] dark:border-[#3F3F46] dark:bg-[#3F3F46] dark:text-white'
               }`}
             >
@@ -321,7 +321,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
             <button
               type="button"
               onClick={handleSimulateScan}
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[#27272A] px-4 py-2.5 text-xs font-bold text-[#C4F000] transition hover:bg-[#3F3F46] dark:bg-[#C4F000] dark:text-[#18181B]"
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[#27272A] px-4 py-2.5 text-xs font-bold text-[#E9FFDB] transition hover:bg-[#3F3F46] dark:bg-[#E9FFDB] dark:text-[#18181B]"
             >
               {simulating ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -338,7 +338,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
             <div className="space-y-4 rounded-2xl border border-[#E4E4E7] bg-[#F4F4F5] p-4 dark:border-[#3F3F46] dark:bg-[#18181B] lg:col-span-7">
               {!isAuthenticated ? (
                 <div className="flex h-full min-h-[280px] flex-col items-center justify-center p-4 text-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#27272A] text-[#C4F000]">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#27272A] text-[#E9FFDB]">
                     <Lock className="h-6 w-6" />
                   </div>
                   <h4 className="mt-3 text-sm font-bold text-[#18181B] dark:text-white">
@@ -351,7 +351,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                   <button
                     type="button"
                     onClick={() => setShowAuthPrompt(true)}
-                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#C4F000] px-4 py-2.5 text-xs font-bold text-[#18181B] transition hover:bg-[#d2f833]"
+                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#E9FFDB] px-4 py-2.5 text-xs font-bold text-[#18181B] transition hover:bg-[#D7F9C2]"
                   >
                     Sign in to Unlock Custom Designer
                   </button>
@@ -394,7 +394,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploadingImage}
-                        className="inline-flex items-center gap-2 rounded-xl border border-dashed border-[#27272A] bg-white px-4 py-2.5 text-xs font-semibold text-[#18181B] transition hover:bg-[#E4E4E7]/40 dark:border-[#C4F000]/50 dark:bg-[#27272A] dark:text-white"
+                        className="inline-flex items-center gap-2 rounded-xl border border-dashed border-[#27272A] bg-white px-4 py-2.5 text-xs font-semibold text-[#18181B] transition hover:bg-[#E4E4E7]/40 dark:border-[#E9FFDB]/50 dark:bg-[#27272A] dark:text-white"
                       >
                         {uploadingImage ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -445,13 +445,13 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                           }
                           className={`rounded-xl border p-2.5 text-left transition ${
                             styleConfig.frameMode === mode.id
-                              ? 'border-[#27272A] bg-[#27272A] text-white dark:border-[#C4F000] dark:bg-[#3F3F46]'
+                              ? 'border-[#27272A] bg-[#27272A] text-white dark:border-[#E9FFDB] dark:bg-[#3F3F46]'
                               : 'border-[#E4E4E7] bg-white text-[#18181B] hover:border-[#71717A] dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-white'
                           }`}
                         >
                           <div
                             className={`text-xs font-bold ${
-                              styleConfig.frameMode === mode.id ? 'text-[#C4F000]' : ''
+                              styleConfig.frameMode === mode.id ? 'text-[#E9FFDB]' : ''
                             }`}
                           >
                             {mode.label}
@@ -486,7 +486,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                             }
                             className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition ${
                               styleConfig.dotStyle === dot.id
-                                ? 'border-[#27272A] bg-[#27272A] text-[#C4F000] dark:border-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]'
+                                ? 'border-[#27272A] bg-[#27272A] text-[#E9FFDB] dark:border-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]'
                                 : 'border-[#E4E4E7] bg-white text-[#18181B] dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-zinc-300'
                             }`}
                           >
@@ -510,7 +510,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                             }
                             className={`rounded-lg border px-2 py-1.5 text-xs font-semibold transition ${
                               styleConfig.cornerStyle === corner.id
-                                ? 'border-[#27272A] bg-[#27272A] text-[#C4F000] dark:border-[#C4F000] dark:bg-[#C4F000] dark:text-[#18181B]'
+                                ? 'border-[#27272A] bg-[#27272A] text-[#E9FFDB] dark:border-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]'
                                 : 'border-[#E4E4E7] bg-white text-[#18181B] dark:border-[#3F3F46] dark:bg-[#27272A] dark:text-zinc-300'
                             }`}
                           >
@@ -591,7 +591,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                     >
                       <ShieldCheck className="h-3.5 w-3.5" />
                       Contrast {contrastRatio.toFixed(1)}:1{' '}
-                      {contrastRatio >= 4.5 ? '(Scan-Safe)' : '(Low contrast — darken QR color)'}
+                      {contrastRatio >= 4.5 ? '(Scan-Safe)' : '(Low contrast â€” darken QR color)'}
                     </span>
 
                     <div className="flex items-center gap-2">
@@ -608,7 +608,7 @@ export function QrCodeModal({ link, onClose }: QrCodeModalProps) {
                         type="button"
                         onClick={() => void handleSaveStyle()}
                         disabled={savingStyle}
-                        className="inline-flex items-center gap-1.5 rounded-xl bg-[#C4F000] px-4 py-2 text-xs font-bold text-[#18181B] transition hover:bg-[#d2f833] disabled:opacity-60"
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-[#E9FFDB] px-4 py-2 text-xs font-bold text-[#18181B] transition hover:bg-[#D7F9C2] disabled:opacity-60"
                       >
                         {savingStyle ? (
                           <Loader2 className="h-3.5 w-3.5 animate-spin" />

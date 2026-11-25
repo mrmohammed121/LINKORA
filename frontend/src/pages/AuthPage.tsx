@@ -138,21 +138,21 @@ export function AuthPage({ mode }: AuthPageProps) {
       <aside className="flex flex-col justify-between bg-[#27272A] p-6 text-white sm:p-10 lg:col-span-5 lg:min-h-screen lg:p-12">
         <div>
           <Link to="/" className="inline-flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C4F000] text-[#18181B]">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#E9FFDB] text-[#18181B]">
               <Link2 className="h-5 w-5 stroke-[2.4]" />
             </div>
             <span className="text-lg font-extrabold tracking-tight text-white">LINKORA</span>
           </Link>
 
           <div className="mt-10">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#3F3F46] bg-[#18181B]/70 px-3 py-1 text-xs font-semibold text-[#C4F000]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#3F3F46] bg-[#18181B]/70 px-3 py-1 text-xs font-semibold text-[#E9FFDB]">
               <LifeBuoy className="h-3.5 w-3.5" />
               Dynamic Links &amp; QR Rescue
             </span>
 
             <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
               Control Every Short Link from One{' '}
-              <span className="text-[#C4F000]">Command Center</span>.
+              <span className="text-[#E9FFDB]">Command Center</span>.
             </h1>
 
             <p className="mt-3 text-sm leading-relaxed text-zinc-300">
@@ -163,7 +163,7 @@ export function AuthPage({ mode }: AuthPageProps) {
 
           <div className="mt-8 space-y-3">
             <div className="flex items-start gap-3 rounded-2xl border border-[#3F3F46] bg-[#18181B]/60 p-4">
-              <Zap className="mt-0.5 h-5 w-5 shrink-0 text-[#C4F000]" />
+              <Zap className="mt-0.5 h-5 w-5 shrink-0 text-[#E9FFDB]" />
               <div>
                 <div className="text-sm font-bold text-white">Instant HTTP 302 Redirects</div>
                 <p className="mt-0.5 text-xs text-zinc-400">
@@ -172,7 +172,7 @@ export function AuthPage({ mode }: AuthPageProps) {
               </div>
             </div>
             <div className="flex items-start gap-3 rounded-2xl border border-[#3F3F46] bg-[#18181B]/60 p-4">
-              <LifeBuoy className="mt-0.5 h-5 w-5 shrink-0 text-[#C4F000]" />
+              <LifeBuoy className="mt-0.5 h-5 w-5 shrink-0 text-[#E9FFDB]" />
               <div>
                 <div className="text-sm font-bold text-white">Zero-Reprint QR Rescue</div>
                 <p className="mt-0.5 text-xs text-zinc-400">
@@ -181,7 +181,7 @@ export function AuthPage({ mode }: AuthPageProps) {
               </div>
             </div>
             <div className="flex items-start gap-3 rounded-2xl border border-[#3F3F46] bg-[#18181B]/60 p-4">
-              <Activity className="mt-0.5 h-5 w-5 shrink-0 text-[#C4F000]" />
+              <Activity className="mt-0.5 h-5 w-5 shrink-0 text-[#E9FFDB]" />
               <div>
                 <div className="text-sm font-bold text-white">Privacy-First Analytics</div>
                 <p className="mt-0.5 text-xs text-zinc-400">
@@ -193,7 +193,7 @@ export function AuthPage({ mode }: AuthPageProps) {
         </div>
 
         <div className="mt-8 hidden border-t border-[#3F3F46] pt-5 text-xs text-zinc-400 lg:block">
-          Fastify 5 · Prisma 6.6 · Neon PostgreSQL · JWT Auth
+          Fastify 5 Â· Prisma 6.6 Â· Neon PostgreSQL Â· JWT Auth
         </div>
       </aside>
 
@@ -222,7 +222,7 @@ export function AuthPage({ mode }: AuthPageProps) {
                 }}
                 className={`rounded-lg px-4 py-1.5 text-xs font-bold transition ${
                   mode === 'login'
-                    ? 'bg-[#27272A] text-[#C4F000]'
+                    ? 'bg-[#27272A] text-[#E9FFDB]'
                     : 'text-[#71717A] hover:text-[#18181B]'
                 }`}
               >
@@ -237,7 +237,7 @@ export function AuthPage({ mode }: AuthPageProps) {
                 }}
                 className={`rounded-lg px-4 py-1.5 text-xs font-bold transition ${
                   mode === 'register'
-                    ? 'bg-[#27272A] text-[#C4F000]'
+                    ? 'bg-[#27272A] text-[#E9FFDB]'
                     : 'text-[#71717A] hover:text-[#18181B]'
                 }`}
               >
@@ -249,7 +249,7 @@ export function AuthPage({ mode }: AuthPageProps) {
               to="/dashboard"
               className="text-xs font-semibold text-[#71717A] hover:text-[#18181B] hover:underline"
             >
-              Continue as guest →
+              Continue as guest â†’
             </Link>
           </div>
 
@@ -395,7 +395,7 @@ export function AuthPage({ mode }: AuthPageProps) {
               <div className="rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] p-3 text-xs text-[#71717A]">
                 <strong className="text-[#18181B]">Password recovery:</strong> Email password resets
                 are not enabled in this workspace. Signed-in users can update their password anytime
-                under <strong>Settings → Security</strong>, or sign in with Google / Demo Account.
+                under <strong>Settings â†’ Security</strong>, or sign in with Google / Demo Account.
               </div>
             )}
 
@@ -412,7 +412,7 @@ export function AuthPage({ mode }: AuthPageProps) {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#C4F000] px-5 py-3 text-sm font-bold text-[#18181B] shadow-xs transition hover:bg-[#d2f833] disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#E9FFDB] px-5 py-3 text-sm font-bold text-[#18181B] shadow-xs transition hover:bg-[#D7F9C2] disabled:opacity-60"
             >
               {isLoading ? (
                 <>
@@ -446,7 +446,7 @@ export function AuthPage({ mode }: AuthPageProps) {
 
             <Link
               to={mode === 'login' ? registerPath : loginPath}
-              className="font-semibold text-[#18181B] underline decoration-[#C4F000] decoration-2 underline-offset-4"
+              className="font-semibold text-[#18181B] underline decoration-[#E9FFDB] decoration-2 underline-offset-4"
             >
               {mode === 'login'
                 ? 'Need an account? Create one'

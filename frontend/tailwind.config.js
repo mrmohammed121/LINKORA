@@ -7,7 +7,7 @@ export default {
       colors: {
         charcoal: '#27272A',
         graphite: '#3F3F46',
-        limebrand: '#C4F000',
+        limebrand: '#E9FFDB',
         softbg: '#F4F4F5',
         ink: '#18181B',
         muted: '#71717A',
