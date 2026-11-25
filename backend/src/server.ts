@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { env } from './config/env.js';
 import { linkCache } from './lib/cacheAndQueue.js';
-import { prisma } from './lib/prisma.js';
+import { connectDatabase, disconnectDatabase, prisma } from './lib/prisma.js';
 import { registerAuthPlugin } from './plugins/auth.js';
 import { analyticsRoutes } from './routes/analytics.js';
 import { authRoutes } from './routes/auth.js';
@@ -54,7 +54,7 @@ export async function buildServer() {
       status: dbOk ? 'ok' : 'degraded',
       service: 'linkora-api',
       publicBaseUrl: env.PUBLIC_BASE_URL,
-      database: dbOk ? 'sqlite:connected' : 'disconnected',
+      database: dbOk ? 'postgresql:connected' : 'disconnected',
       cacheMode: linkCache.mode,
       cachedSlugs: linkCache.size(),
       timestamp: new Date().toISOString(),
@@ -78,7 +78,7 @@ async function start() {
     try {
       await app.close();
       await linkCache.close();
-      await prisma.$disconnect();
+      await disconnectDatabase();
       process.exit(0);
     } catch (err) {
       console.error('Error during graceful shutdown:', err);
@@ -90,10 +90,12 @@ async function start() {
   process.on('SIGTERM', () => void shutdown('SIGTERM'));
 
   try {
+    await connectDatabase();
     await app.listen({ port: env.PORT, host: '0.0.0.0' });
     console.log(`🚀 LINKORA API running on http://0.0.0.0:${env.PORT} (public: ${env.PUBLIC_BASE_URL}, cache: ${linkCache.mode})`);
   } catch (err) {
     app.log.error(err);
+    await disconnectDatabase().catch(() => undefined);
     process.exit(1);
   }
 }

@@ -16,6 +16,21 @@ if (env.NODE_ENV !== 'production') {
 }
 
 /**
+ * Establishes and verifies the PostgreSQL connection on startup.
+ */
+export async function connectDatabase(): Promise<void> {
+  await prisma.$connect();
+  await prisma.$queryRaw`SELECT 1`;
+}
+
+/**
+ * Gracefully closes the Prisma database connection pool.
+ */
+export async function disconnectDatabase(): Promise<void> {
+  await prisma.$disconnect();
+}
+
+/**
  * True when a Prisma operation failed with the given error code, e.g.
  * 'P2002' (unique constraint violation) or 'P2025' (record not found).
  */
