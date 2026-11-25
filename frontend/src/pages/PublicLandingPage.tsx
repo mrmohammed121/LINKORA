@@ -34,14 +34,16 @@ export function PublicLandingPage() {
   const [activeGuest, setActiveGuest] = useState<LinkItem | null>(
     () => getGuestLinks()[0] ?? null
   );
+  const [showGuestQr, setShowGuestQr] = useState(false);
   const [qrSvg, setQrSvg] = useState<string | null>(null);
   const [qrLoading, setQrLoading] = useState(false);
   const [downloading, setDownloading] = useState<'png' | 'svg' | null>(null);
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!activeGuest) {
+    if (!activeGuest || !showGuestQr) {
       setQrSvg(null);
+      setQrLoading(false);
       return;
     }
     let cancelled = false;
@@ -60,7 +62,7 @@ export function PublicLandingPage() {
     return () => {
       cancelled = true;
     };
-  }, [activeGuest]);
+  }, [activeGuest, showGuestQr]);
 
   const handleSlugChange = (raw: string) => {
     const { slug, notice } = sanitizeSlugInput(raw);
@@ -89,6 +91,7 @@ export function PublicLandingPage() {
       saveGuestLink(link);
       setGuestLinks(getGuestLinks());
       setActiveGuest(link);
+      setShowGuestQr(createMode === 'qr');
       setOriginalUrl('');
       setCustomSlug('');
       setSlugNotice(null);
@@ -230,52 +233,54 @@ export function PublicLandingPage() {
         {activeGuest && (
           <section className="rounded-2xl border border-blue-200 bg-white p-6 shadow-sm dark:border-blue-500/30 dark:bg-slate-900">
             <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-12">
-              <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950 lg:col-span-4">
-                {qrLoading ? (
-                  <div className="flex h-44 w-44 items-center justify-center">
-                    <Loader2 className="h-7 w-7 animate-spin text-blue-600" />
-                  </div>
-                ) : qrSvg ? (
-                  <div
-                    className="h-44 w-44 overflow-hidden rounded-xl bg-white p-2 shadow-xs [&>svg]:h-full [&>svg]:w-full"
-                    dangerouslySetInnerHTML={{ __html: qrSvg }}
-                  />
-                ) : (
-                  <div className="flex h-44 w-44 items-center justify-center text-xs text-slate-400">
-                    QR Preview Unavailable
-                  </div>
-                )}
+              {showGuestQr && (
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950 lg:col-span-4">
+                  {qrLoading ? (
+                    <div className="flex h-44 w-44 items-center justify-center">
+                      <Loader2 className="h-7 w-7 animate-spin text-blue-600" />
+                    </div>
+                  ) : qrSvg ? (
+                    <div
+                      className="h-44 w-44 overflow-hidden rounded-xl bg-white p-2 shadow-xs [&>svg]:h-full [&>svg]:w-full"
+                      dangerouslySetInnerHTML={{ __html: qrSvg }}
+                    />
+                  ) : (
+                    <div className="flex h-44 w-44 items-center justify-center text-xs text-slate-400">
+                      QR Preview Unavailable
+                    </div>
+                  )}
 
-                <div className="mt-4 grid w-full grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => void handleDownload('png')}
-                    disabled={downloading !== null}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                    PNG
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => void handleDownload('svg')}
-                    disabled={downloading !== null}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                    SVG
-                  </button>
+                  <div className="mt-4 grid w-full grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => void handleDownload('png')}
+                      disabled={downloading !== null}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      PNG
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void handleDownload('svg')}
+                      disabled={downloading !== null}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      SVG
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div className="space-y-4 lg:col-span-8">
+              <div className={`space-y-4 ${showGuestQr ? 'lg:col-span-8' : 'lg:col-span-12'}`}>
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:text-amber-300">
                     <Clock className="h-3 w-3" />
                     24h Guest Preview
                   </span>
                   <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
-                    Live &amp; Scannable Now
+                    {showGuestQr ? 'Live & Scannable Now' : 'Live Short Link Ready'}
                   </span>
                 </div>
 
@@ -305,6 +310,16 @@ export function PublicLandingPage() {
                         </>
                       )}
                     </button>
+                    {!showGuestQr && (
+                      <button
+                        type="button"
+                        onClick={() => setShowGuestQr(true)}
+                        className="inline-flex items-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-500/30 dark:bg-blue-500/15 dark:text-blue-300"
+                      >
+                        <QrCode className="h-3.5 w-3.5" />
+                        Generate QR Code
+                      </button>
+                    )}
                   </div>
                   <p className="mt-1 truncate text-xs text-slate-500 dark:text-slate-400">
                     Redirects to: {activeGuest.originalUrl}
@@ -346,7 +361,10 @@ export function PublicLandingPage() {
                         <button
                           key={item.slug}
                           type="button"
-                          onClick={() => setActiveGuest(item)}
+                          onClick={() => {
+                            setActiveGuest(item);
+                            setShowGuestQr(createMode === 'qr');
+                          }}
                           className={`rounded-lg border px-2.5 py-1 font-mono text-xs font-semibold transition ${
                             activeGuest.slug === item.slug
                               ? 'border-blue-600 bg-blue-50 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300'
