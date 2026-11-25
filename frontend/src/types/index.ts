@@ -152,3 +152,19 @@ export interface HealthResponse {
   cachedSlugs: number;
   timestamp: string;
 }
+
+export interface AssistantReferenceItem {
+  id: string;
+  title: string;
+  route: string;
+  routeLabel: string;
+  category: 'Core' | 'QR' | 'Analytics' | 'Account' | 'Architecture';
+  summary: string;
+}
+
+export interface AssistantChatResponse {
+  reply: string;
+  references: AssistantReferenceItem[];
+  suggestions: string[];
+  currentPageHint: string | null;
+}

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import authHeroIllustration from '../assets/auth-hero.svg';
 import { GoogleContinueButton } from '../components/GoogleContinueButton';
+import { WebsiteGuideAgent } from '../components/WebsiteGuideAgent';
 import { useAuthStore } from '../store/useAuthStore';
 
 interface AuthPageProps {
@@ -472,6 +473,8 @@ export function AuthPage({ mode }: AuthPageProps) {
           LINKORA Platform — Fastify, Prisma, Redis Cache &amp; Dynamic QR Rescue
         </footer>
       </div>
+
+      <WebsiteGuideAgent />
     </div>
   );
 }

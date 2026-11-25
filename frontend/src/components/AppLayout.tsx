@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import { useLinkStore } from '../store/useLinkStore';
+import { WebsiteGuideAgent } from './WebsiteGuideAgent';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -304,6 +305,8 @@ export function AppLayout({ children }: AppLayoutProps) {
         {/* Page Body */}
         <main className="mx-auto w-full max-w-7xl flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
+
+      <WebsiteGuideAgent />
     </div>
   );
 }

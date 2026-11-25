@@ -5,6 +5,7 @@ import { linkCache } from './lib/cacheAndQueue.js';
 import { connectDatabase, disconnectDatabase, prisma } from './lib/prisma.js';
 import { registerAuthPlugin } from './plugins/auth.js';
 import { analyticsRoutes } from './routes/analytics.js';
+import { assistantRoutes } from './routes/assistant.js';
 import { authRoutes } from './routes/auth.js';
 import { linkRoutes } from './routes/links.js';
 import { qrRoutes } from './routes/qr.js';
@@ -65,6 +66,7 @@ export async function buildServer() {
   await app.register(linkRoutes);
   await app.register(qrRoutes);
   await app.register(analyticsRoutes);
+  await app.register(assistantRoutes);
   await app.register(redirectRoutes);
 
   return app;

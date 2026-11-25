@@ -1,5 +1,7 @@
 import type {
   AnalyticsResponse,
+  AssistantChatResponse,
+  AssistantReferenceItem,
   HealthResponse,
   LinkItem,
   LinkStatus,
@@ -286,5 +288,15 @@ export const api = {
       anchor.remove();
       URL.revokeObjectURL(url);
     },
+  },
+
+  assistant: {
+    references: () =>
+      request<{ references: AssistantReferenceItem[] }>('/api/assistant/references'),
+    chat: (payload: { message: string; currentPath?: string }) =>
+      request<AssistantChatResponse>('/api/assistant/chat', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
   },
 };
