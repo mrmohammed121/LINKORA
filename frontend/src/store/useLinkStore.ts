@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '../lib/api';
 import { saveGuestLink } from '../lib/guestStorage';
-import type { LinkItem, LinkStatus } from '../types';
+import type { LinkItem, LinkStatus, QrStyleConfig } from '../types';
 
 interface LinkStoreState {
   links: LinkItem[];
@@ -15,8 +15,14 @@ interface LinkStoreState {
   }) => Promise<LinkItem>;
   updateLink: (
     id: string,
-    payload: { originalUrl?: string; status?: LinkStatus; expiresAt?: string | null }
+    payload: {
+      originalUrl?: string;
+      status?: LinkStatus;
+      expiresAt?: string | null;
+      qrStyleConfig?: QrStyleConfig | null;
+    }
   ) => Promise<LinkItem>;
+  saveQrStyle: (id: string, qrStyleConfig: QrStyleConfig | null) => Promise<LinkItem>;
   deleteLink: (id: string) => Promise<void>;
   reset: () => void;
 }
@@ -51,6 +57,14 @@ export const useLinkStore = create<LinkStoreState>((set) => ({
     if (link.isGuest) {
       saveGuestLink(link);
     }
+    set((state) => ({
+      links: state.links.map((item) => (item.id === id ? link : item)),
+    }));
+    return link;
+  },
+
+  saveQrStyle: async (id, qrStyleConfig) => {
+    const { link } = await api.qr.saveStyle(id, qrStyleConfig);
     set((state) => ({
       links: state.links.map((item) => (item.id === id ? link : item)),
     }));

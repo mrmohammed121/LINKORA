@@ -14,10 +14,13 @@ import { AppLayout } from '../components/AppLayout';
 import { QrCodeModal } from '../components/QrCodeModal';
 import { QrRescueModal } from '../components/QrRescueModal';
 import { StatusBadge } from '../components/StatusBadge';
+import { WorkspacePromptCard } from '../components/WorkspacePromptModal';
+import { useAuthStore } from '../store/useAuthStore';
 import { useLinkStore } from '../store/useLinkStore';
 import type { LinkItem, LinkStatus } from '../types';
 
 export function LinkManagementPage() {
+  const isAuthenticated = Boolean(useAuthStore((s) => s.token));
   const { links, isLoading, fetchLinks, updateLink, deleteLink } = useLinkStore();
 
   const [search, setSearch] = useState('');
@@ -25,6 +28,8 @@ export function LinkManagementPage() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [qrModalLink, setQrModalLink] = useState<LinkItem | null>(null);
   const [rescueModalLink, setRescueModalLink] = useState<LinkItem | null>(null);
+  const [authPromptFeature, setAuthPromptFeature] = useState<string | null>(null);
+  const [rescueToast, setRescueToast] = useState<string | null>(null);
 
   useEffect(() => {
     void fetchLinks();
@@ -41,9 +46,13 @@ export function LinkManagementPage() {
   }, [links, search, statusFilter]);
 
   const handleQuickStatus = async (link: LinkItem, nextStatus: LinkStatus) => {
+    if (!isAuthenticated) {
+      setAuthPromptFeature(`QR Lifecycle Controls (/${link.slug})`);
+      return;
+    }
     setBusyId(link.id);
     try {
-      await updateLink(link.id, {
+      const updated = await updateLink(link.id, {
         status: nextStatus,
         ...(nextStatus === 'ACTIVE' &&
         link.expiresAt &&
@@ -51,6 +60,7 @@ export function LinkManagementPage() {
           ? { expiresAt: null }
           : {}),
       });
+      setRescueToast(`Updated /${updated.slug} status to ${updated.status}.`);
     } finally {
       setBusyId(null);
     }
@@ -78,6 +88,22 @@ export function LinkManagementPage() {
             every printed QR code.
           </p>
         </div>
+
+        {rescueToast && (
+          <div className="flex items-center justify-between gap-3 rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-xs font-medium text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200">
+            <span className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
+              {rescueToast}
+            </span>
+            <button
+              type="button"
+              onClick={() => setRescueToast(null)}
+              className="font-semibold underline"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
 
         <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900 sm:flex-row sm:items-center sm:justify-between">
           <div className="relative flex-1 sm:max-w-sm">
@@ -232,7 +258,28 @@ export function LinkManagementPage() {
       </div>
 
       <QrCodeModal link={qrModalLink} onClose={() => setQrModalLink(null)} />
-      <QrRescueModal link={rescueModalLink} onClose={() => setRescueModalLink(null)} />
+      <QrRescueModal
+        link={rescueModalLink}
+        onClose={() => setRescueModalLink(null)}
+        onSaved={(updated) =>
+          setRescueToast(
+            `QR Rescue saved: /${updated.slug} now redirects live to ${updated.originalUrl} without reprinting.`
+          )
+        }
+      />
+      {authPromptFeature && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-xs">
+          <WorkspacePromptCard
+            featureName={authPromptFeature}
+            redirectTo="/manage"
+            onClose={() => setAuthPromptFeature(null)}
+            onSuccess={() => {
+              setAuthPromptFeature(null);
+              void fetchLinks();
+            }}
+          />
+        </div>
+      )}
     </AppLayout>
   );
 }

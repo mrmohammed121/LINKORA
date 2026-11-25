@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, LifeBuoy, Loader2, Lock, Sparkles, X } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
+import { GoogleContinueButton } from './GoogleContinueButton';
 
 interface WorkspacePromptCardProps {
   featureName?: string;
@@ -77,6 +78,19 @@ export function WorkspacePromptCard({
       )}
 
       <div className="mt-5 space-y-2.5">
+        <GoogleContinueButton
+          onSuccess={() => {
+            onSuccess?.();
+            onClose?.();
+          }}
+        />
+
+        <div className="flex items-center gap-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+          <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+          <span>or</span>
+          <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+        </div>
+
         <button
           type="button"
           onClick={() => void handleDemoLogin()}

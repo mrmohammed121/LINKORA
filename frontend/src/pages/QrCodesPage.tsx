@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import {
   BarChart3,
   Calendar,
+  CheckCircle2,
   CornerDownRight,
   Download,
   ExternalLink,
   LifeBuoy,
   Link2,
   Loader2,
+  Palette,
   Plus,
   QrCode,
   Search,
@@ -18,7 +20,7 @@ import { QrCodeModal } from '../components/QrCodeModal';
 import { QrRescueModal } from '../components/QrRescueModal';
 import { QrThumbnail } from '../components/QrThumbnail';
 import { StatusBadge } from '../components/StatusBadge';
-import { api } from '../lib/api';
+import { DEFAULT_QR_STYLE, exportStyledQr } from '../lib/qrStyle';
 import { useLinkStore } from '../store/useLinkStore';
 import type { LinkItem, LinkStatus } from '../types';
 
@@ -30,6 +32,7 @@ export function QrCodesPage() {
   const [qrModalLink, setQrModalLink] = useState<LinkItem | null>(null);
   const [rescueModalLink, setRescueModalLink] = useState<LinkItem | null>(null);
   const [downloadingKey, setDownloadingKey] = useState<string | null>(null);
+  const [rescueToast, setRescueToast] = useState<string | null>(null);
 
   useEffect(() => {
     void fetchLinks();
@@ -51,7 +54,12 @@ export function QrCodesPage() {
     const key = `${link.id}:${format}`;
     setDownloadingKey(key);
     try {
-      await api.qr.downloadFile(link.id, link.slug, format);
+      await exportStyledQr(
+        link.shortUrl,
+        link.slug,
+        link.qrStyleConfig ?? DEFAULT_QR_STYLE,
+        format
+      );
     } finally {
       setDownloadingKey(null);
     }
@@ -80,6 +88,22 @@ export function QrCodesPage() {
             Create code
           </Link>
         </div>
+
+        {rescueToast && (
+          <div className="flex items-center justify-between gap-3 rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-xs font-medium text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200">
+            <span className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
+              {rescueToast}
+            </span>
+            <button
+              type="button"
+              onClick={() => setRescueToast(null)}
+              className="font-semibold underline"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
 
         {/* Search & Status Filter */}
         <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900 sm:flex-row sm:items-center sm:justify-between">
@@ -130,9 +154,15 @@ export function QrCodesPage() {
                     type="button"
                     onClick={() => setQrModalLink(link)}
                     className="shrink-0 transition-transform hover:scale-105"
-                    title="Open large QR preview"
+                    title="Open QR Studio & Custom Designer"
                   >
-                    <QrThumbnail linkId={link.id} sizeClass="h-24 w-24" />
+                    <QrThumbnail
+                      linkId={link.id}
+                      shortUrl={link.shortUrl}
+                      slug={link.slug}
+                      qrStyleConfig={link.qrStyleConfig}
+                      sizeClass="h-24 w-24"
+                    />
                   </button>
 
                   <div className="min-w-0 flex-1 space-y-1.5">
@@ -141,6 +171,12 @@ export function QrCodesPage() {
                         Dynamic QR
                       </span>
                       <StatusBadge status={link.status} />
+                      {link.qrStyleConfig && (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-indigo-50 px-2 py-0.5 text-[11px] font-semibold text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300">
+                          <Palette className="h-3 w-3" />
+                          Custom Styled
+                        </span>
+                      )}
                     </div>
 
                     <h3 className="font-mono text-base font-bold text-slate-900 dark:text-white">
@@ -224,7 +260,15 @@ export function QrCodesPage() {
       </div>
 
       <QrCodeModal link={qrModalLink} onClose={() => setQrModalLink(null)} />
-      <QrRescueModal link={rescueModalLink} onClose={() => setRescueModalLink(null)} />
+      <QrRescueModal
+        link={rescueModalLink}
+        onClose={() => setRescueModalLink(null)}
+        onSaved={(updated) =>
+          setRescueToast(
+            `/${updated.slug} now redirects live to ${updated.originalUrl} — no reprinting needed.`
+          )
+        }
+      />
     </AppLayout>
   );
 }

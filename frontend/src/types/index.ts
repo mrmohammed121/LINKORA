@@ -1,10 +1,25 @@
 export type Role = 'USER' | 'ADMIN';
 export type LinkStatus = 'ACTIVE' | 'EXPIRED' | 'DISABLED';
+export type QrDotStyle = 'square' | 'rounded' | 'dots' | 'classy-rounded';
+export type QrCornerStyle = 'square' | 'extra-rounded' | 'dot';
+export type QrFrameMode = 'none' | 'center-logo' | 'color-matched' | 'branded-card';
+
+export interface QrStyleConfig {
+  dotStyle: QrDotStyle;
+  cornerStyle: QrCornerStyle;
+  foregroundColor: string;
+  backgroundColor: string;
+  accentColor?: string;
+  frameMode: QrFrameMode;
+  ctaText?: string;
+  logoDataUrl?: string | null;
+}
 
 export interface User {
   id: string;
   name: string;
   email: string;
+  avatarUrl?: string | null;
   role: Role;
   createdAt: string;
 }
@@ -23,6 +38,8 @@ export interface LinkItem {
   shortUrl: string;
   status: LinkStatus;
   isGuest?: boolean;
+  rescueCount?: number;
+  qrStyleConfig?: QrStyleConfig | null;
   expiresAt: string | null;
   createdAt: string;
   updatedAt: string;

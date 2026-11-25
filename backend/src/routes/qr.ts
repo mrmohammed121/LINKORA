@@ -3,7 +3,9 @@ import QRCode from 'qrcode';
 import { z } from 'zod';
 import { buildShortUrl } from '../config/env.js';
 import { prisma } from '../lib/prisma.js';
-import { requireOwnerOrAdminOrGuest } from '../plugins/auth.js';
+import { requireOwnerOrAdmin, requireOwnerOrAdminOrGuest } from '../plugins/auth.js';
+import { qrStyleConfigSchema } from '../schemas/link.js';
+import { formatLinkResponse } from './links.js';
 
 const qrQuerySchema = z.object({
   format: z.enum(['png', 'svg']).default('png'),
@@ -100,6 +102,42 @@ export async function qrRoutes(app: FastifyInstance): Promise<void> {
 
       const link = request.targetLink!;
       return sendQrResponse(reply, link.slug, parsed.data.format, parsed.data.download);
+    }
+  );
+
+  // Authenticated custom Image-to-QR style persistence
+  app.patch<{ Params: { id: string } }>(
+    '/api/qr/:id',
+    { preHandler: [app.authenticate, requireOwnerOrAdmin] },
+    async (request, reply) => {
+      const parsed = z
+        .object({ qrStyleConfig: qrStyleConfigSchema })
+        .safeParse(request.body);
+
+      if (!parsed.success) {
+        return reply.code(400).send({
+          error: 'VALIDATION_ERROR',
+          message: parsed.error.issues[0]?.message ?? 'Invalid QR style configuration',
+          details: parsed.error.flatten().fieldErrors,
+        });
+      }
+
+      const updated = await prisma.link.update({
+        where: { id: request.params.id },
+        data: {
+          qrStyleConfig:
+            parsed.data.qrStyleConfig === null
+              ? null
+              : JSON.stringify(parsed.data.qrStyleConfig),
+        },
+        include: {
+          _count: { select: { clicks: true } },
+        },
+      });
+
+      return reply.send({
+        link: formatLinkResponse(updated),
+      });
     }
   );
 }

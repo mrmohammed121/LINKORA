@@ -59,6 +59,7 @@ export function MyLinksPage() {
   const [rescueModalLink, setRescueModalLink] = useState<LinkItem | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [rescueToast, setRescueToast] = useState<string | null>(null);
 
   useEffect(() => {
     setSearchQuery(initialQuery);
@@ -179,6 +180,22 @@ export function MyLinksPage() {
             </select>
           </div>
         </div>
+
+        {rescueToast && (
+          <div className="flex items-center justify-between gap-3 rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-xs font-medium text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200">
+            <span className="flex items-center gap-2">
+              <Check className="h-4 w-4 shrink-0 text-emerald-600" />
+              {rescueToast}
+            </span>
+            <button
+              type="button"
+              onClick={() => setRescueToast(null)}
+              className="font-semibold underline"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
 
         {error && (
           <div className="rounded-xl border border-rose-300 bg-rose-50 px-4 py-3 text-xs font-medium text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
@@ -332,7 +349,15 @@ export function MyLinksPage() {
       </div>
 
       <QrCodeModal link={qrModalLink} onClose={() => setQrModalLink(null)} />
-      <QrRescueModal link={rescueModalLink} onClose={() => setRescueModalLink(null)} />
+      <QrRescueModal
+        link={rescueModalLink}
+        onClose={() => setRescueModalLink(null)}
+        onSaved={(updated) =>
+          setRescueToast(
+            `QR Rescue saved: /${updated.slug} now redirects live to ${updated.originalUrl} without reprinting.`
+          )
+        }
+      />
     </AppLayout>
   );
 }

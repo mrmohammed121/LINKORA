@@ -34,6 +34,10 @@ const envSchema = z.object({
     .transform((v) => (v && v.trim().length > 0 ? v.trim() : undefined)),
   JWT_SECRET: z.string().min(8).default('linkora-local-dev-jwt-secret-min-32-chars'),
   IP_HASH_SALT: z.string().min(4).default('linkora-daily-ip-hash-salt'),
+  GOOGLE_CLIENT_ID: z
+    .string()
+    .optional()
+    .transform((v) => (v && v.trim().length > 0 ? v.trim() : undefined)),
 });
 
 const parsed = envSchema.safeParse({

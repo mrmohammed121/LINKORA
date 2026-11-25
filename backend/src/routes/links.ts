@@ -1,10 +1,10 @@
-import type { FastifyInstance } from 'fastify';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import type { Link } from '@prisma/client';
 import { nanoid } from 'nanoid';
 import { buildShortUrl } from '../config/env.js';
 import { linkCache, type LinkStatusValue } from '../lib/cacheAndQueue.js';
 import { prisma } from '../lib/prisma.js';
-import { requireOwnerOrAdminOrGuest } from '../plugins/auth.js';
+import { requireOwnerOrAdmin, requireOwnerOrAdminOrGuest } from '../plugins/auth.js';
 import {
   claimLinksSchema,
   createGuestLinkSchema,
@@ -14,7 +14,16 @@ import {
 
 const GUEST_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
-function formatLinkResponse(
+function parseQrStyleConfig(raw: string | null | undefined): Record<string, unknown> | null {
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+export function formatLinkResponse(
   link: Link & {
     _count?: { clicks: number };
     owner?: { id: string; name: string; email: string } | null;
@@ -29,6 +38,8 @@ function formatLinkResponse(
     shortUrl: buildShortUrl(link.slug),
     status: link.status as LinkStatusValue,
     isGuest: link.isGuest,
+    rescueCount: link.rescueCount,
+    qrStyleConfig: parseQrStyleConfig(link.qrStyleConfig),
     expiresAt: link.expiresAt ? link.expiresAt.toISOString() : null,
     createdAt: link.createdAt.toISOString(),
     updatedAt: link.updatedAt.toISOString(),
@@ -308,43 +319,61 @@ export async function linkRoutes(app: FastifyInstance): Promise<void> {
     }
   );
 
-  // QR Rescue Core Feature: Update destination, status, or expiry without changing slug
-  app.put<{ Params: { id: string } }>(
-    '/api/links/:id',
-    { preHandler: [app.authenticateOptional, requireOwnerOrAdminOrGuest] },
-    async (request, reply) => {
-      const parsed = updateLinkSchema.safeParse(request.body);
-      if (!parsed.success) {
-        return reply.code(400).send({
-          error: 'VALIDATION_ERROR',
-          message: parsed.error.issues[0]?.message ?? 'Invalid update payload',
-          details: parsed.error.flatten().fieldErrors,
-        });
-      }
-
-      const { originalUrl, status, expiresAt } = parsed.data;
-
-      const updated = await prisma.link.update({
-        where: { id: request.params.id },
-        data: {
-          ...(originalUrl !== undefined ? { originalUrl } : {}),
-          ...(status !== undefined ? { status } : {}),
-          ...(expiresAt !== undefined
-            ? { expiresAt: expiresAt ? new Date(expiresAt) : null }
-            : {}),
-        },
-        include: {
-          _count: { select: { clicks: true } },
-        },
-      });
-
-      await linkCache.invalidate(updated.slug);
-      await warmLinkCache(updated);
-
-      return reply.send({
-        link: formatLinkResponse(updated),
+  // QR Rescue Core Feature: Authenticated destination, status, expiry & QR style updates without changing slug
+  const handleAuthenticatedUpdate = async (
+    request: FastifyRequest<{ Params: { id: string } }>,
+    reply: FastifyReply
+  ) => {
+    const parsed = updateLinkSchema.safeParse(request.body);
+    if (!parsed.success) {
+      return reply.code(400).send({
+        error: 'VALIDATION_ERROR',
+        message: parsed.error.issues[0]?.message ?? 'Invalid update payload',
+        details: parsed.error.flatten().fieldErrors,
       });
     }
+
+    const existing = request.targetLink!;
+    const nextOriginalUrl = parsed.data.originalUrl ?? parsed.data.targetUrl;
+    const { status, expiresAt, qrStyleConfig } = parsed.data;
+    const urlChanged = nextOriginalUrl !== undefined && nextOriginalUrl !== existing.originalUrl;
+
+    const updated = await prisma.link.update({
+      where: { id: request.params.id },
+      data: {
+        ...(nextOriginalUrl !== undefined ? { originalUrl: nextOriginalUrl } : {}),
+        ...(urlChanged ? { rescueCount: { increment: 1 } } : {}),
+        ...(status !== undefined ? { status } : {}),
+        ...(expiresAt !== undefined
+          ? { expiresAt: expiresAt ? new Date(expiresAt) : null }
+          : {}),
+        ...(qrStyleConfig !== undefined
+          ? { qrStyleConfig: qrStyleConfig === null ? null : JSON.stringify(qrStyleConfig) }
+          : {}),
+      },
+      include: {
+        _count: { select: { clicks: true } },
+      },
+    });
+
+    await linkCache.invalidate(updated.slug);
+    await warmLinkCache(updated);
+
+    return reply.send({
+      link: formatLinkResponse(updated),
+    });
+  };
+
+  app.put<{ Params: { id: string } }>(
+    '/api/links/:id',
+    { preHandler: [app.authenticate, requireOwnerOrAdmin] },
+    handleAuthenticatedUpdate
+  );
+
+  app.patch<{ Params: { id: string } }>(
+    '/api/links/:id',
+    { preHandler: [app.authenticate, requireOwnerOrAdmin] },
+    handleAuthenticatedUpdate
   );
 
   app.delete<{ Params: { id: string } }>(

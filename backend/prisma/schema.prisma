@@ -13,7 +13,9 @@ model User {
   id           String   @id @default(uuid())
   name         String
   email        String   @unique
-  passwordHash String
+  passwordHash String?
+  googleId     String?  @unique
+  avatarUrl    String?
   role         String   @default("USER") // "USER" | "ADMIN"
   createdAt    DateTime @default(now())
   links        Link[]
@@ -28,6 +30,8 @@ model Link {
   slug           String       @unique
   status         String       @default("ACTIVE") // "ACTIVE" | "EXPIRED" | "DISABLED"
   isGuest        Boolean      @default(false)
+  rescueCount    Int          @default(0)
+  qrStyleConfig  String?
   expiresAt      DateTime?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt

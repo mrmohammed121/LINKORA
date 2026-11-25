@@ -14,6 +14,7 @@ interface AuthState {
   error: string | null;
   claimNotice: string | null;
   login: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: (credential: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   updateProfile: (payload: {
     name?: string;
@@ -79,6 +80,25 @@ export const useAuthStore = create<AuthState>()(
           });
         } catch (err) {
           const message = err instanceof Error ? err.message : 'Unable to sign in';
+          set({ isLoading: false, error: message });
+          throw err;
+        }
+      },
+
+      loginWithGoogle: async (credential) => {
+        set({ isLoading: true, error: null });
+        try {
+          const data = await api.auth.google(credential);
+          const notice = await claimPendingGuestLinks(data.token);
+          set({
+            token: data.token,
+            user: data.user,
+            isLoading: false,
+            error: null,
+            claimNotice: notice,
+          });
+        } catch (err) {
+          const message = err instanceof Error ? err.message : 'Unable to sign in with Google';
           set({ isLoading: false, error: message });
           throw err;
         }

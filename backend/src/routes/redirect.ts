@@ -39,7 +39,10 @@ function rescueUrl(slug: string, reason: 'expired' | 'not_found'): string {
 export async function redirectRoutes(app: FastifyInstance): Promise<void> {
   app.get('/favicon.ico', async (_request, reply) => reply.code(204).send());
 
-  app.get<{ Params: { slug: string } }>('/:slug', async (request, reply) => {
+  const handleRedirect = async (
+    request: import('fastify').FastifyRequest<{ Params: { slug: string } }>,
+    reply: import('fastify').FastifyReply
+  ) => {
     const { slug } = request.params;
 
     reply.header('Cache-Control', 'no-store, no-cache, must-revalidate');
@@ -116,5 +119,8 @@ export async function redirectRoutes(app: FastifyInstance): Promise<void> {
 
     // 5. Return HTTP 302 Found immediately
     return reply.code(302).redirect(cached.originalUrl);
-  });
+  };
+
+  app.get<{ Params: { slug: string } }>('/:slug', handleRedirect);
+  app.get<{ Params: { slug: string } }>('/r/:slug', handleRedirect);
 }

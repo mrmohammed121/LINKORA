@@ -4,6 +4,7 @@ import type {
   LinkItem,
   LinkStatus,
   OverviewAnalyticsResponse,
+  QrStyleConfig,
   User,
 } from '../types';
 import { getOrCreateGuestId } from './guestStorage';
@@ -143,6 +144,11 @@ export const api = {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
+    google: (credential: string) =>
+      request<{ token: string; user: User }>('/api/auth/google', {
+        method: 'POST',
+        body: JSON.stringify({ credential }),
+      }),
     me: () => request<{ user: User }>('/api/auth/me'),
     updateMe: (payload: { name?: string; currentPassword?: string; newPassword?: string }) =>
       request<{ user: User; token: string }>('/api/auth/me', {
@@ -173,10 +179,15 @@ export const api = {
       }),
     update: (
       id: string,
-      payload: { originalUrl?: string; status?: LinkStatus; expiresAt?: string | null }
+      payload: {
+        originalUrl?: string;
+        status?: LinkStatus;
+        expiresAt?: string | null;
+        qrStyleConfig?: QrStyleConfig | null;
+      }
     ) =>
       request<{ link: LinkItem }>(`/api/links/${id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify(payload),
       }),
     delete: (id: string) =>
@@ -205,6 +216,12 @@ export const api = {
   },
 
   qr: {
+    saveStyle: (id: string, qrStyleConfig: QrStyleConfig | null) =>
+      request<{ link: LinkItem }>(`/api/qr/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ qrStyleConfig }),
+      }),
+
     fetchSvgMarkup: async (id: string): Promise<string> => {
       const authToken = getStoredToken();
       const guestId = getOrCreateGuestId();

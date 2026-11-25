@@ -71,17 +71,56 @@ export const createLinkSchema = z.object({
   expiresAt: optionalDateSchema,
 });
 
+export const qrStyleConfigSchema = z
+  .object({
+    dotStyle: z.enum(['square', 'rounded', 'dots', 'classy-rounded']).default('square'),
+    cornerStyle: z.enum(['square', 'extra-rounded', 'dot']).default('square'),
+    foregroundColor: z
+      .string()
+      .regex(/^#[0-9a-fA-F]{6}$/, 'Foreground color must be a 6-digit hex color')
+      .default('#0f172a'),
+    backgroundColor: z
+      .string()
+      .regex(/^#[0-9a-fA-F]{6}$/, 'Background color must be a 6-digit hex color')
+      .default('#ffffff'),
+    accentColor: z
+      .string()
+      .regex(/^#[0-9a-fA-F]{6}$/, 'Accent color must be a 6-digit hex color')
+      .optional(),
+    frameMode: z
+      .enum(['none', 'center-logo', 'color-matched', 'branded-card'])
+      .default('none'),
+    ctaText: z.string().trim().max(40).optional(),
+    logoDataUrl: z
+      .string()
+      .max(400_000, 'Uploaded image is too large; please use a smaller image')
+      .refine(
+        (v) => v.startsWith('data:image/'),
+        'logoDataUrl must be a valid image data URL'
+      )
+      .nullable()
+      .optional(),
+  })
+  .nullable();
+
 export const updateLinkSchema = z
   .object({
     originalUrl: safeHttpUrlSchema.optional(),
+    targetUrl: safeHttpUrlSchema.optional(),
     status: z.enum(['ACTIVE', 'EXPIRED', 'DISABLED']).optional(),
     expiresAt: optionalDateSchema.optional(),
+    qrStyleConfig: qrStyleConfigSchema.optional(),
   })
   .refine(
     (data) =>
-      data.originalUrl !== undefined || data.status !== undefined || data.expiresAt !== undefined,
+      data.originalUrl !== undefined ||
+      data.targetUrl !== undefined ||
+      data.status !== undefined ||
+      data.expiresAt !== undefined ||
+      data.qrStyleConfig !== undefined,
     {
-      message: 'Provide at least one field (originalUrl, status, or expiresAt) to update',
+      message:
+        'Provide at least one field (originalUrl, targetUrl, status, expiresAt, or qrStyleConfig) to update',
     }
   );
 

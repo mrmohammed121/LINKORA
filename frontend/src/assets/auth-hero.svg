@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="55%" stop-color="#1E1B4B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#14B8A6" />
+    </linearGradient>
+    <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#14B8A6" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#14B8A6" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Base Card -->
+  <rect width="640" height="360" rx="24" fill="url(#bgGrad)" />
+  <circle cx="560" cy="48" r="110" fill="#6366F1" fill-opacity="0.16" />
+  <circle cx="88" cy="316" r="120" fill="#14B8A6" fill-opacity="0.14" />
+
+  <!-- Subtle Grid Lines -->
+  <path d="M0 90H640M0 180H640M0 270H640M160 0V360M320 0V360M480 0V360" stroke="#94A3B8" stroke-opacity="0.07" />
+
+  <!-- Left Dynamic QR Card -->
+  <rect x="34" y="42" width="218" height="276" rx="20" fill="#1E293B" stroke="#334155" stroke-width="1.5" />
+  <rect x="58" y="66" width="170" height="170" rx="14" fill="#FFFFFF" />
+
+  <!-- Stylized QR Matrix -->
+  <g fill="#0F172A">
+    <!-- Top-Left Finder -->
+    <rect x="74" y="82" width="38" height="38" rx="6" />
+    <rect x="81" y="89" width="24" height="24" rx="3" fill="#FFFFFF" />
+    <rect x="87" y="95" width="12" height="12" rx="2" fill="#4F46E5" />
+
+    <!-- Top-Right Finder -->
+    <rect x="174" y="82" width="38" height="38" rx="6" />
+    <rect x="181" y="89" width="24" height="24" rx="3" fill="#FFFFFF" />
+    <rect x="187" y="95" width="12" height="12" rx="2" fill="#0D9488" />
+
+    <!-- Bottom-Left Finder -->
+    <rect x="74" y="182" width="38" height="38" rx="6" />
+    <rect x="81" y="189" width="24" height="24" rx="3" fill="#FFFFFF" />
+    <rect x="87" y="195" width="12" height="12" rx="2" fill="#4F46E5" />
+
+    <!-- Data Modules -->
+    <rect x="124" y="84" width="10" height="10" rx="2" />
+    <rect x="140" y="84" width="10" height="10" rx="2" />
+    <rect x="156" y="84" width="10" height="10" rx="2" />
+    <rect x="124" y="100" width="10" height="10" rx="2" />
+    <rect x="140" y="108" width="10" height="10" rx="2" />
+    <rect x="156" y="100" width="10" height="10" rx="2" />
+    <rect x="76" y="132" width="10" height="10" rx="2" />
+    <rect x="92" y="132" width="10" height="10" rx="2" />
+    <rect x="108" y="132" width="10" height="10" rx="2" />
+    <rect x="76" y="148" width="10" height="10" rx="2" />
+    <rect x="92" y="164" width="10" height="10" rx="2" />
+    <rect x="108" y="148" width="10" height="10" rx="2" />
+    <rect x="176" y="132" width="10" height="10" rx="2" />
+    <rect x="192" y="132" width="10" height="10" rx="2" />
+    <rect x="202" y="148" width="10" height="10" rx="2" />
+    <rect x="176" y="164" width="10" height="10" rx="2" />
+    <rect x="124" y="184" width="10" height="10" rx="2" />
+    <rect x="140" y="198" width="10" height="10" rx="2" />
+    <rect x="156" y="184" width="10" height="10" rx="2" />
+    <rect x="174" y="184" width="14" height="14" rx="3" fill="#0D9488" />
+    <rect x="198" y="184" width="14" height="14" rx="3" />
+    <rect x="174" y="206" width="14" height="14" rx="3" />
+    <rect x="198" y="206" width="14" height="14" rx="3" fill="#4F46E5" />
+    <rect x="124" y="208" width="12" height="12" rx="3" />
+    <rect x="146" y="208" width="12" height="12" rx="3" />
+  </g>
+
+  <!-- Center QR Logo Badge -->
+  <rect x="125" y="133" width="36" height="36" rx="10" fill="#FFFFFF" />
+  <rect x="129" y="137" width="28" height="28" rx="8" fill="url(#accentGrad)" />
+  <path d="M138 151L142 155L149 147" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- QR Footer Pill -->
+  <rect x="58" y="252" width="170" height="44" rx="11" fill="#0F172A" stroke="#334155" />
+  <circle cx="76" cy="274" r="5" fill="#10B981" />
+  <text x="89" y="278" fill="#E2E8F0" font-family="ui-monospace, SFMono-Regular, monospace" font-size="13" font-weight="700">/launch26</text>
+  <rect x="172" y="263" width="44" height="22" rx="6" fill="#4F46E5" fill-opacity="0.28" />
+  <text x="194" y="278" text-anchor="middle" fill="#A5B4FC" font-family="system-ui, sans-serif" font-size="10" font-weight="700">LIVE</text>
+
+  <!-- Top-Right QR Rescue Hot-Swap Card -->
+  <rect x="276" y="42" width="330" height="124" rx="18" fill="#1E293B" stroke="#334155" stroke-width="1.5" />
+  <rect x="296" y="60" width="96" height="24" rx="12" fill="#F59E0B" fill-opacity="0.18" />
+  <text x="344" y="76" text-anchor="middle" fill="#FCD34D" font-family="system-ui, sans-serif" font-size="11" font-weight="700">QR RESCUE</text>
+  <rect x="498" y="60" width="88" height="24" rx="12" fill="#10B981" fill-opacity="0.18" />
+  <text x="542" y="76" text-anchor="middle" fill="#6EE7B7" font-family="system-ui, sans-serif" font-size="10" font-weight="700">NO REPRINT</text>
+
+  <rect x="296" y="98" width="124" height="22" rx="6" fill="#0F172A" />
+  <text x="306" y="113" fill="#94A3B8" font-family="ui-monospace, monospace" font-size="10.5">old-promo.io</text>
+  <path d="M428 109H452M446 103L453 109L446 115" stroke="#2DD4BF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="460" y="98" width="126" height="22" rx="6" fill="#0F172A" stroke="#14B8A6" stroke-opacity="0.55" />
+  <text x="470" y="113" fill="#5EEAD4" font-family="ui-monospace, monospace" font-size="10.5">live-page.io</text>
+  <text x="296" y="144" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="11">302 edge cache invalidated instantaneously</text>
+
+  <!-- Bottom-Right Scan Analytics Card -->
+  <rect x="276" y="186" width="330" height="132" rx="18" fill="#1E293B" stroke="#334155" stroke-width="1.5" />
+  <text x="296" y="214" fill="#F8FAFC" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Scan &amp; Click Telemetry</text>
+  <rect x="518" y="198" width="68" height="22" rx="11" fill="#14B8A6" fill-opacity="0.18" />
+  <text x="552" y="213" text-anchor="middle" fill="#5EEAD4" font-family="system-ui, sans-serif" font-size="11" font-weight="700">+148%</text>
+
+  <!-- Chart Curve + Fill -->
+  <path d="M296 294 C336 286, 356 260, 396 266 C432 272, 458 234, 498 238 C532 242, 558 214, 586 218 L586 298 L296 298 Z" fill="url(#chartFill)" />
+  <path d="M296 294 C336 286, 356 260, 396 266 C432 272, 458 234, 498 238 C532 242, 558 214, 586 218" stroke="#2DD4BF" stroke-width="3" stroke-linecap="round" />
+  <circle cx="498" cy="238" r="4.5" fill="#FFFFFF" stroke="#14B8A6" stroke-width="2.5" />
+  <circle cx="586" cy="218" r="4.5" fill="#FFFFFF" stroke="#6366F1" stroke-width="2.5" />
+</svg>

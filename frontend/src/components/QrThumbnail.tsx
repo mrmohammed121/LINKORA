@@ -1,17 +1,32 @@
 import { useEffect, useState } from 'react';
 import { Loader2, QrCode } from 'lucide-react';
 import { api } from '../lib/api';
+import type { QrStyleConfig } from '../types';
+import { StyledQrPreview } from './StyledQrPreview';
 
 interface QrThumbnailProps {
   linkId: string;
+  shortUrl?: string;
+  slug?: string;
+  qrStyleConfig?: QrStyleConfig | null;
   sizeClass?: string;
 }
 
-export function QrThumbnail({ linkId, sizeClass = 'h-20 w-20' }: QrThumbnailProps) {
+export function QrThumbnail({
+  linkId,
+  shortUrl,
+  slug,
+  qrStyleConfig,
+  sizeClass = 'h-20 w-20',
+}: QrThumbnailProps) {
   const [svg, setSvg] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!qrStyleConfig);
 
   useEffect(() => {
+    if (qrStyleConfig && shortUrl && slug) {
+      setLoading(false);
+      return;
+    }
     let cancelled = false;
     setLoading(true);
     api.qr
@@ -29,7 +44,23 @@ export function QrThumbnail({ linkId, sizeClass = 'h-20 w-20' }: QrThumbnailProp
     return () => {
       cancelled = true;
     };
-  }, [linkId]);
+  }, [linkId, qrStyleConfig, shortUrl, slug]);
+
+  if (qrStyleConfig && shortUrl && slug) {
+    return (
+      <div
+        className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-1 dark:border-slate-700 ${sizeClass}`}
+      >
+        <StyledQrPreview
+          shortUrl={shortUrl}
+          slug={slug}
+          styleConfig={qrStyleConfig}
+          size={84}
+          compact
+        />
+      </div>
+    );
+  }
 
   return (
     <div

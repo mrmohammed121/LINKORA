@@ -34,7 +34,7 @@ export async function buildServer() {
 
   await app.register(cors, {
     origin: env.CORS_ORIGINS,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Guest-Id'],
     credentials: true,
   });

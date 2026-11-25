@@ -69,6 +69,7 @@ export function DashboardPage() {
   const [overviewLoading, setOverviewLoading] = useState(true);
 
   // Modals & UI feedback
+  const [recentCreatedLink, setRecentCreatedLink] = useState<LinkItem | null>(null);
   const [qrModalLink, setQrModalLink] = useState<LinkItem | null>(null);
   const [rescueModalLink, setRescueModalLink] = useState<LinkItem | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -150,7 +151,12 @@ export function DashboardPage() {
       setCustomSlug('');
       setSlugNotice(null);
       setExpiresAt('');
-      setQrModalLink(created);
+      if (createMode === 'qr') {
+        setRecentCreatedLink(null);
+        setQrModalLink(created);
+      } else {
+        setRecentCreatedLink(created);
+      }
       void loadOverview();
     } catch (err) {
       setCreateError(err instanceof Error ? err.message : 'Failed to create link');
@@ -341,6 +347,40 @@ export function DashboardPage() {
             {createError && (
               <div className="mt-3 rounded-xl border border-rose-300 bg-rose-50 px-4 py-2.5 text-xs font-medium text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
                 {createError}
+              </div>
+            )}
+
+            {recentCreatedLink && (
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-300 bg-emerald-50/80 px-4 py-3 text-left text-xs dark:border-emerald-500/30 dark:bg-emerald-500/10">
+                <div className="min-w-0 flex-1">
+                  <div className="font-semibold text-emerald-800 dark:text-emerald-200">
+                    Short link created
+                  </div>
+                  <a
+                    href={recentCreatedLink.shortUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-0.5 inline-flex items-center gap-1 truncate font-mono font-bold text-blue-600 hover:underline dark:text-blue-400"
+                  >
+                    {recentCreatedLink.shortUrl}
+                    <ExternalLink className="h-3 w-3 shrink-0" />
+                  </a>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => void handleCopy(recentCreatedLink.id, recentCreatedLink.shortUrl)}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 font-semibold text-slate-700 shadow-xs hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-200"
+                >
+                  {copiedId === recentCreatedLink.id ? (
+                    <>
+                      <Check className="h-3.5 w-3.5 text-emerald-500" /> Copied
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-3.5 w-3.5" /> Copy Link
+                    </>
+                  )}
+                </button>
               </div>
             )}
           </div>

@@ -5,16 +5,13 @@ import {
   CalendarClock,
   Check,
   Copy,
-  Download,
   ExternalLink,
   Link2,
   Loader2,
-  QrCode,
   Sparkles,
 } from 'lucide-react';
 import { AppLayout } from '../components/AppLayout';
-import { QrThumbnail } from '../components/QrThumbnail';
-import { api, getDisplayBaseHost } from '../lib/api';
+import { getDisplayBaseHost } from '../lib/api';
 import { sanitizeSlugInput, validateSlugForSubmit } from '../lib/slug';
 import { useLinkStore } from '../store/useLinkStore';
 import type { LinkItem } from '../types';
@@ -30,7 +27,6 @@ export function CreateLinkPage() {
   const [error, setError] = useState<string | null>(null);
   const [createdLink, setCreatedLink] = useState<LinkItem | null>(null);
   const [copied, setCopied] = useState(false);
-  const [downloading, setDownloading] = useState<'png' | 'svg' | null>(null);
 
   const handleSlugChange = (raw: string) => {
     const { slug, notice } = sanitizeSlugInput(raw);
@@ -76,26 +72,15 @@ export function CreateLinkPage() {
     setTimeout(() => setCopied(false), 1600);
   };
 
-  const handleDownload = async (format: 'png' | 'svg') => {
-    if (!createdLink) return;
-    setDownloading(format);
-    try {
-      await api.qr.downloadFile(createdLink.id, createdLink.slug, format);
-    } finally {
-      setDownloading(null);
-    }
-  };
-
   return (
     <AppLayout>
       <div className="mx-auto max-w-4xl space-y-6">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-            Create Short Link &amp; Dynamic QR
+            Create Short Link
           </h1>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Generate a permanent short URL and dynamic QR code whose destination can be edited
-            anytime via QR Rescue.
+            Generate a fast, reliable short URL with an optional custom slug and expiration.
           </p>
         </div>
 
@@ -165,11 +150,11 @@ export function CreateLinkPage() {
             <div className="rounded-xl border border-teal-200 bg-teal-50/70 p-3.5 text-xs text-teal-800 dark:border-teal-500/20 dark:bg-teal-500/10 dark:text-teal-200">
               <div className="flex items-center gap-1.5 font-semibold">
                 <Sparkles className="h-4 w-4 text-teal-600" />
-                Permanent Dynamic QR Routing
+                Instant Short URL Routing
               </div>
               <p className="mt-1 leading-relaxed">
-                Generated QR codes point to your short URL, never directly to the long URL—so you
-                can swap destinations or reactivate expired links anytime.
+                Your short link routes immediately with cached HTTP 302 redirects. If you ever need
+                a QR code later, you can open it anytime from My Links or QR Codes.
               </p>
             </div>
 
@@ -187,36 +172,38 @@ export function CreateLinkPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Creating Link &amp; QR...
+                  Creating Short Link...
                 </>
               ) : (
                 <>
-                  Create Short Link &amp; QR Code
+                  Create Short Link
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
             </button>
           </form>
 
-          {/* Right Preview Panel */}
+          {/* Right Preview Panel — Short Link Only */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900 lg:col-span-5">
             <h2 className="text-sm font-bold text-slate-900 dark:text-white">
-              Live QR &amp; Short URL Preview
+              Short Link Result
             </h2>
 
             {createdLink ? (
-              <div className="mt-4 flex flex-col items-center text-center">
-                <QrThumbnail linkId={createdLink.id} sizeClass="h-44 w-44" />
+              <div className="mt-4 space-y-4">
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50/80 px-3.5 py-2.5 text-xs font-semibold text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200">
+                  Short link created and ready to share!
+                </div>
 
-                <div className="mt-4 flex w-full items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-950">
+                <div className="flex w-full items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 dark:border-slate-700 dark:bg-slate-950">
                   <a
                     href={createdLink.shortUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 truncate font-mono text-xs font-bold text-blue-600 hover:underline dark:text-blue-400"
+                    className="inline-flex items-center gap-1 truncate font-mono text-sm font-bold text-blue-600 hover:underline dark:text-blue-400"
                   >
                     {createdLink.shortUrl}
-                    <ExternalLink className="h-3 w-3 shrink-0" />
+                    <ExternalLink className="h-3.5 w-3.5 shrink-0" />
                   </a>
                   <button
                     type="button"
@@ -232,42 +219,43 @@ export function CreateLinkPage() {
                   </button>
                 </div>
 
-                <div className="mt-4 grid w-full grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => void handleDownload('png')}
-                    disabled={downloading !== null}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                    PNG
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => void handleDownload('svg')}
-                    disabled={downloading !== null}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                    SVG
-                  </button>
+                <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-3 text-xs dark:border-slate-800 dark:bg-slate-950/60">
+                  <div className="font-semibold text-slate-500 dark:text-slate-400">
+                    Redirects to
+                  </div>
+                  <p className="mt-1 break-all font-medium text-slate-700 dark:text-slate-200">
+                    {createdLink.originalUrl}
+                  </p>
+                  {createdLink.expiresAt && (
+                    <p className="mt-2 text-[11px] text-slate-500">
+                      Expires: {new Date(createdLink.expiresAt).toLocaleString()}
+                    </p>
+                  )}
                 </div>
 
-                <Link
-                  to={`/analytics/${createdLink.id}`}
-                  className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:underline dark:text-blue-400"
-                >
-                  Open Link Analytics <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                  <Link
+                    to="/links"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 hover:underline dark:text-slate-300"
+                  >
+                    View My Links
+                  </Link>
+                  <Link
+                    to={`/analytics/${createdLink.id}`}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:underline dark:text-blue-400"
+                  >
+                    Open Link Analytics <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
               </div>
             ) : (
               <div className="mt-8 flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 py-14 text-center dark:border-slate-700">
-                <QrCode className="h-12 w-12 text-slate-300 dark:text-slate-700" />
+                <Link2 className="h-11 w-11 text-slate-300 dark:text-slate-700" />
                 <p className="mt-3 text-xs font-semibold text-slate-600 dark:text-slate-300">
-                  Your dynamic QR code will appear here
+                  Your short link will appear here
                 </p>
                 <p className="mt-1 max-w-[220px] text-[11px] text-slate-400">
-                  Submit the form to generate a short link and downloadable PNG/SVG QR matrix.
+                  Enter a destination URL and submit to generate a shareable short link.
                 </p>
               </div>
             )}
