@@ -1,0 +1,28 @@
+import { PrismaClient } from '@prisma/client';
+import { env } from '../config/env.js';
+
+const globalForPrisma = globalThis as unknown as {
+  prisma?: PrismaClient;
+};
+
+export const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log: env.NODE_ENV === 'development' ? ['warn', 'error'] : ['error'],
+  });
+
+if (env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma;
+}
+
+/**
+ * True when a Prisma operation failed with the given error code, e.g.
+ * 'P2002' (unique constraint violation) or 'P2025' (record not found).
+ */
+export function isPrismaError(err: unknown, code: string): boolean {
+  return (
+    typeof err === 'object' &&
+    err !== null &&
+    (err as { code?: unknown }).code === code
+  );
+}

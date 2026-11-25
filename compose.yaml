@@ -1,0 +1,6 @@
+services:
+  hackavishkar:
+    image: hackavishkar
+    build:
+      context: .
+      dockerfile: ./Dockerfile
