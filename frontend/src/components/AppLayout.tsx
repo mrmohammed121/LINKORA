@@ -7,6 +7,7 @@ import {
   Home,
   LifeBuoy,
   Link2,
+  LogIn,
   LogOut,
   Menu,
   Moon,
@@ -268,7 +269,7 @@ export function AppLayout({ children }: AppLayoutProps) {
               {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
 
-            {isAuthenticated && (
+            {isAuthenticated ? (
               <NavLink
                 to="/settings"
                 className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 py-1 pl-1 pr-3 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700"
@@ -280,6 +281,22 @@ export function AppLayout({ children }: AppLayoutProps) {
                   {user?.name ?? 'Account'}
                 </span>
               </NavLink>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link
+                  to="/login"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                >
+                  <LogIn className="h-3.5 w-3.5" />
+                  Log in
+                </Link>
+                <Link
+                  to="/register"
+                  className="hidden items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition hover:bg-blue-700 sm:inline-flex"
+                >
+                  Sign up
+                </Link>
+              </div>
             )}
           </div>
         </header>
