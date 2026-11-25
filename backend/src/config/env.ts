@@ -16,6 +16,15 @@ const resolvedPublicBaseUrl =
 const resolvedFrontendUrl =
   process.env.FRONTEND_URL?.trim() || (isProd ? resolvedPublicBaseUrl : 'http://localhost:5173');
 
+const postgresUrlSchema = z
+  .string()
+  .trim()
+  .min(1, 'PostgreSQL connection URL is required')
+  .refine(
+    (value) => value.startsWith('postgresql://') || value.startsWith('postgres://'),
+    'Must be a valid PostgreSQL connection string starting with postgresql:// or postgres://'
+  );
+
 const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(4000),
   HOST: z.string().default('0.0.0.0'),
@@ -27,7 +36,8 @@ const envSchema = z.object({
     .string()
     .url('FRONTEND_URL must be a valid URL (set it in deployment environment variables)'),
   CORS_ORIGINS: z.string().optional(),
-  DATABASE_URL: z.string().min(1).default('file:./dev.db'),
+  DATABASE_URL: postgresUrlSchema,
+  DIRECT_URL: postgresUrlSchema,
   REDIS_URL: z
     .string()
     .optional()
