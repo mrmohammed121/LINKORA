@@ -18,7 +18,6 @@ import {
   QrCode,
   ShieldCheck,
   SlidersHorizontal,
-  Sparkles,
   Tag,
   X,
   Zap,
@@ -303,21 +302,9 @@ export function PublicLandingPage() {
 
         <div className="relative z-10 mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#3F3F46] bg-[#18181B]/70 px-3.5 py-1.5 text-xs font-semibold text-[#E9FFDB]">
-              <Sparkles className="h-3.5 w-3.5" />
-              Precision Link Infrastructure · Dynamic QR Rescue · Neon PostgreSQL
-            </div>
-
-            <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-[54px] lg:leading-[1.08]">
-              Shorten Links, Rescue QR Codes &amp; Track Every Click in{' '}
-              <span className="text-[#E9FFDB]">Real Time</span>.
+            <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-[54px] lg:leading-[1.08]">
+              Track Every Click in <span className="text-[#E9FFDB]">Real Time</span>
             </h1>
-
-            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-zinc-300 sm:text-base">
-              LINKORA unifies custom-slug URL shortening, styled PNG/SVG QR generation, live
-              destination rescue without reprinting, and privacy-first click analytics in one clean
-              workspace.
-            </p>
 
             <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
               <Link
