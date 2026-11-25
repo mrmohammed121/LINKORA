@@ -5,7 +5,6 @@ import {
   BookOpen,
   Bot,
   Loader2,
-  MessageSquare,
   Send,
   Sparkles,
   X,
@@ -294,20 +293,11 @@ export function WebsiteGuideAgent() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-label={open ? 'Close LINKORA Guide Agent' : 'Open LINKORA Guide Agent'}
-        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-teal-500 px-4 py-3 text-xs font-bold text-white shadow-lg shadow-blue-600/25 transition hover:scale-[1.02] hover:from-blue-500 hover:to-teal-400"
+        title={open ? 'Close LINKORA Guide' : 'Ask LINKORA Guide'}
+        aria-label={open ? 'Close LINKORA Guide Agent' : 'Ask LINKORA Guide'}
+        className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-teal-500 text-white shadow-lg shadow-blue-600/30 transition hover:scale-105 hover:from-blue-500 hover:to-teal-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-slate-950"
       >
-        {open ? (
-          <>
-            <X className="h-4 w-4" />
-            <span>Close Guide</span>
-          </>
-        ) : (
-          <>
-            <MessageSquare className="h-4 w-4" />
-            <span>Ask LINKORA Guide</span>
-          </>
-        )}
+        {open ? <X className="h-5 w-5" /> : <Bot className="h-5 w-5" />}
       </button>
     </div>
   );
