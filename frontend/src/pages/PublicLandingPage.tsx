@@ -285,10 +285,10 @@ export function PublicLandingPage() {
         )}
       </header>
 
-      {/* Charcoal Hero Section + Interactive Product Dashboard Preview */}
+      {/* Charcoal Hero Section */}
       <section
         ref={heroRef}
-        className="relative overflow-hidden border-b border-[#3F3F46] bg-[#27272A] px-4 pt-14 pb-20 text-white sm:px-6 lg:px-8 lg:pt-20 lg:pb-24"
+        className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden border-b border-[#3F3F46] bg-[#27272A] px-4 py-24 text-white sm:px-6 lg:px-8 lg:py-32"
       >
         <Crosshair
           containerRef={heroRef}
@@ -300,31 +300,38 @@ export function PublicLandingPage() {
           clickPulse
         />
 
-        <div className="relative z-10 mx-auto max-w-7xl">
+        <div className="relative z-10 mx-auto w-full max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-[54px] lg:leading-[1.08]">
+            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl lg:leading-[1.08]">
               Track Every Click in <span className="text-[#E9FFDB]">Real Time</span>
             </h1>
 
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-3.5 sm:mt-12">
               <Link
                 to={token ? '/dashboard' : '/dashboard'}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#E9FFDB] px-6 py-3 text-sm font-bold text-[#18181B] shadow-sm transition hover:bg-[#D7F9C2]"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#E9FFDB] px-6 py-3.5 text-sm font-bold text-[#18181B] shadow-sm transition hover:bg-[#D7F9C2]"
               >
                 Get Started
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <a
                 href="#features"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#3F3F46] bg-[#3F3F46]/40 px-6 py-3 text-sm font-semibold text-white transition hover:border-zinc-400 hover:bg-[#3F3F46]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#3F3F46] bg-[#3F3F46]/40 px-6 py-3.5 text-sm font-semibold text-white transition hover:border-zinc-400 hover:bg-[#3F3F46]"
               >
                 Explore Features
               </a>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Live Product Dashboard Preview (Real Backend Components) */}
-          <div className="mx-auto mt-12 max-w-5xl rounded-3xl border border-[#3F3F46] bg-[#18181B]/80 p-3 shadow-2xl sm:p-5">
+      {/* Next Section: Interactive Product Dashboard Preview (Real Backend Components) */}
+      <section
+        id="preview"
+        className="border-b border-[#E4E4E7] bg-[#F4F4F5] px-4 py-16 dark:border-[#3F3F46] dark:bg-[#18181B] sm:px-6 lg:px-8 lg:py-24"
+      >
+        <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-5xl rounded-3xl border border-[#3F3F46] bg-[#27272A] p-3 text-white shadow-2xl sm:p-5">
             {/* Window Chrome */}
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#3F3F46] pb-3">
               <div className="flex items-center gap-2">
