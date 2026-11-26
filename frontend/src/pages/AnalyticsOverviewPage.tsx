@@ -8,8 +8,9 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  BarChart,
-  Bar
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 import {
   Activity,
@@ -30,6 +31,40 @@ import { OverviewAnalyticsResponse } from '../types';
 import { StatusBadge } from '../components/StatusBadge';
 import { useAuthStore } from '../store/useAuthStore';
 
+/* ── Country flag emoji helper ─────────────────────────────────────────── */
+const countryFlag = (name: string): string => {
+  const map: Record<string, string> = {
+    'United Kingdom': '🇬🇧', 'United States': '🇺🇸', 'Australia': '🇦🇺',
+    'Canada': '🇨🇦', 'France': '🇫🇷', 'Germany': '🇩🇪', 'Spain': '🇪🇸',
+    'India': '🇮🇳', 'Mexico': '🇲🇽', 'Japan': '🇯🇵', 'Brazil': '🇧🇷',
+    'China': '🇨🇳', 'South Korea': '🇰🇷', 'Russia': '🇷🇺', 'Italy': '🇮🇹',
+    'Netherlands': '🇳🇱', 'Sweden': '🇸🇪', 'Norway': '🇳🇴', 'Denmark': '🇩🇰',
+    'Switzerland': '🇨🇭', 'Poland': '🇵🇱', 'Turkey': '🇹🇷', 'Argentina': '🇦🇷',
+    'South Africa': '🇿🇦', 'Nigeria': '🇳🇬', 'Egypt': '🇪🇬', 'Pakistan': '🇵🇰',
+    'Bangladesh': '🇧🇩', 'Indonesia': '🇮🇩', 'Malaysia': '🇲🇾', 'Singapore': '🇸🇬',
+    'Philippines': '🇵🇭', 'Vietnam': '🇻🇳', 'Thailand': '🇹🇭', 'UAE': '🇦🇪',
+    'Saudi Arabia': '🇸🇦', 'Israel': '🇮🇱', 'Iran': '🇮🇷', 'Iraq': '🇮🇶',
+    'Ukraine': '🇺🇦', 'Portugal': '🇵🇹', 'Belgium': '🇧🇪', 'Austria': '🇦🇹',
+    'Greece': '🇬🇷', 'Czech Republic': '🇨🇿', 'Romania': '🇷🇴', 'Hungary': '🇭🇺',
+    'Colombia': '🇨🇴', 'Chile': '🇨🇱', 'Peru': '🇵🇪', 'Venezuela': '🇻🇪',
+    'New Zealand': '🇳🇿', 'Finland': '🇫🇮', 'Ireland': '🇮🇪', 'Unknown': '🌐',
+  };
+  if (map[name]) return map[name];
+  // try to build from 2-letter ISO code embedded in region string
+  const upper = name.toUpperCase().replace(/[^A-Z]/g, '');
+  if (upper.length >= 2) {
+    try {
+      return String.fromCodePoint(
+        ...[...upper.slice(0, 2)].map(c => 0x1F1E6 + c.charCodeAt(0) - 65)
+      );
+    } catch { /* ignore */ }
+  }
+  return '🌐';
+};
+
+/* ── Donut chart colours ───────────────────────────────────────────────── */
+const DEVICE_COLORS = ['#2DD4BF', '#7C3AED', '#F97316', '#3B82F6', '#EAB308', '#EC4899', '#10B981'];
+
 type Preset = '7d' | '30d' | '90d' | 'all' | 'custom';
 type TrendMode = 'day' | 'hour' | 'month';
 
@@ -49,6 +84,7 @@ export function AnalyticsOverviewPage() {
   const [customTo, setCustomTo] = useState('');
   const [trendMode, setTrendMode] = useState<TrendMode>('day');
   const [data, setData] = useState<OverviewAnalyticsResponse | null>(null);
+  const [prevData, setPrevData] = useState<OverviewAnalyticsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -60,16 +96,36 @@ export function AnalyticsOverviewPage() {
     try {
       let from: string | undefined;
       let to: string | undefined;
+      let prevFrom: string | undefined;
+      let prevTo: string | undefined;
 
       if (preset === 'custom') {
         from = customFrom ? new Date(customFrom).toISOString() : undefined;
         to = customTo ? new Date(`${customTo}T23:59:59`).toISOString() : undefined;
+        // prev period = same window length before `from`
+        if (from && to) {
+          const dur = new Date(to).getTime() - new Date(from).getTime();
+          prevTo = from;
+          prevFrom = new Date(new Date(from).getTime() - dur).toISOString();
+        }
       } else {
         from = getFromIso(preset);
+        // prev period = same duration before `from`
+        if (from) {
+          const dur = Date.now() - new Date(from).getTime();
+          prevTo = from;
+          prevFrom = new Date(new Date(from).getTime() - dur).toISOString();
+        }
       }
 
-      const res = await api.analytics.overview({ granularity: apiGranularity, from, to });
-      setData(res);
+      const [current, previous] = await Promise.all([
+        api.analytics.overview({ granularity: apiGranularity, from, to }),
+        (prevFrom && prevTo)
+          ? api.analytics.overview({ granularity: apiGranularity, from: prevFrom, to: prevTo }).catch(() => null)
+          : Promise.resolve(null),
+      ]);
+      setData(current);
+      setPrevData(previous);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to load analytics overview.');
     } finally {
@@ -111,16 +167,53 @@ export function AnalyticsOverviewPage() {
     [data]
   );
 
-  const maxRegionCount = useMemo(
-    () => Math.max(1, ...(data?.regions.map((r) => r.count) ?? [1])),
-    [data]
+
+  /* ── Derived: device donut data with % of total ─────────────────────── */
+  const deviceTotal = useMemo(() => data?.devices.reduce((s, d) => s + d.count, 0) ?? 0, [data]);
+  const deviceDonut = useMemo(() =>
+    (data?.devices ?? []).map((d) => ({
+      name: d.deviceType,
+      value: d.count,
+      pct: deviceTotal > 0 ? Math.round((d.count / deviceTotal) * 1000) / 10 : 0,
+    })),
+    [data, deviceTotal]
   );
+
+  /* ── Derived: region table rows with % share and vs-prev ────────────── */
+  const regionTotal = useMemo(() => data?.regions.reduce((s, r) => s + r.count, 0) ?? 0, [data]);
+  const prevRegionMap = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const r of prevData?.regions ?? []) m.set(r.region, r.count);
+    return m;
+  }, [prevData]);
+
+  const regionRows = useMemo(() =>
+    (data?.regions ?? []).map((r) => {
+      const pct = regionTotal > 0 ? Math.round((r.count / regionTotal) * 1000) / 10 : 0;
+      const prev = prevRegionMap.get(r.region) ?? 0;
+      const vsPrev = prev > 0 ? Math.round(((r.count - prev) / prev) * 1000) / 10 : null;
+      return { region: r.region, count: r.count, pct, vsPrev };
+    }),
+    [data, regionTotal, prevRegionMap]
+  );
+
+  /* ── Derived: top location card ─────────────────────────────────────── */
+  const topRegion = useMemo(() => {
+    if (!regionRows.length) return null;
+    const top = regionRows[0];
+    const prevTotal = prevData?.summary.totalClicks ?? 0;
+    const prevTopCount = prevRegionMap.get(top.region) ?? 0;
+    return {
+      ...top,
+      prevCount: prevTopCount,
+      vsPrevTotal: prevTotal > 0 ? Math.round(((top.count - prevTopCount) / Math.max(1, prevTopCount)) * 1000) / 10 : null,
+    };
+  }, [regionRows, prevData, prevRegionMap]);
 
   const isDark = theme === 'dark';
   const gridStroke = isDark ? '#3F3F46' : '#E4E4E7';
   const axisTickColor = isDark ? '#A1A1AA' : '#71717A';
   const areaStroke = isDark ? '#E9FFDB' : '#27272A';
-  const barFill = isDark ? '#E9FFDB' : '#27272A';
 
   return (
     <div className="space-y-6">
@@ -411,102 +504,210 @@ export function AnalyticsOverviewPage() {
               <div className="mb-4 flex items-center justify-between">
                 <div>
                   <h2 className="font-display text-lg font-bold text-[#18181B] dark:text-white">
-                    Device Breakdown
+                    Clicks by Device
                   </h2>
                   <p className="text-xs text-[#71717A] dark:text-zinc-400">Visitor client categories</p>
                 </div>
                 <Smartphone className="h-4 w-4 text-[#71717A]" />
               </div>
 
-              <div className="h-72 w-full">
-                {data.devices.length > 0 ? (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={data.devices} margin={{ top: 10, right: 8, left: -18, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />
-                      <XAxis dataKey="deviceType" tick={{ fill: axisTickColor, fontSize: 11 }} axisLine={false} tickLine={false} />
-                      <YAxis allowDecimals={false} tick={{ fill: axisTickColor, fontSize: 11 }} axisLine={false} tickLine={false} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: '#27272A',
-                          borderColor: '#3F3F46',
-                          borderRadius: '12px',
-                          color: '#FFFFFF',
-                          fontSize: '12px'
-                        }}
-                      />
-                      <Bar dataKey="count" fill={barFill} radius={[8, 8, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <div className="flex h-full items-center justify-center text-sm text-[#71717A] dark:text-zinc-400">
-                    No device telemetry yet.
+              {deviceDonut.length > 0 ? (
+                <div className="flex flex-col gap-4">
+                  {/* Donut */}
+                  <div className="relative mx-auto h-48 w-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={deviceDonut}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={58}
+                          outerRadius={88}
+                          paddingAngle={2}
+                          dataKey="value"
+                          strokeWidth={0}
+                        >
+                          {deviceDonut.map((_, i) => (
+                            <Cell key={i} fill={DEVICE_COLORS[i % DEVICE_COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: '#27272A',
+                            borderColor: '#3F3F46',
+                            borderRadius: '12px',
+                            color: '#FFFFFF',
+                            fontSize: '12px',
+                          }}
+                          formatter={(v: number, name: string) => [`${v} clicks`, name]}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    {/* Centre label */}
+                    <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="font-display text-2xl font-bold text-[#18181B] dark:text-white">
+                        {deviceTotal.toLocaleString()}
+                      </span>
+                      <span className="text-[10px] text-[#71717A] dark:text-zinc-400">Clicks</span>
+                    </div>
                   </div>
-                )}
-              </div>
+                  {/* Legend */}
+                  <div className="space-y-1.5">
+                    {deviceDonut.map((d, i) => (
+                      <div key={d.name} className="flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="inline-block h-2.5 w-2.5 rounded-full"
+                            style={{ backgroundColor: DEVICE_COLORS[i % DEVICE_COLORS.length] }}
+                          />
+                          <span className="font-medium text-[#18181B] dark:text-zinc-200 capitalize">{d.name}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="font-mono font-semibold text-[#18181B] dark:text-white">{d.value}</span>
+                          <span className="w-10 text-right text-[#71717A] dark:text-zinc-400">{d.pct}%</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex h-64 items-center justify-center text-sm text-[#71717A] dark:text-zinc-400">
+                  No device telemetry yet.
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-3xl border border-[#E4E4E7] bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="font-display text-lg font-bold text-[#18181B] dark:text-white">
-                  Top Referrers
-                </h2>
-                <Globe2 className="h-4 w-4 text-[#71717A]" />
+          {/* ── Engagements by Location + Top Location card ───────────── */}
+          <div className="grid gap-6 lg:grid-cols-3">
+            {/* Location table — takes 2 cols */}
+            <div className="rounded-3xl border border-[#E4E4E7] bg-white dark:border-zinc-800 dark:bg-zinc-900 lg:col-span-2 overflow-hidden">
+              <div className="flex items-center justify-between border-b border-[#E4E4E7] px-6 py-4 dark:border-zinc-800">
+                <div>
+                  <h2 className="font-display text-lg font-bold text-[#18181B] dark:text-white">
+                    Clicks by Location
+                  </h2>
+                  <p className="text-xs text-[#71717A] dark:text-zinc-400 mt-0.5">Country-level breakdown</p>
+                </div>
+                <MapPin className="h-4 w-4 text-[#71717A]" />
               </div>
-              {data.referrers.length === 0 ? (
-                <p className="py-8 text-center text-sm text-[#71717A] dark:text-zinc-400">No referrer data yet.</p>
+              {regionRows.length === 0 ? (
+                <p className="py-10 text-center text-sm text-[#71717A] dark:text-zinc-400">No region telemetry yet.</p>
               ) : (
-                <div className="space-y-3">
-                  {data.referrers.map((item) => (
-                    <div key={item.referrer} className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-medium text-[#18181B] dark:text-zinc-200">{item.referrer}</span>
-                        <span className="font-mono font-semibold text-[#18181B] dark:text-[#E9FFDB]">
-                          {item.count}
-                        </span>
-                      </div>
-                      <div className="h-2 overflow-hidden rounded-full bg-[#F4F4F5] dark:bg-zinc-800">
-                        <div
-                          className="h-full rounded-full bg-[#27272A] dark:bg-[#E9FFDB]"
-                          style={{ width: `${Math.max(6, Math.round((item.count / maxReferrerCount) * 100))}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-[#F4F4F5] text-xs uppercase tracking-wider text-[#71717A] dark:bg-zinc-950/60 dark:text-zinc-400">
+                      <tr>
+                        <th className="px-5 py-3 font-semibold">Country</th>
+                        <th className="px-5 py-3 font-semibold text-right">Clicks</th>
+                        <th className="px-5 py-3 font-semibold text-right">%</th>
+                        {prevData && <th className="px-5 py-3 font-semibold text-right">vs prev.</th>}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#E4E4E7] dark:divide-zinc-800">
+                      {regionRows.map((row) => (
+                        <tr key={row.region} className="hover:bg-[#F4F4F5]/60 dark:hover:bg-zinc-800/40">
+                          <td className="px-5 py-3">
+                            <div className="flex items-center gap-2.5">
+                              <span className="text-lg leading-none" role="img" aria-label={row.region}>
+                                {countryFlag(row.region)}
+                              </span>
+                              <span className="font-medium text-[#18181B] dark:text-zinc-200">{row.region}</span>
+                            </div>
+                          </td>
+                          <td className="px-5 py-3 text-right font-mono font-semibold text-[#18181B] dark:text-white">
+                            {row.count.toLocaleString()}
+                          </td>
+                          <td className="px-5 py-3 text-right text-[#71717A] dark:text-zinc-400">
+                            {row.pct}%
+                          </td>
+                          {prevData && (
+                            <td className="px-5 py-3 text-right">
+                              {row.vsPrev !== null ? (
+                                <span className={`font-semibold ${row.vsPrev >= 0 ? 'text-[#16A34A]' : 'text-[#DC2626]'}`}>
+                                  {row.vsPrev >= 0 ? '↑' : '↓'} {Math.abs(row.vsPrev)}%
+                                </span>
+                              ) : (
+                                <span className="text-[#71717A] dark:text-zinc-500">—</span>
+                              )}
+                            </td>
+                          )}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </div>
 
-            <div className="rounded-3xl border border-[#E4E4E7] bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="font-display text-lg font-bold text-[#18181B] dark:text-white">
-                  Top Regions / Locations
-                </h2>
-                <MapPin className="h-4 w-4 text-[#71717A]" />
-              </div>
-              {data.regions.length === 0 ? (
-                <p className="py-8 text-center text-sm text-[#71717A] dark:text-zinc-400">No region telemetry yet.</p>
-              ) : (
-                <div className="space-y-3">
-                  {data.regions.map((item) => (
-                    <div key={item.region} className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-medium text-[#18181B] dark:text-zinc-200">{item.region}</span>
-                        <span className="font-mono font-semibold text-[#18181B] dark:text-[#E9FFDB]">
-                          {item.count}
-                        </span>
-                      </div>
-                      <div className="h-2 overflow-hidden rounded-full bg-[#F4F4F5] dark:bg-zinc-800">
-                        <div
-                          className="h-full rounded-full bg-[#27272A] dark:bg-[#E9FFDB]"
-                          style={{ width: `${Math.max(6, Math.round((item.count / maxRegionCount) * 100))}%` }}
-                        />
-                      </div>
+            {/* Top Location card */}
+            <div className="flex flex-col gap-4">
+              {topRegion && (
+                <div className="rounded-3xl border border-[#E4E4E7] bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+                  <div className="mb-3 flex items-center justify-between">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[#71717A] dark:text-zinc-400">
+                      Top Location
+                    </p>
+                    <MapPin className="h-3.5 w-3.5 text-[#71717A]" />
+                  </div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-3xl" role="img" aria-label={topRegion.region}>
+                      {countryFlag(topRegion.region)}
+                    </span>
+                    <span className="font-display text-lg font-bold text-[#18181B] dark:text-white">
+                      {topRegion.region}
+                    </span>
+                  </div>
+                  <p className="font-display text-3xl font-bold text-[#18181B] dark:text-white mt-2">
+                    {topRegion.count.toLocaleString()}
+                    <span className="ml-1.5 text-sm font-normal text-[#71717A] dark:text-zinc-400">clicks</span>
+                  </p>
+                  <p className="mt-1 text-sm text-[#71717A] dark:text-zinc-400">
+                    {topRegion.pct}% of all traffic
+                  </p>
+                  {topRegion.vsPrevTotal !== null && (
+                    <div className={`mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
+                      topRegion.vsPrevTotal >= 0
+                        ? 'bg-[#E9FFDB]/40 text-[#16A34A]'
+                        : 'bg-[#DC2626]/10 text-[#DC2626]'
+                    }`}>
+                      {topRegion.vsPrevTotal >= 0 ? '↑' : '↓'} {Math.abs(topRegion.vsPrevTotal)}% vs prev period
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
+
+              {/* Top Referrers moved here as compact card */}
+              <div className="rounded-3xl border border-[#E4E4E7] bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900 flex-1">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="font-display text-base font-bold text-[#18181B] dark:text-white">
+                    Top Referrers
+                  </h2>
+                  <Globe2 className="h-4 w-4 text-[#71717A]" />
+                </div>
+                {data.referrers.length === 0 ? (
+                  <p className="py-4 text-center text-sm text-[#71717A] dark:text-zinc-400">No referrer data yet.</p>
+                ) : (
+                  <div className="space-y-3">
+                    {data.referrers.slice(0, 6).map((item) => (
+                      <div key={item.referrer} className="space-y-1.5">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="font-medium text-[#18181B] dark:text-zinc-200 truncate max-w-[140px]">{item.referrer}</span>
+                          <span className="font-mono font-semibold text-[#18181B] dark:text-[#E9FFDB]">
+                            {item.count}
+                          </span>
+                        </div>
+                        <div className="h-1.5 overflow-hidden rounded-full bg-[#F4F4F5] dark:bg-zinc-800">
+                          <div
+                            className="h-full rounded-full bg-[#27272A] dark:bg-[#E9FFDB]"
+                            style={{ width: `${Math.max(6, Math.round((item.count / maxReferrerCount) * 100))}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
