@@ -23,6 +23,7 @@ import {
   Zap,
 } from 'lucide-react';
 import Crosshair from '../components/Crosshair';
+import TechText from '../components/TechText';
 import { WebsiteGuideAgent } from '../components/WebsiteGuideAgent';
 import { api, getDisplayBaseHost } from '../lib/api';
 import { getGuestLinks, saveGuestLink } from '../lib/guestStorage';
@@ -301,12 +302,30 @@ export function PublicLandingPage() {
         />
 
         <div className="relative z-10 mx-auto w-full max-w-7xl">
-          <div className="mx-auto max-w-3xl text-center">
-            <h1 className="bbh-bogle-regular text-6xl tracking-wide text-[#E9FFDB] sm:text-7xl lg:text-8xl">
-              LINKORA
-            </h1>
+          <div className="mx-auto max-w-4xl text-center">
+            <h1 className="sr-only">LINKORA</h1>
+            <div className="mx-auto h-40 w-full sm:h-52 lg:h-64">
+              <TechText
+                text="LINKORA"
+                fontFamily='"BBH Bogle", sans-serif'
+                fontWeight={400}
+                fontSize={180}
+                letterSpacing={0.02}
+                color="#E9FFDB"
+                accentColor="#E9FFDB"
+                align="center"
+                reveal="letter"
+                selection
+                labels
+                draggable
+                sweep
+                clickKick
+                intro="assemble"
+                introDuration={1.8}
+              />
+            </div>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-3.5 sm:mt-12">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5 sm:mt-10">
               <Link
                 to={token ? '/dashboard' : '/dashboard'}
                 className="inline-flex items-center gap-2 rounded-xl bg-[#E9FFDB] px-6 py-3.5 text-sm font-bold text-[#18181B] shadow-sm transition hover:bg-[#D7F9C2]"
