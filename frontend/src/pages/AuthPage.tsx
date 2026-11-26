@@ -272,171 +272,171 @@ export function AuthPage({ mode }: AuthPageProps) {
           </div>
 
           <form onSubmit={handleSubmit} noValidate className="space-y-4">
-            {mode === 'register' && (
-              <div>
-                <label
-                  htmlFor="auth-name"
-                  className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#71717A]"
-                >
-                  Full Name
-                </label>
-                <input
-                  id="auth-name"
-                  type="text"
-                  autoComplete="name"
-                  value={name}
-                  onBlur={() => setTouched((t) => ({ ...t, name: true }))}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                    if (error) clearError();
-                  }}
-                  placeholder="Alex Rivera"
-                  className={`w-full rounded-xl border bg-[#F4F4F5] px-4 py-3 text-sm text-[#18181B] focus:bg-white focus:outline-none ${
-                    showNameError
-                      ? 'border-[#DC2626]'
-                      : 'border-[#E4E4E7] focus:border-[#27272A]'
-                  }`}
-                />
-                {showNameError && (
-                  <p className="mt-1 text-xs font-medium text-[#DC2626]">{showNameError}</p>
+                {mode === 'register' && (
+                  <div>
+                    <label
+                      htmlFor="auth-name"
+                      className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#71717A]"
+                    >
+                      Full Name
+                    </label>
+                    <input
+                      id="auth-name"
+                      type="text"
+                      autoComplete="name"
+                      value={name}
+                      onBlur={() => setTouched((t) => ({ ...t, name: true }))}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        if (error) clearError();
+                      }}
+                      placeholder="Alex Rivera"
+                      className={`w-full rounded-xl border bg-[#F4F4F5] px-4 py-3 text-sm text-[#18181B] focus:bg-white focus:outline-none ${
+                        showNameError
+                          ? 'border-[#DC2626]'
+                          : 'border-[#E4E4E7] focus:border-[#27272A]'
+                      }`}
+                    />
+                    {showNameError && (
+                      <p className="mt-1 text-xs font-medium text-[#DC2626]">{showNameError}</p>
+                    )}
+                  </div>
                 )}
-              </div>
-            )}
 
-            <div>
-              <label
-                htmlFor="auth-email"
-                className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#71717A]"
-              >
-                Email Address
-              </label>
-              <input
-                id="auth-email"
-                type="email"
-                autoComplete="email"
-                value={email}
-                onBlur={() => setTouched((t) => ({ ...t, email: true }))}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (error) clearError();
-                }}
-                placeholder="you@company.com"
-                className={`w-full rounded-xl border bg-[#F4F4F5] px-4 py-3 text-sm text-[#18181B] focus:bg-white focus:outline-none ${
-                  showEmailError
-                    ? 'border-[#DC2626]'
-                    : 'border-[#E4E4E7] focus:border-[#27272A]'
-                }`}
-              />
-              {showEmailError && (
-                <p className="mt-1 text-xs font-medium text-[#DC2626]">{showEmailError}</p>
-              )}
-            </div>
+                <div>
+                  <label
+                    htmlFor="auth-email"
+                    className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#71717A]"
+                  >
+                    Email Address
+                  </label>
+                  <input
+                    id="auth-email"
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onBlur={() => setTouched((t) => ({ ...t, email: true }))}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (error) clearError();
+                    }}
+                    placeholder="you@company.com"
+                    className={`w-full rounded-xl border bg-[#F4F4F5] px-4 py-3 text-sm text-[#18181B] focus:bg-white focus:outline-none ${
+                      showEmailError
+                        ? 'border-[#DC2626]'
+                        : 'border-[#E4E4E7] focus:border-[#27272A]'
+                    }`}
+                  />
+                  {showEmailError && (
+                    <p className="mt-1 text-xs font-medium text-[#DC2626]">{showEmailError}</p>
+                  )}
+                </div>
 
-            <div>
-              <div className="mb-1.5 flex items-center justify-between">
-                <label
-                  htmlFor="auth-password"
-                  className="block text-xs font-semibold uppercase tracking-wider text-[#71717A]"
+                <div>
+                  <div className="mb-1.5 flex items-center justify-between">
+                    <label
+                      htmlFor="auth-password"
+                      className="block text-xs font-semibold uppercase tracking-wider text-[#71717A]"
+                    >
+                      Password
+                    </label>
+                    {mode === 'login' ? (
+                      <button
+                        type="button"
+                        onClick={() => setShowForgotHelp((v) => !v)}
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#71717A] hover:text-[#18181B] hover:underline"
+                      >
+                        <HelpCircle className="h-3 w-3" />
+                        Forgot password?
+                      </button>
+                    ) : (
+                      <span
+                        className={`text-[11px] font-semibold ${
+                          password.length >= 8 ? 'text-[#16A34A]' : 'text-[#71717A]'
+                        }`}
+                      >
+                        {password.length}/8+ chars
+                      </span>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <input
+                      id="auth-password"
+                      type={showPassword ? 'text' : 'password'}
+                      autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
+                      value={password}
+                      onBlur={() => setTouched((t) => ({ ...t, password: true }))}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        if (error) clearError();
+                      }}
+                      placeholder={mode === 'register' ? 'Minimum 8 characters' : 'Enter password'}
+                      className={`w-full rounded-xl border bg-[#F4F4F5] py-3 pl-4 pr-11 text-sm text-[#18181B] focus:bg-white focus:outline-none ${
+                        showPasswordError
+                          ? 'border-[#DC2626]'
+                          : 'border-[#E4E4E7] focus:border-[#27272A]'
+                      }`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-[#71717A] hover:bg-[#E4E4E7] hover:text-[#18181B]"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                  {showPasswordError && (
+                    <p className="mt-1 text-xs font-medium text-[#DC2626]">{showPasswordError}</p>
+                  )}
+                </div>
+
+                {showForgotHelp && (
+                  <div className="rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] p-3 text-xs text-[#71717A]">
+                    <strong className="text-[#18181B]">Password recovery:</strong> Email password resets
+                    are not enabled in this workspace. Signed-in users can update their password anytime
+                    under <strong>Settings → Security</strong>, or sign in with Google / Demo Account.
+                  </div>
+                )}
+
+                {activeError && (
+                  <div
+                    role="alert"
+                    className="flex items-start gap-2 rounded-xl border border-[#DC2626]/25 bg-[#DC2626]/10 px-4 py-3 text-xs font-medium text-[#DC2626]"
+                  >
+                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                    <span>{activeError}</span>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#E9FFDB] px-5 py-3 text-sm font-bold text-[#18181B] shadow-xs transition hover:bg-[#D7F9C2] disabled:opacity-60"
                 >
-                  Password
-                </label>
-                {mode === 'login' ? (
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {mode === 'login' ? 'Signing in...' : 'Creating account...'}
+                    </>
+                  ) : (
+                    <>
+                      {mode === 'login' ? 'Sign In' : 'Create Account'}
+                      <ArrowRight className="h-4 w-4" />
+                    </>
+                  )}
+                </button>
+
+                {mode === 'login' && (
                   <button
                     type="button"
-                    onClick={() => setShowForgotHelp((v) => !v)}
-                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#71717A] hover:text-[#18181B] hover:underline"
+                    onClick={handleFillDemo}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] px-4 py-2.5 text-xs font-semibold text-[#18181B] transition hover:border-[#27272A] hover:bg-white"
                   >
-                    <HelpCircle className="h-3 w-3" />
-                    Forgot password?
+                    Fill Demo Credentials (demo@linkora.io / Demo@1234)
                   </button>
-                ) : (
-                  <span
-                    className={`text-[11px] font-semibold ${
-                      password.length >= 8 ? 'text-[#16A34A]' : 'text-[#71717A]'
-                    }`}
-                  >
-                    {password.length}/8+ chars
-                  </span>
                 )}
-              </div>
-              <div className="relative">
-                <input
-                  id="auth-password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
-                  value={password}
-                  onBlur={() => setTouched((t) => ({ ...t, password: true }))}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    if (error) clearError();
-                  }}
-                  placeholder={mode === 'register' ? 'Minimum 8 characters' : 'Enter password'}
-                  className={`w-full rounded-xl border bg-[#F4F4F5] py-3 pl-4 pr-11 text-sm text-[#18181B] focus:bg-white focus:outline-none ${
-                    showPasswordError
-                      ? 'border-[#DC2626]'
-                      : 'border-[#E4E4E7] focus:border-[#27272A]'
-                  }`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-[#71717A] hover:bg-[#E4E4E7] hover:text-[#18181B]"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-              {showPasswordError && (
-                <p className="mt-1 text-xs font-medium text-[#DC2626]">{showPasswordError}</p>
-              )}
-            </div>
-
-            {showForgotHelp && (
-              <div className="rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] p-3 text-xs text-[#71717A]">
-                <strong className="text-[#18181B]">Password recovery:</strong> Email password resets
-                are not enabled in this workspace. Signed-in users can update their password anytime
-                under <strong>Settings → Security</strong>, or sign in with Google / Demo Account.
-              </div>
-            )}
-
-            {activeError && (
-              <div
-                role="alert"
-                className="flex items-start gap-2 rounded-xl border border-[#DC2626]/25 bg-[#DC2626]/10 px-4 py-3 text-xs font-medium text-[#DC2626]"
-              >
-                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                <span>{activeError}</span>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#E9FFDB] px-5 py-3 text-sm font-bold text-[#18181B] shadow-xs transition hover:bg-[#D7F9C2] disabled:opacity-60"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  {mode === 'login' ? 'Signing in...' : 'Creating account...'}
-                </>
-              ) : (
-                <>
-                  {mode === 'login' ? 'Sign In' : 'Create Account'}
-                  <ArrowRight className="h-4 w-4" />
-                </>
-              )}
-            </button>
-
-            {mode === 'login' && (
-              <button
-                type="button"
-                onClick={handleFillDemo}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#E4E4E7] bg-[#F4F4F5] px-4 py-2.5 text-xs font-semibold text-[#18181B] transition hover:border-[#27272A] hover:bg-white"
-              >
-                Fill Demo Credentials (demo@linkora.io / Demo@1234)
-              </button>
-            )}
-          </form>
+              </form>
 
           <div className="mt-6 flex flex-wrap items-center justify-between gap-2 border-t border-[#E4E4E7] pt-5 text-xs">
             <span className="inline-flex items-center gap-1.5 text-[#71717A]">

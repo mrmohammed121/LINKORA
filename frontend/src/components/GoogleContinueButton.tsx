@@ -1,24 +1,27 @@
 import { useState } from 'react';
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
-import { Loader2 } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 
 interface GoogleContinueButtonProps {
   onSuccess?: () => void;
   onError?: (message: string) => void;
+  className?: string;
 }
 
-const GOOGLE_CLIENT_ID = (import.meta.env.VITE_GOOGLE_CLIENT_ID ?? '').trim();
-
-export function GoogleContinueButton({ onSuccess, onError }: GoogleContinueButtonProps) {
+export function GoogleContinueButton({
+  onSuccess,
+  onError,
+  className = '',
+}: GoogleContinueButtonProps) {
   const { loginWithGoogle, isLoading } = useAuthStore();
-  const [configError, setConfigError] = useState<string | null>(null);
+  const [googleError, setGoogleError] = useState<string | null>(null);
 
   const handleGoogleSuccess = async (response: CredentialResponse) => {
-    setConfigError(null);
+    setGoogleError(null);
     if (!response.credential) {
       const msg = 'Google did not return a sign-in credential. Please try again.';
-      setConfigError(msg);
+      setGoogleError(msg);
       onError?.(msg);
       return;
     }
@@ -27,72 +30,56 @@ export function GoogleContinueButton({ onSuccess, onError }: GoogleContinueButto
       await loginWithGoogle(response.credential);
       onSuccess?.();
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Google Sign-In failed.';
-      setConfigError(msg);
+      const msg = err instanceof Error ? err.message : 'Google authentication failed.';
+      setGoogleError(msg);
       onError?.(msg);
     }
   };
 
-  if (!GOOGLE_CLIENT_ID) {
-    return (
-      <div className="space-y-2">
-        <button
-          type="button"
-          onClick={() => {
-            const msg =
-              'Google OAuth is not configured yet. Set VITE_GOOGLE_CLIENT_ID in frontend/.env and GOOGLE_CLIENT_ID in backend/.env.';
-            setConfigError(msg);
-            onError?.(msg);
-          }}
-          className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
-        >
-          <GoogleMark />
-          Continue with Google
-        </button>
-        {configError && (
-          <p className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-[11px] font-medium text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
-            {configError}
-          </p>
-        )}
-      </div>
-    );
-  }
+  const handleGoogleError = () => {
+    const msg =
+      'Google Sign-In was cancelled or failed. Verify your Google account or authorized origin in Google Cloud.';
+    setGoogleError(msg);
+    onError?.(msg);
+  };
 
   return (
-    <div className="space-y-2">
-      <div className="relative flex min-h-[42px] items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-1 dark:border-slate-700 dark:bg-slate-950">
+    <div className={`space-y-2 ${className}`}>
+      <div className="flex w-full justify-center overflow-hidden rounded-xl border border-[#DADCE0] bg-white p-1 transition hover:shadow-xs">
         {isLoading ? (
-          <div className="flex items-center gap-2 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300">
-            <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
-            Signing in with Google...
+          <div className="flex h-[40px] w-full items-center justify-center gap-2 text-xs font-semibold text-[#3C4043]">
+            <Loader2 className="h-4 w-4 animate-spin text-[#1A73E8]" />
+            <span>Signing in with Google...</span>
           </div>
         ) : (
           <GoogleLogin
             onSuccess={(res) => void handleGoogleSuccess(res)}
-            onError={() => {
-              const msg = 'Google Sign-In failed or was cancelled.';
-              setConfigError(msg);
-              onError?.(msg);
-            }}
+            onError={handleGoogleError}
             text="continue_with"
             shape="rectangular"
             size="large"
-            width="360"
+            theme="outline"
+            width="384"
           />
         )}
       </div>
-      {configError && (
-        <p className="rounded-lg border border-rose-300 bg-rose-50 px-3 py-2 text-[11px] font-medium text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
-          {configError}
-        </p>
+
+      {googleError && (
+        <div
+          role="alert"
+          className="flex items-start gap-2 rounded-xl border border-[#DC2626]/25 bg-[#DC2626]/10 px-3.5 py-2.5 text-xs font-medium text-[#DC2626]"
+        >
+          <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          <span>{googleError}</span>
+        </div>
       )}
     </div>
   );
 }
 
-function GoogleMark() {
+export function GoogleLogo({ className = 'h-4 w-4' }: { className?: string }) {
   return (
-    <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
       <path
         fill="#4285F4"
         d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"

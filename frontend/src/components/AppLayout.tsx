@@ -274,9 +274,17 @@ export function AppLayout({ children }: AppLayoutProps) {
                 to="/settings"
                 className="flex items-center gap-2 rounded-full border border-[#E4E4E7] bg-[#F4F4F5] py-1 pl-1 pr-3 transition hover:border-[#27272A] dark:border-[#3F3F46] dark:bg-[#18181B]"
               >
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#27272A] text-xs font-bold text-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]">
-                  {initials}
-                </span>
+                {user?.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt={user.name}
+                    className="h-7 w-7 rounded-full object-cover ring-1 ring-black/10 dark:ring-white/15"
+                  />
+                ) : (
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#27272A] text-xs font-bold text-[#E9FFDB] dark:bg-[#E9FFDB] dark:text-[#18181B]">
+                    {initials}
+                  </span>
+                )}
                 <span className="hidden text-xs font-semibold text-[#18181B] dark:text-white sm:inline">
                   {user?.name ?? 'Account'}
                 </span>

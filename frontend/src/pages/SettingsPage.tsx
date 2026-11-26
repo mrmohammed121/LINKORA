@@ -13,6 +13,7 @@ import {
   Sun,
   User as UserIcon
 } from 'lucide-react';
+import { GoogleLogo } from '../components/GoogleContinueButton';
 import { useAuthStore } from '../store/useAuthStore';
 import { useLinkStore } from '../store/useLinkStore';
 import { api } from '../lib/api';
@@ -219,6 +220,25 @@ export function SettingsPage() {
                 </div>
               ) : (
                 <form onSubmit={handleProfileSave} className="mt-6 max-w-lg space-y-4">
+                  {user?.avatarUrl && (
+                    <div className="flex items-center gap-3 rounded-2xl border border-[#DADCE0] bg-[#F8F9FA] p-3.5 text-xs dark:border-zinc-800 dark:bg-zinc-950">
+                      <img
+                        src={user.avatarUrl}
+                        alt={user.name}
+                        className="h-10 w-10 rounded-full object-cover ring-2 ring-white"
+                      />
+                      <div>
+                        <div className="flex items-center gap-1.5 font-bold text-[#202124] dark:text-white">
+                          <GoogleLogo className="h-4 w-4" />
+                          Google Account Connected
+                        </div>
+                        <p className="mt-0.5 text-[#5F6368] dark:text-zinc-400">
+                          One-click Google authentication enabled for {user.email}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
                   <div>
                     <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#71717A] dark:text-zinc-400">
                       Display Name

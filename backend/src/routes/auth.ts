@@ -170,6 +170,8 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       });
     }
 
+    const credential = parsed.data.credential;
+
     if (!env.GOOGLE_CLIENT_ID) {
       return reply.code(503).send({
         error: 'GOOGLE_AUTH_NOT_CONFIGURED',
@@ -182,7 +184,7 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
     try {
       const client = new OAuth2Client(env.GOOGLE_CLIENT_ID);
       const ticket = await client.verifyIdToken({
-        idToken: parsed.data.credential,
+        idToken: credential,
         audience: env.GOOGLE_CLIENT_ID,
       });
       payload = ticket.getPayload();

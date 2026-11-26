@@ -19,8 +19,16 @@ if (env.NODE_ENV !== 'production') {
  * Establishes and verifies the PostgreSQL connection on startup.
  */
 export async function connectDatabase(): Promise<void> {
-  await prisma.$connect();
-  await prisma.$queryRaw`SELECT 1`;
+  try {
+    await prisma.$connect();
+    await prisma.$queryRaw`SELECT 1`;
+    console.log('✅ PostgreSQL connected successfully');
+  } catch (err) {
+    console.warn(
+      '⚠️ Warning: PostgreSQL not reachable on startup (will retry on demand):',
+      err instanceof Error ? err.message : err
+    );
+  }
 }
 
 /**
