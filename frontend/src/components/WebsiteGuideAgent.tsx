@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowUpRight, BookOpen, Bot, Loader2, Send, Sparkles, X } from 'lucide-react';
+import { ArrowUpRight, BookOpen, Bot, Loader2, Send, X } from 'lucide-react';
 import { api } from '../lib/api';
 import type { AssistantReferenceItem } from '../types';
 
@@ -151,10 +151,6 @@ export function WebsiteGuideAgent() {
               <div>
                 <div className="flex items-center gap-1.5 text-sm font-bold leading-tight">
                   LINKORA Guide
-                  <span className="inline-flex items-center gap-0.5 rounded-full bg-[#E9FFDB]/15 px-1.5 py-0.5 text-[10px] font-semibold text-[#E9FFDB]">
-                    <Sparkles className="h-2.5 w-2.5" />
-                    Docs
-                  </span>
                 </div>
                 <p className="text-[11px] text-zinc-400">
                   Viewing: {formatPageLabel(location.pathname)}
