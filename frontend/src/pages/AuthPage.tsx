@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Zap,
 } from 'lucide-react';
+import { AuthNavbar } from '../components/AuthNavbar';
 import { GoogleContinueButton } from '../components/GoogleContinueButton';
 import { WebsiteGuideAgent } from '../components/WebsiteGuideAgent';
 import { useAuthStore } from '../store/useAuthStore';
@@ -133,9 +134,11 @@ export function AuthPage({ mode }: AuthPageProps) {
   const activeError = error || googleError;
 
   return (
-    <div className="min-h-screen bg-[#F4F4F5] lg:grid lg:grid-cols-12">
-      {/* Left Charcoal Visual Panel */}
-      <aside className="flex flex-col justify-between bg-[#27272A] p-6 text-white sm:p-10 lg:col-span-5 lg:min-h-screen lg:p-12">
+    <div className="min-h-screen bg-[#F4F4F5] dark:bg-[#18181B]">
+      <AuthNavbar mode={mode} />
+      <div className="min-h-[calc(100vh-4rem)] lg:grid lg:grid-cols-12">
+        {/* Left Charcoal Visual Panel */}
+        <aside className="flex flex-col justify-between bg-[#27272A] p-6 text-white sm:p-10 lg:col-span-5 lg:min-h-full lg:p-12">
         <div>
           <Link to="/" className="inline-flex items-center gap-2.5">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#E9FFDB] text-[#18181B]">
@@ -455,6 +458,7 @@ export function AuthPage({ mode }: AuthPageProps) {
           </div>
         </div>
       </main>
+      </div>
 
       <WebsiteGuideAgent />
     </div>

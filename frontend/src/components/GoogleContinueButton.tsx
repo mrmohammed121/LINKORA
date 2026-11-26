@@ -67,10 +67,32 @@ export function GoogleContinueButton({
       {googleError && (
         <div
           role="alert"
-          className="flex items-start gap-2 rounded-xl border border-[#DC2626]/25 bg-[#DC2626]/10 px-3.5 py-2.5 text-xs font-medium text-[#DC2626]"
+          className="space-y-2 rounded-xl border border-[#DC2626]/25 bg-[#DC2626]/10 p-3 text-xs text-[#DC2626]"
         >
-          <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-          <span>{googleError}</span>
+          <div className="flex items-start gap-2 font-medium">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>{googleError}</span>
+          </div>
+
+          <div className="rounded-lg bg-white/80 p-2.5 text-[11px] leading-relaxed text-[#3C4043] dark:bg-[#18181B] dark:text-zinc-300">
+            <strong className="block text-[#18181B] dark:text-white">
+              Resolving Google Authorization Error:
+            </strong>
+            <ul className="mt-1 list-disc space-y-1 pl-4">
+              <li>
+                <strong>Origin mismatch:</strong> Add{' '}
+                <code className="rounded bg-black/5 px-1 py-0.5 font-mono font-bold text-[#1A73E8] dark:bg-white/10">
+                  {typeof window !== 'undefined' ? window.location.origin : 'current URL'}
+                </code>{' '}
+                under <em>Authorized JavaScript origins</em> in Google Cloud Console credentials.
+              </li>
+              <li>
+                <strong>Testing status:</strong> If your OAuth consent screen is in <em>Testing</em>{' '}
+                mode, add your Google account to <em>Test users</em> or click <em>Publish App</em> in
+                Google Cloud Console.
+              </li>
+            </ul>
+          </div>
         </div>
       )}
     </div>
