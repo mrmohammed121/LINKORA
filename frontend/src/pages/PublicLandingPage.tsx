@@ -340,6 +340,14 @@ export function PublicLandingPage() {
               />
             </div>
 
+            <p className="mt-1 flex items-center justify-center gap-3 font-mono text-xs font-medium uppercase tracking-[0.28em] text-zinc-300 sm:gap-4 sm:text-sm">
+              <span>Paste</span>
+              <span className="h-1.5 w-1.5 rounded-full bg-[#E9FFDB]" aria-hidden="true" />
+              <span>Generate</span>
+              <span className="h-1.5 w-1.5 rounded-full bg-[#E9FFDB]" aria-hidden="true" />
+              <span>Track</span>
+            </p>
+
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5 sm:mt-10">
               <Link
                 to={token ? '/dashboard' : '/dashboard'}
