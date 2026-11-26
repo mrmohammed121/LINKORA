@@ -745,11 +745,6 @@ export function PublicLandingPage() {
         </div>
       </section>
 
-      <footer className="border-t border-[#3F3F46] bg-[#27272A] px-4 py-8 text-center text-xs text-zinc-400">
-        LINKORA — Smart URL Shortening, Dynamic QR Rescue &amp; Analytics · Powered by Fastify &amp;
-        Neon PostgreSQL
-      </footer>
-
       <WebsiteGuideAgent />
     </div>
   );
