@@ -200,9 +200,6 @@ export function PublicLandingPage() {
             <a href="#about" className="transition hover:text-[#E9FFDB]">
               About
             </a>
-            <a href="#contact" className="transition hover:text-[#E9FFDB]">
-              Contact
-            </a>
           </nav>
 
           <div className="hidden items-center gap-2.5 md:flex">
@@ -253,9 +250,6 @@ export function PublicLandingPage() {
               </a>
               <a href="#about" onClick={() => setMobileMenuOpen(false)}>
                 About
-              </a>
-              <a href="#contact" onClick={() => setMobileMenuOpen(false)}>
-                Contact
               </a>
               <div className="grid grid-cols-2 gap-2 pt-2">
                 {token ? (
