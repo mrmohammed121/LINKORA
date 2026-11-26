@@ -182,7 +182,7 @@ export function PublicLandingPage() {
     <div id="top" className="min-h-screen bg-[#F4F4F5] text-[#18181B]">
       {/* Charcoal Top Navigation Bar */}
       <header className="sticky top-0 z-40 border-b border-[#3F3F46] bg-[#27272A]/95 text-white backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link to="/" className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#E9FFDB] text-[#18181B]">
               <Link2 className="h-5 w-5 stroke-[2.4]" />
@@ -190,7 +190,7 @@ export function PublicLandingPage() {
             <span className="text-lg font-extrabold tracking-tight text-white">LINKORA</span>
           </Link>
 
-          <nav className="hidden items-center gap-7 text-sm font-medium text-zinc-300 md:flex">
+          <nav className="pointer-events-auto absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 text-sm font-medium text-zinc-300 md:flex">
             <a href="#top" className="transition hover:text-[#E9FFDB]">
               Home
             </a>
