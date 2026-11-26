@@ -302,8 +302,8 @@ export function PublicLandingPage() {
 
         <div className="relative z-10 mx-auto w-full max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl lg:leading-[1.08]">
-              Track Every Click in <span className="text-[#E9FFDB]">Real Time</span>
+            <h1 className="bbh-bogle-regular text-6xl tracking-wide text-[#E9FFDB] sm:text-7xl lg:text-8xl">
+              LINKORA
             </h1>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3.5 sm:mt-12">
