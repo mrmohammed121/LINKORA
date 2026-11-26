@@ -73,6 +73,9 @@ const extraCorsOrigins = (parsed.data.CORS_ORIGINS ?? '')
 const corsOrigins = Array.from(
   new Set([
     frontendUrl,
+    'https://linkora-web-2k8v.onrender.com',
+    'https://linkora-iota-two.vercel.app',
+    'https://linkora-git-main-abdulmuneemharda.vercel.app',
     ...extraCorsOrigins,
     ...(parsed.data.NODE_ENV !== 'production'
       ? ['http://localhost:5173', 'http://127.0.0.1:5173']

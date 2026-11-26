@@ -13,11 +13,12 @@ import { getOrCreateGuestId } from './guestStorage';
 
 export const API_BASE_URL = (
   import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV ? 'http://localhost:4000' : window.location.origin)
+  (import.meta.env.DEV ? 'http://localhost:4000' : 'https://linkora-api-wm5x.onrender.com')
 ).replace(/\/+$/, '');
 
 export const PUBLIC_BASE_URL = (
-  import.meta.env.VITE_PUBLIC_BASE_URL || API_BASE_URL
+  import.meta.env.VITE_PUBLIC_BASE_URL ||
+  (import.meta.env.DEV ? API_BASE_URL : 'https://linkora-api-wm5x.onrender.com')
 ).replace(/\/+$/, '');
 
 export const PUBLIC_BASE_HOST = PUBLIC_BASE_URL.replace(/^https?:\/\//, '');
