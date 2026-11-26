@@ -23,6 +23,7 @@ import {
   Zap,
 } from 'lucide-react';
 import Crosshair from '../components/Crosshair';
+import CursorGrid from '../components/CursorGrid';
 import TechText from '../components/TechText';
 import { WebsiteGuideAgent } from '../components/WebsiteGuideAgent';
 import { api, getDisplayBaseHost } from '../lib/api';
@@ -291,6 +292,20 @@ export function PublicLandingPage() {
         ref={heroRef}
         className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden border-b border-[#3F3F46] bg-[#27272A] px-4 py-24 text-white sm:px-6 lg:px-8 lg:py-32"
       >
+        <CursorGrid
+          className="!absolute inset-0 z-0"
+          cellSize={56}
+          color="#E9FFDB"
+          gridColor="#E9FFDB"
+          radius={160}
+          gridOpacity={0.08}
+          fillOpacity={0.07}
+          maxOpacity={0.55}
+          spotlight={0.6}
+          ambient={0.2}
+          clickPulse
+          intro
+        />
         <Crosshair
           containerRef={heroRef}
           color="#E9FFDB"
