@@ -47,7 +47,7 @@ const envSchema = z.object({
   GOOGLE_CLIENT_ID: z
     .string()
     .optional()
-    .transform((v) => (v && v.trim().length > 0 ? v.trim() : undefined)),
+    .transform((v) => (v && v.trim().length > 0 ? v.trim() : '405092491316-8na3nk7ci8e654qg0mjaafcro05i8f5f.apps.googleusercontent.com')),
 });
 
 const parsed = envSchema.safeParse({
